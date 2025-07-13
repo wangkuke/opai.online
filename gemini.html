@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Pro - 免费获取15个月套餐</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 继承主页样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .logo i { font-size: 2.5rem; color: var(--success); margin-bottom: 10px; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; }
+        .category-section { margin-bottom: 25px; padding: 0 15px; }
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .category-title i { margin-right: 10px; font-size: 1.2rem; }
+        .category-list { list-style: none; padding: 0 5px; }
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .category-list li:hover { background: rgba(255,255,255,0.1); }
+        .category-list li:hover::before { background: var(--success); }
+        .category-list li.active { background: rgba(114,9,183,0.3); }
+        .category-list li.active::before { background: var(--accent); }
+        .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
+        
+        .category-list a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .category-list a:visited {
+            color: inherit;
+        }
+        .category-list a:hover {
+            color: var(--success);
+        }
+        
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nav-links { display: flex; list-style: none; gap: 25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--primary); }
+        .user-actions { display: flex; align-items: center; gap: 15px; }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+        .btn i { margin-right: 8px; }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: var(--secondary);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .user-profile:hover { background: rgba(255,255,255,0.85); }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+        }
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245,247,251,0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+        .gemini-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .gemini-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+            background: #eee;
+        }
+        .gemini-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .gemini-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+        .gemini-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+        .gemini-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
+        }
+        .gemini-btn:hover {
+            background: var(--secondary);
+        }
+        .gemini-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .gemini-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        @media (max-width: 992px) {
+            .app-layout { grid-template-columns: 1fr; grid-template-areas: "header" "content"; }
+            .sidebar { display: none; }
+        }
+        @media (max-width: 768px) {
+            .main-section { padding: 18px 6px; }
+        }
+        @media (max-width: 700px) {
+            .gemini-card {
+                flex-direction: column;
+                padding: 18px 8px;
+                gap: 18px;
+            }
+            .gemini-img img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        /* 相关推荐区域样式 */
+        .related-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            margin-top: 40px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+        .section-title i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
+        }
+        .article-image {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .article-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        .article-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+        .article-content {
+            padding: 20px;
+        }
+        .article-title {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-excerpt {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3;
+        }
+        .article-overlay i {
+            color: white;
+            font-size: 2rem;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+        .article-card:hover .article-overlay i {
+            transform: translateX(0);
+        }
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .read-time, .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .read-time i, .article-date i {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+        }
+        @media (max-width: 768px) {
+            .related-section {
+                padding: 0 20px;
+                margin-top: 30px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 18px;
+            }
+            .article-image {
+                height: 140px;
+            }
+            .article-content {
+                padding: 16px;
+            }
+            .article-title {
+                font-size: 1rem;
+            }
+            .article-excerpt {
+                font-size: 0.9rem;
+            }
+            .article-meta {
+                margin-top: 12px;
+                padding-top: 12px;
+                font-size: 0.8rem;
+            }
+            .article-overlay i {
+                font-size: 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .related-section {
+                padding: 0 15px;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .article-image {
+                height: 120px;
+            }
+            .article-category {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            .article-category i {
+                font-size: 0.7rem;
+            }
+            .article-content {
+                padding: 14px;
+            }
+            .article-title {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+            .article-excerpt {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+            .article-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                font-size: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .article-overlay i {
+                font-size: 1.2rem;
+            }
+        }
+        #qrcode-popup {
+            position: absolute;
+            z-index: 9999;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 12px 12px 8px 12px;
+            min-width: 120px;
+            min-height: 120px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            top: 100%;
+            left: 0;
+            margin-top: 10px;
+        }
+        #qrcode-popup canvas {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>AI工具探索</h1>
+            </div>
+            <div class="category-section">
+                <div class="category-title">
+                    <i class="fas fa-image"></i>
+                    <span>AI图像工具</span>
+                </div>
+                <ul class="category-list">
+                    <li><i class="fas fa-paint-brush"></i> 图像生成</li>
+                    <li><i class="fas fa-magic"></i> 图像增强</li>
+                </ul>
+            </div>
+            <div class="category-section">
+                <div class="category-title">
+                    <i class="fas fa-video"></i>
+                    <span>AI视频工具</span>
+                </div>
+                <ul class="category-list">
+                    <li><a href="#video-gen-section"><i class="fas fa-film"></i> 视频生成</a></li>
+                    <li><i class="fas fa-sync-alt"></i> 视频风格化</li>
+                    <li><i class="fas fa-closed-captioning"></i> 自动字幕</li>
+                </ul>
+            </div>
+            <div class="category-section">
+                <div class="category-title">
+                    <i class="fas fa-cogs"></i>
+                    <span>其他AI工具</span>
+                </div>
+                <ul class="category-list">
+                    <li><i class="fas fa-file-alt"></i> 文本生成</li>
+                    <li><i class="fas fa-code"></i> 编程辅助</li>
+                    <li><i class="fas fa-chart-line"></i> 数据分析</li>
+                </ul>
+            </div>
+        </aside>
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#">AI工具</a></li>
+                <li><a href="#">教程</a></li>
+                <li><a href="#">博客</a></li>
+                <li><a href="#">社区</a></li>
+                <li><a href="#">关于</a></li>
+            </ul>
+            <div class="user-actions">
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> 发布文章
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">AI</div>
+                    <span>AI探索者</span>
+                </div>
+            </div>
+        </header>
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- Gemini AI Pro卡片 -->
+            <div class="gemini-card">
+                <div class="gemini-img">
+                    <img src="src/gemini.png" alt="Gemini AI Pro" />
+                </div>
+                <div class="gemini-info">
+                    <h1>Gemini AI Pro</h1>
+                    <p>Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取15个月！</p>
+                    <div class="gemini-btns">
+                        <a href="https://one.google.com/" target="_blank" class="btn gemini-btn">立即领取</a>
+                        <a href="https://one.google.com/" target="_blank" class="btn gemini-btn-outline" id="mobileViewBtn">手机查看</a>
+                    </div>
+                    <div id="qrcode-popup" style="display:none;"></div>
+                </div>
+            </div>
+            <!-- 主内容区 -->
+            <section class="main-section">
+                <h2><i class="fas fa-gift"></i> Gemini AI Pro 免费套餐</h2>
+                <p>Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取15个月！</p>
+                <p style="color:var(--gray);font-size:0.98rem;">活动包含：Gemini Advanced、Google One 2TB 存储空间、Google Workspace 高级功能、VPN 服务等多项权益。</p>
+                <h2><i class="fas fa-info-circle"></i> Gemini AI Pro 简介</h2>
+                <p>Gemini AI Pro 是 Google 最新推出的高级 AI 助手，基于 Gemini Ultra 模型，具备强大的多模态理解能力。它可以处理文本、图像、音频等多种输入，提供智能对话、创意写作、代码生成、数据分析等全方位服务。</p>
+                <p style="color:var(--gray);font-size:0.98rem;">相比免费版本，Gemini AI Pro 拥有更长的上下文窗口、更快的响应速度、更强大的推理能力，以及优先访问最新功能的权利。</p>
+                <h2><i class="fas fa-star"></i> 免费套餐权益</h2>
+                <p>本次免费活动包含以下超值权益：</p>
+                <ul style="margin-left: 20px; margin-bottom: 18px;">
+                    <li>Gemini Advanced 高级 AI 助手（原价 $20/月）</li>
+                    <li>Google One 2TB 云存储空间</li>
+                    <li>Google Workspace 高级功能</li>
+                    <li>Google VPN 服务</li>
+                    <li>优先客服支持</li>
+                    <li>家庭成员共享（最多6人）</li>
+                </ul>
+                <h2><i class="fas fa-clock"></i> 活动时间</h2>
+                <p>本次活动限时开放，建议尽快领取。活动截止时间请以官方公告为准。</p>
+                <h2><i class="fas fa-link"></i> 领取方式</h2>
+                <p>访问 Google One 官网：https://one.google.com/，按照页面指引完成注册和激活即可享受15个月免费服务。</p>
+            </section>
+            
+            <!-- 相关推荐区域 -->
+            <section class="related-section">
+                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关推荐</h2>
+                <div class="articles-grid"></div>
+            </section>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+        <script>
+        const homepageCards = [
+          {
+            title: "ChatGPT Plus 订阅指南：如何选择最适合的AI助手",
+            category: "AI助手工具",
+            bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
+            excerpt: "对比ChatGPT Plus、Gemini Advanced、Claude Pro等主流AI助手，帮你选择最适合的订阅方案。",
+            icon: "fas fa-comments"
+          },
+          {
+            title: "Claude 3 Opus：Anthropic最强AI模型深度评测",
+            category: "AI助手工具",
+            bg: "linear-gradient(135deg, #f72585, #b5179e)",
+            excerpt: "深入分析Claude 3 Opus的核心能力，测试其在创意写作、代码生成、逻辑推理等方面的表现。",
+            icon: "fas fa-brain"
+          },
+          {
+            title: "免费AI工具合集：2024年最值得使用的免费AI服务",
+            category: "AI工具推荐",
+            bg: "linear-gradient(135deg, #7209b7, #560bad)",
+            excerpt: "整理2024年最实用的免费AI工具，涵盖文本生成、图像创作、视频制作等多个领域。",
+            icon: "fas fa-gift"
+          },
+          {
+            title: "Google Bard vs ChatGPT：两大AI助手全面对比",
+            category: "AI助手工具",
+            bg: "linear-gradient(135deg, #3a0ca3, #4361ee)",
+            excerpt: "详细对比Google Bard和ChatGPT的功能特点、使用体验和适用场景，帮你做出明智选择。",
+            icon: "fas fa-balance-scale"
+          },
+          {
+            title: "AI助手使用技巧：如何写出更好的提示词",
+            category: "AI教程",
+            bg: "linear-gradient(135deg, #06ffa5, #00d4ff)",
+            excerpt: "掌握AI助手的提示工程技巧，学会如何与AI进行有效沟通，获得更精准的回答。",
+            icon: "fas fa-lightbulb"
+          },
+          {
+            title: "企业级AI解决方案：如何为团队选择合适的AI工具",
+            category: "企业AI",
+            bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
+            excerpt: "为企业团队推荐合适的AI工具和解决方案，提升工作效率和创新能力。",
+            icon: "fas fa-building"
+          }
+        ];
+
+        function shuffle(arr) {
+          return arr.sort(() => Math.random() - 0.5);
+        }
+
+        function renderRelated() {
+          const cards = shuffle(homepageCards).slice(0, 3);
+          const container = document.querySelector('.related-section .articles-grid');
+          
+          // 添加加载动画
+          container.style.opacity = '0';
+          container.style.transform = 'translateY(20px)';
+          
+          container.innerHTML = cards.map((card, index) => `
+            <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+              <div class="article-image" style="background: ${card.bg};">
+                <div class="article-category">
+                  <i class="${card.icon}"></i>
+                  ${card.category}
+                </div>
+                <div class="article-overlay">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+              </div>
+              <div class="article-content">
+                <h3 class="article-title">${card.title}</h3>
+                <p class="article-excerpt">${card.excerpt}</p>
+                <div class="article-meta">
+                  <span class="read-time">
+                    <i class="fas fa-clock"></i>
+                    5分钟阅读
+                  </span>
+                  <span class="article-date">
+                    <i class="fas fa-calendar"></i>
+                    2024年
+                  </span>
+                </div>
+              </div>
+            </article>
+          `).join('');
+
+          // 添加动画效果
+          setTimeout(() => {
+            container.style.transition = 'all 0.6s ease';
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+          }, 100);
+
+          // 添加点击事件
+          const articleCards = container.querySelectorAll('.article-card');
+          articleCards.forEach(card => {
+            card.addEventListener('click', function() {
+              // 添加点击动画
+              this.style.transform = 'scale(0.95)';
+              setTimeout(() => {
+                this.style.transform = 'scale(1)';
+              }, 150);
+              
+              // 这里可以添加跳转逻辑
+            });
+          });
+        }
+
+        // 页面加载完成后渲染
+        document.addEventListener('DOMContentLoaded', function() {
+          renderRelated();
+          
+          // 添加滚动动画
+          const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+          };
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+              }
+            });
+          }, observerOptions);
+          
+          // 观察所有文章卡片
+          document.querySelectorAll('.article-card').forEach(card => {
+            observer.observe(card);
+          });
+        });
+        // 二维码弹窗逻辑
+        const mobileBtn = document.getElementById('mobileViewBtn');
+        const qrPopup = document.getElementById('qrcode-popup');
+        let qrCreated = false;
+        
+        mobileBtn.addEventListener('mouseenter', function(e) {
+          if (!qrCreated) {
+            qrPopup.innerHTML = '';
+            new QRCode(qrPopup, {
+              text: 'https://one.google.com/',
+              width: 120,
+              height: 120,
+              colorDark: '#222',
+              colorLight: '#fff',
+              correctLevel: QRCode.CorrectLevel.H
+            });
+            qrCreated = true;
+          }
+          
+          // 计算按钮位置并设置二维码弹窗位置
+          const btnRect = this.getBoundingClientRect();
+          const containerRect = this.parentElement.getBoundingClientRect();
+          
+          qrPopup.style.position = 'absolute';
+          qrPopup.style.left = (btnRect.left - containerRect.left) + 'px';
+          qrPopup.style.top = (btnRect.bottom - containerRect.top + 10) + 'px';
+          qrPopup.style.display = 'block';
+        });
+        
+        mobileBtn.addEventListener('mouseleave', function() {
+          qrPopup.style.display = 'none';
+        });
+        
+        qrPopup.addEventListener('mouseenter', function() {
+          qrPopup.style.display = 'block';
+        });
+        
+        qrPopup.addEventListener('mouseleave', function() {
+          qrPopup.style.display = 'none';
+        });
+    </script>
+    </div>
+</body>
+</html> 
