@@ -1177,6 +1177,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .section-title[id] {
+            scroll-margin-top: 80px;
+        }
+        .video-gen-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .video-gen-grid .horizontal-card {
+            min-width: 320px;
+            max-width: 320px;
+            flex: 0 0 320px;
+        }
     </style>
 </head>
 <body>
@@ -1194,8 +1207,8 @@
                     <span>AI图像工具</span>
                 </div>
                 <ul class="category-list">
-                    <li><i class="fas fa-paint-brush"></i> 图像生成</li>
-                    <li><i class="fas fa-magic"></i> 图像增强</li>
+                    <li><i class="fas fa-newspaper"></i> 最新文章</li>
+                    <li><a href="#video-download-section"><i class="fas fa-download"></i> 视频下载</a></li>
                 </ul>
             </div>
             
@@ -1321,13 +1334,13 @@
                                             <div class="author-avatar">RG</div>
                                             <span>视频科技</span>
                                         </div>
-                                        <span>2023-10-10</span>
+                                        <span>2025-7-14</span>
                                     </div>
                                 </div>
                             </article>
                         </div>
-                        <h2 class="section-title">
-                            <i class="fas fa-chart-line"></i> 视频下载
+                        <h2 class="section-title" id="video-download-section">
+                            <i class="fas fa-download"></i> 视频下载
                         </h2>
                         <div class="articles-grid">
                             <!-- 视频下载 1 -->
@@ -1355,15 +1368,15 @@
                                 </div>
                             </article>
                             <!-- 视频下载 3 -->
-                            <article class="article-card horizontal-card">
+                            <article class="article-card horizontal-card" onclick="window.location.href='savetube.html'" style="cursor: pointer;">
                                 <div class="card-logo">
-                                    <div class="logo-image" style="background: linear-gradient(135deg, #3a0ca3, #4361ee);">
-                                        <i class="fas fa-video"></i>
+                                    <div class="logo-image" style="background: linear-gradient(135deg, #ff0000, #4361ee);">
+                                        <img src="src/savetubelogo.png" alt="TiQu.cc Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <h3 class="card-title">视频格式转换</h3>
-                                    <p class="card-description">支持多种视频格式转换，包括MP4、AVI、MOV、MKV等，快速高效，保持原画质。</p>
+                                    <h3 class="card-title">SaveTube - YouTube 视频下载</h3>
+                                    <p class="card-description">最好的 youtube 视频下载网站。非常容易从 SaveTube 免费在线下载 YouTube 视频为 mp4 文件。</p>
                                 </div>
                             </article>
                             <!-- 视频下载 4 -->
@@ -1382,28 +1395,32 @@
                         <h2 class="section-title" id="video-gen-section">
                             <i class="fas fa-film"></i> 视频生成
                         </h2>
-                        <div class="articles-grid">
-                            <article class="article-card" onclick="window.location.href='jimengai.html'" style="cursor: pointer;">
-                                <div class="article-image" style="background: linear-gradient(135deg, #3a0ca3, #4361ee);">
-                                    <div class="article-category">AI视频工具</div>
-                                    <div class="article-overlay">
-                                        <i class="fas fa-arrow-right"></i>
+                        <div class="articles-grid video-gen-grid">
+                            <!-- 视频生成 1-->
+                            <article class="article-card horizontal-card" onclick="window.location.href='jimengai.html'" style="cursor: pointer;">
+                                <div class="card-logo">
+                                    <div class="logo-image" style="background: linear-gradient(135deg, #4895ef, #4cc9f0);">
+                                        <img src="src/jimenglogo.png" alt="TiQu.cc Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
                                     </div>
                                 </div>
-                                <div class="article-content">
-                                    <h3 class="article-title">即梦AI</h3>
-                                    <p class="article-excerpt">即梦AI是一款创新的视频生成工具，支持文本到视频的高质量转换，助力创作者轻松实现灵感可视化。</p>
-                                    <div class="article-meta">
-                                        <div class="article-author">
-                                            <div class="author-avatar">MAI</div>
-                                            <span>AI视频团队</span>
-                                        </div>
-                                        <span>2024-06-01</span>
+                                <div class="card-content">
+                                    <h3 class="card-title">即梦AI-海外版</h3>
+                                    <p class="card-description">即梦AI是一款创新的视频生成工具，支持文本到视频的高质量转换，助力创作者轻松实现灵感可视化。</p>
+                                </div>
+                            </article>
+                             <!-- 视频生成 2-->
+                             <article class="article-card horizontal-card" onclick="window.location.href='higgsfield.html'" style="cursor: pointer;">
+                                <div class="card-logo">
+                                    <div class="logo-image" style="background: linear-gradient(135deg, #4895ef, #4cc9f0);">
+                                        <img src="src/favicon.ico" alt="TiQu.cc Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
                                     </div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">higgsfield</h3>
+                                    <p class="card-description">Higgsfield是领先的人工智能视频效果和生成平台。探索Higgsfield的高级人工智能视觉效果、一致的角色创建、人工智能lipsync、相机控制等。美国创作者的最佳Higgsfield人工智能工具。</p>
                                 </div>
                             </article>
                         </div>
-                    </div>
                 </section>
                 <aside class="cards-section">
                     <div class="info-card">
@@ -1457,7 +1474,7 @@
     </div>
     
     <!-- 页脚 -->
-    <footer style="background: var(--sidebar-bg); color: white; padding: 40px 0; margin-top: 50px; text-align: center;">
+    <footer style="background: #232946; color: white; padding: 40px 0; margin-top: 0; text-align: center;">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
                 <div>
@@ -1547,6 +1564,9 @@
             currentIndex = (currentIndex + 1) % carouselItems.length;
             showItem(currentIndex);
         }, 5000); // 每5秒切换一次
+
+        // 初始化轮播，确保点击圆点时能正常切换
+        showItem(0);
 
         // 站内搜索功能
         const searchInput = document.getElementById('searchInput');

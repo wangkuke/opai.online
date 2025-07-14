@@ -1,0 +1,10 @@
+<div class="app-layout">
+    <div id="sidebar"></div>
+</div>
+<script>
+fetch('sidebar.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('sidebar').outerHTML = html;
+  });
+</script> 

@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-62035219DR"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-62035219DR');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini AI Pro - 免费获取15个月套餐</title>
+    <title>SaveTube - 下载 YouTube 短片视频-YouTube 短裤下载器</title>
+    <meta name="title" content="SaveTube - 免费YouTube/短视频下载工具 | 支持多平台">
+    <meta name="description" content="SaveTube是一款YouTube 短片视频免费下载工具。最佳 YouTube 短裤视频下载器在线工具。将 YouTube 短片视频保存到设备中。">
+    <meta name="keywords" content="SaveTube, YouTube下载, 视频下载, MP3下载, Shorts下载, 免费工具, Instagram下载, Twitter下载, TikTok下载">
+    <meta name="author" content="AI Tools Explorer">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="https://yt.savetube.me/">
+    <!-- 注释掉favicon相关 -->
+    <!-- <link rel="icon" type="image/x-icon" href="/favicon.ico"> -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"> -->
+    <!-- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> -->
+    <!-- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 继承主页样式 */
+        /* 复制自greenvideo.html的全部样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         :root {
             --primary: #4361ee;
@@ -101,22 +105,6 @@
         .category-list li.active { background: rgba(114,9,183,0.3); }
         .category-list li.active::before { background: var(--accent); }
         .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
-        
-        .category-list a {
-            color: inherit;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-        .category-list a:visited {
-            color: inherit;
-        }
-        .category-list a:hover {
-            color: var(--success);
-        }
-        
         .header {
             grid-area: header;
             background: var(--header-bg);
@@ -224,7 +212,7 @@
             margin-bottom: 18px;
             line-height: 1.8;
         }
-        .gemini-card {
+        .jimengai-card {
             display: flex;
             align-items: center;
             background: var(--card-bg);
@@ -237,7 +225,7 @@
             margin-left: auto;
             margin-right: auto;
         }
-        .gemini-img img {
+        .jimengai-img img {
             width: 180px;
             height: 180px;
             object-fit: cover;
@@ -245,24 +233,24 @@
             box-shadow: 0 4px 18px rgba(67,97,238,0.10);
             background: #eee;
         }
-        .gemini-info {
+        .jimengai-info {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
         }
-        .gemini-info p {
+        .jimengai-info p {
             font-size: 1.08rem;
             color: var(--dark);
             margin-bottom: 18px;
         }
-        .gemini-btns {
+        .jimengai-btns {
             display: flex;
             gap: 18px;
             position: relative;
         }
-        .gemini-btn {
+        .jimeng-btn {
             background: var(--primary);
             color: #fff;
             border-radius: 22px;
@@ -273,10 +261,10 @@
             transition: background 0.2s;
             box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
         }
-        .gemini-btn:hover {
+        .jimeng-btn:hover {
             background: var(--secondary);
         }
-        .gemini-btn-outline {
+        .jimeng-btn-outline {
             background: transparent;
             color: var(--primary);
             border: 2px solid var(--primary);
@@ -286,7 +274,7 @@
             text-decoration: none;
             transition: background 0.2s, color 0.2s;
         }
-        .gemini-btn-outline:hover {
+        .jimeng-btn-outline:hover {
             background: var(--primary);
             color: #fff;
         }
@@ -298,12 +286,12 @@
             .main-section { padding: 18px 6px; }
         }
         @media (max-width: 700px) {
-            .gemini-card {
+            .jimengai-card {
                 flex-direction: column;
                 padding: 18px 8px;
                 gap: 18px;
             }
-            .gemini-img img {
+            .jimengai-img img {
                 width: 120px;
                 height: 120px;
             }
@@ -445,7 +433,6 @@
             font-size: 0.8rem;
             color: var(--primary);
         }
-        /* 响应式设计 */
         @media (max-width: 1200px) {
             .articles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -569,116 +556,137 @@
                 </button>
                 <div class="user-profile">
                     <div class="user-avatar">AI</div>
-                    <span>AI探索者</span>
+                    <span>OPAI探索者</span>
                 </div>
             </div>
         </header>
         <!-- 主内容区 -->
         <main class="content">
-            <!-- Gemini AI Pro卡片 -->
-            <div class="gemini-card">
-                <div class="gemini-img">
-                    <img src="src/gemini.png" alt="Gemini AI Pro" />
+            <!-- SaveTube卡片 -->
+            <div class="jimengai-card">
+                <div class="jimengai-img">
+                    <img src="src/savetube.png" alt="SaveTube - 免费视频下载工具" />
                 </div>
-                <div class="gemini-info">
-                    <h1>Gemini AI Pro</h1>
-                    <p>Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取15个月！</p>
-                    <div class="gemini-btns">
-                        <a href="https://one.google.com/" target="_blank" class="btn gemini-btn">立即领取</a>
-                        <a href="https://one.google.com/" target="_blank" class="btn gemini-btn-outline" id="mobileViewBtn">手机查看</a>
+                <div class="jimengai-info">
+                    <h1>SaveTube 视频下载</h1>
+                    <p>SaveTube是一款支持YouTube、Instagram、Twitter等多平台的免费视频下载工具，支持YouTube Shorts、MP3、4K下载，完全免费，无广告，无水印。</p>
+                    <div class="jimengai-btns">
+                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn">访问官网</a>
+                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn">手机版</a>
+                        <div id="qrcode-popup" style="display:none;"></div>
                     </div>
-                    <div id="qrcode-popup" style="display:none;"></div>
                 </div>
             </div>
             <!-- 主内容区 -->
             <section class="main-section">
-                <h2><i class="fas fa-gift"></i> Gemini AI Pro 免费套餐</h2>
-                <p>Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取15个月！</p>
-                <p style="color:var(--gray);font-size:0.98rem;">活动包含：Gemini Advanced、Google One 2TB 存储空间、Google Workspace 高级功能、VPN 服务等多项权益。</p>
-                <h2><i class="fas fa-info-circle"></i> Gemini AI Pro 简介</h2>
-                <p>Gemini AI Pro 是 Google 最新推出的高级 AI 助手，基于 Gemini Ultra 模型，具备强大的多模态理解能力。它可以处理文本、图像、音频等多种输入，提供智能对话、创意写作、代码生成、数据分析等全方位服务。</p>
-                <p style="color:var(--gray);font-size:0.98rem;">相比免费版本，Gemini AI Pro 拥有更长的上下文窗口、更快的响应速度、更强大的推理能力，以及优先访问最新功能的权利。</p>
-                <h2><i class="fas fa-star"></i> 免费套餐权益</h2>
-                <p>本次免费活动包含以下超值权益：</p>
-                <ul style="margin-left: 20px; margin-bottom: 18px;">
-                    <li>Gemini Advanced 高级 AI 助手（原价 $20/月）</li>
-                    <li>Google One 2TB 云存储空间</li>
-                    <li>Google Workspace 高级功能</li>
-                    <li>Google VPN 服务</li>
-                    <li>优先客服支持</li>
-                    <li>家庭成员共享（最多6人）</li>
+                <h2><i class="fas fa-download"></i> SaveTube 官方网站</h2>
+                <p>SaveTube是一款功能强大的在线视频下载工具，支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载，支持多种格式和高质量输出。</p>
+                <p style="color:var(--gray);font-size:0.98rem;">平台特色：免费视频下载、YouTube Shorts下载、MP3下载、4K下载、无广告、无水印、支持多平台、高清视频下载、批量下载、视频格式转换、在线下载、安全下载。</p>
+                <h2><i class="fas fa-info-circle"></i> 关于 SaveTube</h2>
+                <p>SaveTube致力于为用户提供最便捷、最安全的视频下载体验。无论是YouTube Shorts、音乐、电影、娱乐还是教育内容，SaveTube都能一键下载，支持多种格式和清晰度选择。</p>
+                <p style="color:var(--gray);font-size:0.98rem;">SaveTube支持MP4、MP3、WAV等多种格式下载，用户可根据需求选择合适的格式和质量。还可提取音频，满足多样化需求。</p>
+                <h2><i class="fas fa-star"></i> 核心功能与特色</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>多平台支持：YouTube、Instagram、Twitter、Facebook、TikTok等</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>无水印下载：原版无水印，保持原始质量</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>支持YouTube Shorts、MP3、4K下载</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>用户友好界面：简洁直观，适合所有用户</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>高质量输出：支持高清视频下载，最高可达4K</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>快速下载：优化引擎，极速体验</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>安全可靠：无广告、无病毒，保护设备安全</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>格式丰富：支持多种视频/音频格式</span>
+                    </li>
                 </ul>
-                <h2><i class="fas fa-clock"></i> 活动时间</h2>
-                <p>本次活动限时开放，建议尽快领取。活动截止时间请以官方公告为准。</p>
-                <h2><i class="fas fa-link"></i> 领取方式</h2>
-                <p>访问 Google One 官网：https://one.google.com/，按照页面指引完成注册和激活即可享受15个月免费服务。</p>
+                <h2><i class="fas fa-link"></i> 官方网站访问</h2>
+                <p><strong>官方网站：</strong> <a href="https://yt.savetube.me/" target="_blank" style="color: var(--primary); text-decoration: none;">https://yt.savetube.me/</a></p>
+                <p>访问SaveTube官网，体验极速、免费的多平台视频下载服务。</p>
+                <h2><i class="fas fa-rocket"></i> SaveTube 使用方法</h2>
+                <ol style="margin: 20px 0 20px 20px;">
+                    <li>打开YouTube或其他支持平台，复制你想下载的视频链接</li>
+                    <li>访问 <a href="https://yt.savetube.me/" target="_blank">SaveTube官网</a>，粘贴链接到输入框</li>
+                    <li>选择所需格式和清晰度，点击下载按钮即可</li>
+                </ol>
+                <h2><i class="fas fa-question-circle"></i> 常见问题 (FAQ)</h2>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">SaveTube支持哪些平台？</h3>
+                    <p>支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">下载的视频可以商用吗？</h3>
+                    <p>请遵守各平台版权政策，下载内容仅供个人学习和交流，商用需获得原作者授权。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">是否有使用次数或时长限制？</h3>
+                    <p>SaveTube完全免费，无次数和时长限制。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">是否支持移动端？</h3>
+                    <p>支持，SaveTube官网可在手机、平板等移动设备上流畅使用。</p>
+                </div>
             </section>
-            
             <!-- 相关推荐区域 -->
             <section class="related-section">
-                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关推荐</h2>
+                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关视频工具</h2>
                 <div class="articles-grid"></div>
             </section>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
         <script>
+        // 相关工具卡片数据可复用greenvideo.html逻辑
         const homepageCards = [
           {
-            title: "ChatGPT Plus 订阅指南：如何选择最适合的AI助手",
-            category: "AI助手工具",
-            bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-            excerpt: "对比ChatGPT Plus、Gemini Advanced、Claude Pro等主流AI助手，帮你选择最适合的订阅方案。",
-            icon: "fas fa-comments"
+            title: "YouTube视频下载器 - 免费无水印下载工具",
+            category: "视频下载工具",
+            bg: "linear-gradient(135deg, #ff0000, #cc0000)",
+            excerpt: "专业的YouTube视频下载工具，支持高清视频下载，无水印，快速安全。支持多种格式和质量选择。",
+            icon: "fas fa-youtube"
           },
           {
-            title: "Claude 3 Opus：Anthropic最强AI模型深度评测",
-            category: "AI助手工具",
-            bg: "linear-gradient(135deg, #f72585, #b5179e)",
-            excerpt: "深入分析Claude 3 Opus的核心能力，测试其在创意写作、代码生成、逻辑推理等方面的表现。",
-            icon: "fas fa-brain"
+            title: "B站视频下载器 - 哔哩哔哩视频下载",
+            category: "视频下载工具",
+            bg: "linear-gradient(135deg, #00a1d6, #0080ff)",
+            excerpt: "专为B站用户设计的视频下载工具，支持高清视频下载，批量下载功能，简单易用。",
+            icon: "fas fa-play-circle"
           },
           {
-            title: "免费AI工具合集：2024年最值得使用的免费AI服务",
-            category: "AI工具推荐",
-            bg: "linear-gradient(135deg, #7209b7, #560bad)",
-            excerpt: "整理2024年最实用的免费AI工具，涵盖文本生成、图像创作、视频制作等多个领域。",
-            icon: "fas fa-gift"
-          },
-          {
-            title: "Google Bard vs ChatGPT：两大AI助手全面对比",
-            category: "AI助手工具",
-            bg: "linear-gradient(135deg, #3a0ca3, #4361ee)",
-            excerpt: "详细对比Google Bard和ChatGPT的功能特点、使用体验和适用场景，帮你做出明智选择。",
-            icon: "fas fa-balance-scale"
-          },
-          {
-            title: "AI助手使用技巧：如何写出更好的提示词",
-            category: "AI教程",
-            bg: "linear-gradient(135deg, #06ffa5, #00d4ff)",
-            excerpt: "掌握AI助手的提示工程技巧，学会如何与AI进行有效沟通，获得更精准的回答。",
-            icon: "fas fa-lightbulb"
-          },
-          {
-            title: "企业级AI解决方案：如何为团队选择合适的AI工具",
-            category: "企业AI",
-            bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
-            excerpt: "为企业团队推荐合适的AI工具和解决方案，提升工作效率和创新能力。",
-            icon: "fas fa-building"
+            title: "抖音视频下载器 - 无水印视频下载",
+            category: "视频下载工具",
+            bg: "linear-gradient(135deg, #000000, #333333)",
+            excerpt: "抖音视频专用下载工具，支持无水印下载，高清画质，快速下载，安全可靠。",
+            icon: "fas fa-music"
           }
         ];
-
         function shuffle(arr) {
           return arr.sort(() => Math.random() - 0.5);
         }
-
         function renderRelated() {
           const cards = shuffle(homepageCards).slice(0, 3);
           const container = document.querySelector('.related-section .articles-grid');
-          
-          // 添加加载动画
           container.style.opacity = '0';
           container.style.transform = 'translateY(20px)';
-          
           container.innerHTML = cards.map((card, index) => `
             <article class="article-card" style="animation-delay: ${index * 0.1}s;">
               <div class="article-image" style="background: ${card.bg};">
@@ -700,45 +708,33 @@
                   </span>
                   <span class="article-date">
                     <i class="fas fa-calendar"></i>
-                    2024年
+                    2024
                   </span>
                 </div>
               </div>
             </article>
           `).join('');
-
-          // 添加动画效果
           setTimeout(() => {
             container.style.transition = 'all 0.6s ease';
             container.style.opacity = '1';
             container.style.transform = 'translateY(0)';
           }, 100);
-
-          // 添加点击事件
           const articleCards = container.querySelectorAll('.article-card');
           articleCards.forEach(card => {
             card.addEventListener('click', function() {
-              // 添加点击动画
               this.style.transform = 'scale(0.95)';
               setTimeout(() => {
                 this.style.transform = 'scale(1)';
               }, 150);
-              
-              // 这里可以添加跳转逻辑
             });
           });
         }
-
-        // 页面加载完成后渲染
         document.addEventListener('DOMContentLoaded', function() {
           renderRelated();
-          
-          // 添加滚动动画
           const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
           };
-          
           const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
@@ -747,8 +743,6 @@
               }
             });
           }, observerOptions);
-          
-          // 观察所有文章卡片
           document.querySelectorAll('.article-card').forEach(card => {
             observer.observe(card);
           });
@@ -757,12 +751,11 @@
         const mobileBtn = document.getElementById('mobileViewBtn');
         const qrPopup = document.getElementById('qrcode-popup');
         let qrCreated = false;
-        
         mobileBtn.addEventListener('mouseenter', function(e) {
           if (!qrCreated) {
             qrPopup.innerHTML = '';
             new QRCode(qrPopup, {
-              text: 'https://one.google.com/',
+              text: 'https://yt.savetube.me/',
               width: 120,
               height: 120,
               colorDark: '#222',
@@ -771,29 +764,22 @@
             });
             qrCreated = true;
           }
-          
-          // 计算按钮位置并设置二维码弹窗位置
           const btnRect = this.getBoundingClientRect();
           const containerRect = this.parentElement.getBoundingClientRect();
-          
           qrPopup.style.position = 'absolute';
           qrPopup.style.left = (btnRect.left - containerRect.left) + 'px';
           qrPopup.style.top = (btnRect.bottom - containerRect.top + 10) + 'px';
           qrPopup.style.display = 'block';
         });
-        
         mobileBtn.addEventListener('mouseleave', function() {
           qrPopup.style.display = 'none';
         });
-        
         qrPopup.addEventListener('mouseenter', function() {
           qrPopup.style.display = 'block';
         });
-        
         qrPopup.addEventListener('mouseleave', function() {
           qrPopup.style.display = 'none';
         });
-
         fetch('sidebar.html')
           .then(res => res.text())
           .then(html => {

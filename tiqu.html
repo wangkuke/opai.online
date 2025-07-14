@@ -677,48 +677,7 @@
 </head>
 <body>
     <div class="app-layout">
-        <!-- 侧边栏 -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-robot"></i>
-                <h1>OPAI</h1>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-image"></i>
-                    <span>AI图像工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><i class="fas fa-paint-brush"></i> 图像生成</li>
-                    <li><i class="fas fa-magic"></i> 图像增强</li>
-                </ul>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-video"></i>
-                    <span>AI视频工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><i class="fas fa-film"></i> 视频生成</li>
-                    <li><i class="fas fa-sync-alt"></i> 视频风格化</li>
-                    <li><i class="fas fa-closed-captioning"></i> 自动字幕</li>
-                </ul>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-cogs"></i>
-                    <span>其他AI工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><i class="fas fa-file-alt"></i> 文本生成</li>
-                    <li><i class="fas fa-code"></i> 编程辅助</li>
-                    <li><i class="fas fa-chart-line"></i> 数据分析</li>
-                </ul>
-            </div>
-        </aside>
+        <div id="sidebar"></div>
         <!-- 顶部导航栏 -->
         <header class="header">
             <ul class="nav-links">
@@ -1074,6 +1033,12 @@
         qrPopup.addEventListener('mouseleave', function() {
           qrPopup.style.display = 'none';
         });
+
+        fetch('sidebar.html')
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('sidebar').outerHTML = html;
+          });
     </script>
     </div>
 </body>
