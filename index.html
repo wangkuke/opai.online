@@ -1190,52 +1190,23 @@
             max-width: 320px;
             flex: 0 0 320px;
         }
+        .ai-model-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .ai-model-grid .horizontal-card {
+            min-width: 320px;
+            max-width: 320px;
+            flex: 0 0 320px;
+        }
     </style>
 </head>
 <body>
     <div class="app-layout">
-        <!-- 左侧边栏 -->
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-robot"></i>
-                <h1>OPAI</h1>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-image"></i>
-                    <span>AI图像工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><i class="fas fa-newspaper"></i> 最新文章</li>
-                    <li><a href="#video-download-section"><i class="fas fa-download"></i> 视频下载</a></li>
-                </ul>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-video"></i>
-                    <span>AI视频工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><a href="#video-gen-section"><i class="fas fa-film"></i> 视频生成</a></li>
-                    <li><i class="fas fa-sync-alt"></i> 视频风格化</li>
-                    <li><i class="fas fa-closed-captioning"></i> 自动字幕</li>
-                </ul>
-            </div>
-            
-            <div class="category-section">
-                <div class="category-title">
-                    <i class="fas fa-cogs"></i>
-                    <span>其他AI工具</span>
-                </div>
-                <ul class="category-list">
-                    <li><i class="fas fa-file-alt"></i> 文本生成</li>
-                    <li><i class="fas fa-code"></i> 编程辅助</li>
-                    <li><i class="fas fa-chart-line"></i> 数据分析</li>
-                </ul>
-            </div>
-        </aside>
+        <!-- Sidebar will be loaded dynamically -->
+        <div id="sidebar"></div>
 
         <!-- 顶部导航栏 -->
         <header class="header">
@@ -1336,6 +1307,23 @@
                                         </div>
                                         <span>2025-7-14</span>
                                     </div>
+                                </div>
+                            </article>
+                        </div>
+                        <h2 class="section-title" id="video-download-section">
+                            <i class="fas fa-download"></i> AI大模型
+                        </h2>
+                        <div class="ai-model-grid">
+                            <!-- AI大模型 1 -->
+                            <article class="article-card horizontal-card" onclick="window.location.href='grok.html'" style="cursor: pointer;">
+                                <div class="card-logo">
+                                    <div class="logo-image" style="background: linear-gradient(135deg, #4895ef, #4cc9f0);">
+                                        <img src="src/groklogo.ico" alt="TiQu.cc Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">Grok</h3>
+                                    <p class="card-description">Grok是最前沿的AI大模型平台，具备强大的自然语言理解、对话生成和知识推理能力。探索Grok的核心功能、技术优势与应用场景，体验AI创新的未来。</p>
                                 </div>
                             </article>
                         </div>
@@ -1485,7 +1473,7 @@
                     <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;">热门AI工具</h3>
                     <ul style="list-style: none; padding: 0;">
                         <li style="margin-bottom: 8px;"><a href="gemini.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">Gemini AI Pro</a></li>
-                        <li style="margin-bottom: 8px;"><a href="jimengai.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">即梦AI</a></li>
+                        <li style="margin-bottom: 8px;"><a href="jimengai.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">jimeng-ai</a></li>
                         <li style="margin-bottom: 8px;"><a href="tiqu.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">TiQu.cc</a></li>
                         <li style="margin-bottom: 8px;"><a href="greenvideo.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">GreenVideo</a></li>
                     </ul>
@@ -1754,4 +1742,11 @@
         });
     </script>
 </body>
+<script>
+fetch('sidebar.html')
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById('sidebar').outerHTML = html;
+  });
+</script>
 </html>
