@@ -1853,7 +1853,8 @@
                     const data = parseJwt(response.credential);
                     // 显示用户信息
                     document.getElementById('user-profile').style.display = 'flex';
-                    // 不再隐藏谷歌登录按钮
+                    // 隐藏谷歌登录按钮
+                    document.getElementById('google-login-btn').style.display = 'none';
                     // 显示头像图片
                     if (data.picture) {
                         document.getElementById('user-avatar').innerHTML = `<img src="${data.picture}" style="width:40px;height:40px;border-radius:50%;">`;
