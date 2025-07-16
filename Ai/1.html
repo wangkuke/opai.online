@@ -582,7 +582,23 @@
     fetch('../sidebar.html')
       .then(res => res.text())
       .then(html => {
-        document.getElementById('sidebar').outerHTML = html;
+        // 提取 style 内容
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const styleTag = tempDiv.querySelector('style');
+        if (styleTag) {
+          document.head.appendChild(styleTag);
+        }
+        // 只插入 aside.sidebar 部分
+        const sidebar = tempDiv.querySelector('.sidebar');
+        if (sidebar) {
+          document.getElementById('sidebar').replaceWith(sidebar);
+        }
+        // 处理 sidebar.html 里的 script（如果有）
+        const scriptTag = tempDiv.querySelector('script');
+        if (scriptTag) {
+          eval(scriptTag.innerText);
+        }
       });
     // Related articles logic (localized for course)
     const homepageCards = [
