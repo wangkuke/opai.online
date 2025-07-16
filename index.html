@@ -525,17 +525,19 @@
         }
         
         .carousel-item {
-            min-width: 100%;
+            width: 100%;
             height: 100%;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            align-items: stretch;
+            justify-content: stretch;
+            padding: 0;
+            background: none;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         
         .carousel-controls {
@@ -1201,6 +1203,84 @@
             max-width: 320px;
             flex: 0 0 320px;
         }
+        .lang-switch {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lang-btn {
+            border: 1.5px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 18px;
+            padding: 4px 16px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+            outline: none;
+        }
+        .lang-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .lang-btn.lang-active {
+            background: var(--primary);
+            color: #fff;
+            border: 1.5px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(67,97,238,0.12);
+        }
+        .lang-select {
+            border: 1.5px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 22px;
+            padding: 7px 36px 7px 16px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: border 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.10);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%234361ee" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px 18px;
+        }
+        .lang-select:focus, .lang-select:hover {
+            border: 1.5px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 4px 16px rgba(67,97,238,0.18);
+            background-color: #f3f6fd;
+        }
+        .lang-select option {
+            font-size: 1.05rem;
+            padding: 8px 0;
+            color: var(--primary);
+            background: #fff;
+        }
+        @media (prefers-color-scheme: dark) {
+            .lang-select {
+                background: #232946;
+                color: #4cc9f0;
+                border: 1.5px solid #4cc9f0;
+                background-image: url('data:image/svg+xml;utf8,<svg fill="%234cc9f0" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            }
+            .lang-select:focus, .lang-select:hover {
+                border: 1.5px solid #4895ef;
+                color: #4895ef;
+                background-color: #232946;
+            }
+            .lang-select option {
+                background: #232946;
+                color: #4cc9f0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1211,21 +1291,27 @@
         <!-- 顶部导航栏 -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="#" class="active">首页</a></li>
-                <li><a href="#">AI工具</a></li>
-                <li><a href="#">教程</a></li>
-                <li><a href="#">博客</a></li>
-                <li><a href="#">社区</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="#" data-i18n="nav.home" class="active">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="AiCourse/AiCourse.html" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="#" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
             </ul>
-            
+            <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
+                <select id="lang-select" class="lang-select">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
             <div class="user-actions">
-                <button class="btn" id="createPostBtn">
-                    <i class="fas fa-plus"></i> 发布文章
-                </button>
-                <div class="user-profile">
-                    <div class="user-avatar">AI</div>
-                    <span>OPAI探索者</span>
+                <button class="btn" id="createPostBtn" data-i18n="btn.publish">发布文章</button>
+                <!-- Google 登录按钮容器 -->
+                <div id="google-login-btn"></div>
+                <!-- 用户信息容器，初始隐藏 -->
+                <div class="user-profile" id="user-profile" style="display: none;">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <span id="user-name"></span>
                 </div>
             </div>
         </header>
@@ -1236,27 +1322,19 @@
             <div class="search-carousel-section">
                 <div class="search-container">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="在OPAI平台搜索AI工具、文章或教程...">
-                    <button class="search-btn" id="searchBtn">搜索</button>
+                    <input type="text" id="searchInput" data-i18n="[placeholder]search.placeholder" placeholder="在OPAI平台搜索AI工具、文章或教程...">
+                    <button class="search-btn" id="searchBtn" data-i18n="btn.search">搜索</button>
                     <div class="search-results" id="searchResults"></div>
                 </div>
                 
                 <div class="carousel">
                     <div class="carousel-inner">
-                        <div class="carousel-item" style="background: linear-gradient(135deg, #4361ee, #3a0ca3);">
-                            新一代AI图像生成工具发布
-                        </div>
-                        <div class="carousel-item" style="background: linear-gradient(135deg, #7209b7, #3a0ca3);">
-                            AI视频编辑工具限时优惠
-                        </div>
-                        <div class="carousel-item" style="background: linear-gradient(135deg, #f72585, #3a0ca3);">
-                            免费AI艺术创作课程
+                        <div class="carousel-item">
+                            <a href="AiCourse/AiCourse.html" style="display:block;width:100%;height:100%;"><img src="src/AiCourse.png" alt="YouTube AI Course" style="width:100%;height:100%;object-fit:cover;" /></a>
                         </div>
                     </div>
                     <div class="carousel-controls">
-                        <div class="carousel-dot active" data-index="0"></div>
-                        <div class="carousel-dot" data-index="1"></div>
-                        <div class="carousel-dot" data-index="2"></div>
+                        <!-- 已无轮播项，去除所有圆点 -->
                     </div>
                 </div>
             </div>
@@ -1265,9 +1343,7 @@
             <div class="content-container">
                 <section class="articles-section">
                     <div class="articles-content">
-                        <h2 class="section-title">
-                            <i class="fas fa-newspaper"></i> 最新文章
-                        </h2>
+                        <h2 class="section-title" data-i18n="section.latest"><i class="fas fa-newspaper"></i> 最新文章</h2>
                         <div class="articles-grid">
                             <!-- 文章卡片 1 -->
                             <article class="article-card" onclick="window.location.href='gemini.html'" style="cursor: pointer;">
@@ -1310,9 +1386,7 @@
                                 </div>
                             </article>
                         </div>
-                        <h2 class="section-title" id="video-download-section">
-                            <i class="fas fa-download"></i> AI大模型
-                        </h2>
+                        <h2 class="section-title" id="video-download-section" data-i18n="section.models"><i class="fas fa-download"></i> AI大模型</h2>
                         <div class="ai-model-grid">
                             <!-- AI大模型 1 -->
                             <article class="article-card horizontal-card" onclick="window.location.href='grok.html'" style="cursor: pointer;">
@@ -1327,9 +1401,7 @@
                                 </div>
                             </article>
                         </div>
-                        <h2 class="section-title" id="video-download-section">
-                            <i class="fas fa-download"></i> 视频下载
-                        </h2>
+                        <h2 class="section-title" id="video-download-section" data-i18n="section.download"><i class="fas fa-download"></i> 视频下载</h2>
                         <div class="articles-grid">
                             <!-- 视频下载 1 -->
                             <article class="article-card horizontal-card" onclick="window.location.href='greenvideo.html'" style="cursor: pointer;">
@@ -1380,9 +1452,7 @@
                                 </div>
                             </article>
                         </div>
-                        <h2 class="section-title" id="video-gen-section">
-                            <i class="fas fa-film"></i> 视频生成
-                        </h2>
+                        <h2 class="section-title" id="video-gen-section" data-i18n="section.gen"><i class="fas fa-film"></i> 视频生成</h2>
                         <div class="articles-grid video-gen-grid">
                             <!-- 视频生成 1-->
                             <article class="article-card horizontal-card" onclick="window.location.href='jimengai.html'" style="cursor: pointer;">
@@ -1409,9 +1479,7 @@
                                 </div>
                             </article>
                         </div>
-                        <h2 class="section-title" id="youtube-tools-section">
-                            <i class="fab fa-youtube"></i> YouTube工具
-                        </h2>
+                        <h2 class="section-title" id="youtube-tools-section" data-i18n="section.youtube"><i class="fab fa-youtube"></i> YouTube工具</h2>
                         <div class="articles-grid video-gen-grid">
                             <!-- YouTube工具 1 -->
                             <article class="article-card horizontal-card" onclick="window.location.href='ytlarge.html'" style="cursor: pointer;">
@@ -1426,356 +1494,425 @@
                                 </div>
                             </article>
                             <!-- YouTube工具 2 -->
-                            <article class="article-card horizontal-card" onclick="window.location.href='#'" style="cursor: pointer;">
+                            <article class="article-card horizontal-card" onclick="window.location.href='viewstats.html'" style="cursor: pointer;">
                                 <div class="card-logo">
-                                    <div class="logo-image" style="background: linear-gradient(135deg, #ff0000, #7209b7);">
-                                        <i class="fas fa-exchange-alt"></i>
+                                    <div class="logo-image" style="background: #fff;">
+                                        <img src="src/viewstats.ico" alt="ViewStats Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <h3 class="card-title">YouTube转MP3工具</h3>
-                                    <p class="card-description">将YouTube视频快速转换为高质量MP3音频，支持批量转换。</p>
+                                    <h3 class="card-title">ViewStats</h3>
+                                    <p class="card-description">YouTube数据、收益查询网站，野兽先生团队出品</p>
                                 </div>
                             </article>
-                        </div>
-                </section>
-                <aside class="cards-section">
-                    <div class="info-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-fire"></i> 热门文章
-                        </h3>
-                        <ul class="popular-list">
-                            <li>
-                                <div class="rank">1.</div>
-                                <div class="title">ChatGPT功能全面解析</div>
-                            </li>
-                            <li>
-                                <div class="rank">2.</div>
-                                <div class="title">AI绘画提示指南</div>
-                            </li>
-                            <li>
-                                <div class="rank">3.</div>
-                                <div class="title">10个免费视频生成工具</div>
-                            </li>
-                        </ul>
+                             <!-- YouTube工具 3 -->
+                             <article class="article-card horizontal-card" onclick="window.location.href='yewtu.html'" style="cursor: pointer;">
+                                <div class="card-logo">
+                                    <div class="logo-image" style="background: #fff;">
+                                        <img src="src/yewtulogo.png" alt="ViewStats Logo" style="width: 50px; height: 50px; border-radius: 10px; display: block; object-fit: contain; background: none;">
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">yewtu</h3>
+                                    <p class="card-description">热门趋势视频分析网站</p>
+                                </div>
+                            </article>
+                        </section>
+                        <aside class="cards-section">
+                            <div class="info-card">
+                                <h3 class="card-title"><i class="fas fa-fire"></i> <span data-i18n="card.hot">热门文章</span></h3>
+                                <ul class="popular-list">
+                                    <li>
+                                        <div class="rank">1.</div>
+                                        <div class="title">ChatGPT功能全面解析</div>
+                                    </li>
+                                    <li>
+                                        <div class="rank">2.</div>
+                                        <div class="title">AI绘画提示指南</div>
+                                    </li>
+                                    <li>
+                                        <div class="rank">3.</div>
+                                        <div class="title">10个免费视频生成工具</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="info-card">
+                                <h3 class="card-title"><i class="fas fa-tags"></i> <span data-i18n="card.tags">热门标签</span></h3>
+                                <div class="tags-container">
+                                    <span class="tag">#AI绘画</span>
+                                    <span class="tag">#视频生成</span>
+                                    <span class="tag">#MidJourney</span>
+                                    <span class="tag">#ChatGPT</span>
+                                    <span class="tag">#StableDiffusion</span>
+                                    <span class="tag">#RunwayML</span>
+                                    <span class="tag">#提示工程</span>
+                                    <span class="tag">#AI教程</span>
+                                    <span class="tag">#生成式AI</span>
+                                    <span class="tag">#AdobeFirefly</span>
+                                </div>
+                            </div>
+                            <div class="info-card">
+                                <h3 class="card-title"><i class="fas fa-bullhorn"></i> <span data-i18n="card.join">加入社区</span></h3>
+                                <p style="margin-bottom: 20px;" data-i18n="card.joinDesc">加入OPAI的AI创作者社区，获取最新工具资讯、教程和独家优惠。</p>
+                                <button class="btn" style="width: 100%;" data-i18n="btn.join">立即加入</button>
+                            </div>
+                        </aside>
                     </div>
-                    <div class="info-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-tags"></i> 热门标签
-                        </h3>
-                        <div class="tags-container">
-                            <span class="tag">#AI绘画</span>
-                            <span class="tag">#视频生成</span>
-                            <span class="tag">#MidJourney</span>
-                            <span class="tag">#ChatGPT</span>
-                            <span class="tag">#StableDiffusion</span>
-                            <span class="tag">#RunwayML</span>
-                            <span class="tag">#提示工程</span>
-                            <span class="tag">#AI教程</span>
-                            <span class="tag">#生成式AI</span>
-                            <span class="tag">#AdobeFirefly</span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <h3 class="card-title">
-                            <i class="fas fa-bullhorn"></i> 加入社区
-                        </h3>
-                        <p style="margin-bottom: 20px;">加入OPAI的AI创作者社区，获取最新工具资讯、教程和独家优惠。</p>
-                        <button class="btn" style="width: 100%;">
-                            <i class="fas fa-user-plus"></i> 立即加入
-                        </button>
-                    </div>
-                </aside>
+                </main>
             </div>
-        </main>
-    </div>
-    
-    <!-- 页脚 -->
-    <footer style="background: #232946; color: white; padding: 40px 0; margin-top: 0; text-align: center;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
-                <div>
-                    <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;">关于OPAI</h3>
-                    <p style="line-height: 1.6; color: rgba(255,255,255,0.8);">OPAI.online是专业的AI工具分享平台，致力于为用户发现和推荐最优秀的AI工具，提供详细的评测、教程和最新资讯。</p>
-                </div>
-                <div>
-                    <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;">热门AI工具</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 8px;"><a href="gemini.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">Gemini AI Pro</a></li>
-                        <li style="margin-bottom: 8px;"><a href="jimengai.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">jimeng-ai</a></li>
-                        <li style="margin-bottom: 8px;"><a href="tiqu.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">TiQu.cc</a></li>
-                        <li style="margin-bottom: 8px;"><a href="greenvideo.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">GreenVideo</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;">AI工具分类</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 8px;"><a href="#video-gen-section" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">AI视频生成</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">AI图像工具</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">AI写作助手</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;">AI编程工具</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;">联系我们</h3>
-                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;">邮箱：contact@opai.online</p>
-                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;">网站：opai.online</p>
-                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
-                        <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
-                        <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-weibo"></i></a>
-                        <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
-                <p style="color: rgba(255,255,255,0.6); margin-bottom: 10px;">© 2024 OPAI.online - 专业AI工具分享平台</p>
-                <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 10px;">发现最好用的AI工具，让AI技术为您的创作赋能</p>
-                <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <a href="/sitemap.xml" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;">网站地图</a>
-                    <a href="/privacy.html" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;">隐私政策</a>
-                    <a href="/terms.html" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;">使用条款</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <script>
-        // 模态框功能
-        document.getElementById('createPostBtn').addEventListener('click', function() {
-            const modal = document.querySelector('.modal');
-            modal.style.display = 'flex';
-        });
-
-        document.querySelector('.modal .close-modal').addEventListener('click', function() {
-            const modal = document.querySelector('.modal');
-            modal.style.display = 'none';
-        });
-
-        // 轮播图功能
-        const carousel = document.querySelector('.carousel');
-        const carouselItems = carousel.querySelectorAll('.carousel-item');
-        const carouselDots = carousel.querySelectorAll('.carousel-dot');
-        let currentIndex = 0;
-
-        function showItem(index) {
-            carouselItems.forEach((item, i) => {
-                item.style.transform = `translateX(${100 * (i - index)}%)`;
-            });
-            carouselDots.forEach((dot, i) => {
-                dot.classList.remove('active');
-                if (i === index) {
-                    dot.classList.add('active');
-                }
-            });
-        }
-
-        carouselDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentIndex = index;
-                showItem(currentIndex);
-            });
-        });
-
-        // 自动轮播
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % carouselItems.length;
-            showItem(currentIndex);
-        }, 5000); // 每5秒切换一次
-
-        // 初始化轮播，确保点击圆点时能正常切换
-        showItem(0);
-
-        // 站内搜索功能
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const searchResults = document.getElementById('searchResults');
-        
-        // 搜索数据 - 包含所有文章和工具信息
-        const searchData = [
-            {
-                id: 'gemini',
-                title: '免费获取 15个月 Gemini AI Pro 套餐！无需学生邮箱，切勿错过！',
-                excerpt: 'Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取！',
-                category: 'AI助手工具',
-                icon: 'fas fa-gift',
-                bgColor: 'linear-gradient(135deg, #4cc9f0, #4895ef)',
-                url: 'gemini.html',
-                tags: ['Gemini AI Pro', 'Google One', '免费套餐', 'AI助手', 'Gemini Advanced']
-            },
-            {
-                id: 'jimengai',
-                title: '即梦AI',
-                excerpt: '即梦AI是一款创新的视频生成工具，支持文本到视频的高质量转换，助力创作者轻松实现灵感可视化。',
-                category: 'AI视频工具',
-                icon: 'fas fa-film',
-                bgColor: 'linear-gradient(135deg, #3a0ca3, #4361ee)',
-                url: 'jimengai.html',
-                tags: ['视频生成', 'AI工具', '文本转视频', '即梦AI', 'Dreamina']
-            },
-            {
-                id: 'midjourney',
-                title: 'MidJourney V6全面评测：创造力的新高度',
-                excerpt: '探索MidJourney最新版本的强大功能，了解它如何改变数字艺术创作方式，以及如何利用提示工程获得最佳效果。',
-                category: 'AI图像工具',
-                icon: 'fas fa-paint-brush',
-                bgColor: 'linear-gradient(135deg, #4cc9f0, #4895ef)',
-                tags: ['MidJourney', 'AI绘画', '图像生成', '提示工程', '艺术创作']
-            },
-            {
-                id: 'runway',
-                title: 'Runway Gen-2：从文本到视频的革命',
-                excerpt: '深入分析Runway Gen-2的核心技术，展示如何通过简单文本提示生成高质量视频内容，以及它在影视行业的应用前景。',
-                category: 'AI视频工具',
-                icon: 'fas fa-video',
-                bgColor: 'linear-gradient(135deg, #f72585, #b5179e)',
-                tags: ['Runway', '视频生成', '文本转视频', '影视制作', 'AI技术']
-            },
-            {
-                id: 'dalle',
-                title: 'DALL·E 3与Adobe Firefly对比评测',
-                excerpt: '两大AI图像生成巨头正面交锋：谁在创意控制上更胜一筹？谁更适合专业设计师？本文全面对比功能、质量和应用场景。',
-                category: 'AI图像工具',
-                icon: 'fas fa-magic',
-                bgColor: 'linear-gradient(135deg, #7209b7, #560bad)',
-                tags: ['DALL·E', 'Adobe Firefly', 'AI绘画', '图像生成', '设计工具']
-            },
-            {
-                id: 'pika',
-                title: 'Pika Labs：文本生成视频的新选择',
-                excerpt: 'Pika Labs以其独特的技术路线在AI视频生成领域崭露头角。本文详细测试其生成质量、风格控制和实际应用效果。',
-                category: 'AI视频工具',
-                icon: 'fas fa-rocket',
-                bgColor: 'linear-gradient(135deg, #3a0ca3, #4361ee)',
-                tags: ['Pika Labs', '视频生成', 'AI工具', '文本转视频', '创新技术']
-            },
-            {
-                id: 'stable-diffusion',
-                title: 'Stable Diffusion进阶：ControlNet完全指南',
-                excerpt: '掌握ControlNet技术，精确控制Stable Diffusion的生成过程。从基础设置到高级应用，一步步提升你的AI绘画技能。',
-                category: '视频下载',
-                icon: 'fas fa-graduation-cap',
-                bgColor: 'linear-gradient(135deg, #4895ef, #4cc9f0)',
-                tags: ['Stable Diffusion', 'ControlNet', 'AI教程', '绘画技巧', '技术指南']
-            },
-            {
-                id: 'premiere-ai',
-                title: 'Premiere Pro + AI：高效视频制作工作流',
-                excerpt: '如何将AI工具整合到Premiere Pro工作流程中？本文分享10个实用技巧，大幅提升视频编辑效率和质量。',
-                category: '视频下载',
-                icon: 'fas fa-cut',
-                bgColor: 'linear-gradient(135deg, #b5179e, #f72585)',
-                tags: ['Premiere Pro', '视频编辑', 'AI工作流', '效率提升', '制作技巧']
-            }
-        ];
-
-        // 高亮搜索关键词
-        function highlightText(text, keyword) {
-            if (!keyword) return text;
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            return text.replace(regex, '<span class="search-highlight">$1</span>');
-        }
-
-        // 搜索功能
-        function performSearch(query) {
-            if (!query.trim()) {
-                searchResults.classList.remove('active');
-                return;
-            }
-
-            const keywords = query.toLowerCase().split(' ').filter(k => k.length > 0);
-            const results = searchData.filter(item => {
-                const searchText = `${item.title} ${item.excerpt} ${item.category} ${item.tags.join(' ')}`.toLowerCase();
-                return keywords.some(keyword => searchText.includes(keyword));
-            });
-
-            displaySearchResults(results, query);
-        }
-
-        // 显示搜索结果
-        function displaySearchResults(results, query) {
-            if (results.length === 0) {
-                searchResults.innerHTML = `
-                    <div class="no-results">
-                        <i class="fas fa-search"></i>
-                        <p>未找到相关结果</p>
-                        <p style="font-size: 0.9rem; margin-top: 5px;">尝试使用其他关键词搜索</p>
-                    </div>
-                `;
-            } else {
-                searchResults.innerHTML = results.map(item => `
-                    <div class="search-result-item" data-id="${item.id}" onclick="handleSearchResultClick('${item.id}')">
-                        <div class="search-result-icon" style="background: ${item.bgColor}">
-                            <i class="${item.icon}"></i>
-                        </div>
-                        <div class="search-result-content">
-                            <div class="search-result-title">${highlightText(item.title, query)}</div>
-                            <div class="search-result-excerpt">${highlightText(item.excerpt, query)}</div>
-                        </div>
-                        <div class="search-result-category">${item.category}</div>
-                    </div>
-                `).join('');
-            }
             
-            searchResults.classList.add('active');
-        }
+            <!-- 页脚 -->
+            <footer style="background: #232946; color: white; padding: 40px 0; margin-top: 0; text-align: center;">
+                <div style="max-width: 1200px; margin: 0 auto; padding: 0 30px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
+                        <div>
+                            <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;" data-i18n="footer.aboutTitle">关于OPAI</h3>
+                            <p style="line-height: 1.6; color: rgba(255,255,255,0.8);" data-i18n="footer.about">OPAI.online是专业的AI工具分享平台，致力于为用户发现和推荐最优秀的AI工具，提供详细的评测、教程和最新资讯。</p>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;" data-i18n="footer.hotToolsTitle">热门AI工具</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 8px;"><a href="gemini.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.gemini">Gemini AI Pro</a></li>
+                                <li style="margin-bottom: 8px;"><a href="jimengai.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.jimeng">jimeng-ai</a></li>
+                                <li style="margin-bottom: 8px;"><a href="tiqu.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.tiqu">TiQu.cc</a></li>
+                                <li style="margin-bottom: 8px;"><a href="greenvideo.html" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.green">GreenVideo</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;" data-i18n="footer.cateTitle">AI工具分类</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 8px;"><a href="#video-gen-section" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.cateGen">AI视频生成</a></li>
+                                <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.cateImg">AI图像工具</a></li>
+                                <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.cateWrite">AI写作助手</a></li>
+                                <li style="margin-bottom: 8px;"><a href="#" style="color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s;" data-i18n="footer.cateCode">AI编程工具</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: var(--success); margin-bottom: 15px; font-size: 1.2rem;" data-i18n="footer.contactTitle">联系我们</h3>
+                            <p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;" data-i18n="footer.email">邮箱：contact@opai.online</p>
+                            <p style="color: rgba(255,255,255,0.8); margin-bottom: 10px;" data-i18n="footer.site">网站：opai.online</p>
+                            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                                <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                                <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-weibo"></i></a>
+                                <a href="#" style="color: var(--success); font-size: 1.5rem;"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
+                        <p style="color: rgba(255,255,255,0.6); margin-bottom: 10px;" data-i18n="footer.copyright">© 2024 OPAI.online - 专业AI工具分享平台</p>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 10px;" data-i18n="footer.slogan">发现最好用的AI工具，让AI技术为您的创作赋能</p>
+                        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <a href="/sitemap.xml" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;" data-i18n="footer.sitemap">网站地图</a>
+                            <a href="/privacy.html" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;" data-i18n="footer.privacy">隐私政策</a>
+                            <a href="/terms.html" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem;" data-i18n="footer.terms">使用条款</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            
+            <script>
+                // 模态框功能
+                document.getElementById('createPostBtn').addEventListener('click', function() {
+                    const modal = document.querySelector('.modal');
+                    if (modal) modal.style.display = 'flex';
+                });
 
-        // 处理搜索结果点击
-        function handleSearchResultClick(itemId) {
-            const item = searchData.find(data => data.id === itemId);
-            if (item && item.url) {
-                window.location.href = item.url;
-            } else {
-                // 滚动到对应的文章卡片
-                const targetSection = document.getElementById(itemId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                var closeModalBtn = document.querySelector('.modal .close-modal');
+                if (closeModalBtn) {
+                    closeModalBtn.addEventListener('click', function() {
+                        const modal = document.querySelector('.modal');
+                        if (modal) modal.style.display = 'none';
+                    });
                 }
-            }
-            searchResults.classList.remove('active');
-            searchInput.value = '';
-        }
 
-        // 搜索输入事件
-        let searchTimeout;
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                performSearch(this.value);
-            }, 300); // 300ms 防抖
-        });
+                // 轮播图功能
+                const carousel = document.querySelector('.carousel');
+                const carouselItems = carousel.querySelectorAll('.carousel-item');
+                const carouselDots = carousel.querySelectorAll('.carousel-dot');
+                let currentIndex = 0;
 
-        // 搜索按钮点击事件
-        searchBtn.addEventListener('click', function() {
-            performSearch(searchInput.value);
-        });
+                function showItem(index) {
+                    carouselItems.forEach((item, i) => {
+                        item.style.transform = `translateX(${100 * (i - index)}%)`;
+                    });
+                    carouselDots.forEach((dot, i) => {
+                        dot.classList.remove('active');
+                        if (i === index) {
+                            dot.classList.add('active');
+                        }
+                    });
+                }
 
-        // 回车键搜索
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch(this.value);
-            }
-        });
+                carouselDots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        currentIndex = index;
+                        showItem(currentIndex);
+                    });
+                });
 
-        // 点击外部关闭搜索结果
-        document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !searchBtn.contains(e.target)) {
-                searchResults.classList.remove('active');
-            }
-        });
+                // 自动轮播
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % carouselItems.length;
+                    showItem(currentIndex);
+                }, 5000); // 每5秒切换一次
 
-        // 搜索框获得焦点时显示最近搜索
-        searchInput.addEventListener('focus', function() {
-            if (this.value.trim()) {
-                performSearch(this.value);
-            }
-        });
-    </script>
-</body>
-<script>
-fetch('sidebar.html')
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById('sidebar').outerHTML = html;
-  });
-</script>
-</html>
+                // 初始化轮播，确保点击圆点时能正常切换
+                showItem(0);
+
+                // 站内搜索功能
+                const searchInput = document.getElementById('searchInput');
+                const searchBtn = document.getElementById('searchBtn');
+                const searchResults = document.getElementById('searchResults');
+                
+                // 搜索数据 - 包含所有文章和工具信息
+                const searchData = [
+                    {
+                        id: 'gemini',
+                        title: '免费获取 15个月 Gemini AI Pro 套餐！无需学生邮箱，切勿错过！',
+                        excerpt: 'Google 推出 Gemini Advanced 替代方案！原价 $20/月的 Google One AI 进阶计划，现在限时可免费领取！',
+                        category: 'AI助手工具',
+                        icon: 'fas fa-gift',
+                        bgColor: 'linear-gradient(135deg, #4cc9f0, #4895ef)',
+                        url: 'gemini.html',
+                        tags: ['Gemini AI Pro', 'Google One', '免费套餐', 'AI助手', 'Gemini Advanced']
+                    },
+                    {
+                        id: 'jimengai',
+                        title: '即梦AI',
+                        excerpt: '即梦AI是一款创新的视频生成工具，支持文本到视频的高质量转换，助力创作者轻松实现灵感可视化。',
+                        category: 'AI视频工具',
+                        icon: 'fas fa-film',
+                        bgColor: 'linear-gradient(135deg, #3a0ca3, #4361ee)',
+                        url: 'jimengai.html',
+                        tags: ['视频生成', 'AI工具', '文本转视频', '即梦AI', 'Dreamina']
+                    },
+                    {
+                        id: 'midjourney',
+                        title: 'MidJourney V6全面评测：创造力的新高度',
+                        excerpt: '探索MidJourney最新版本的强大功能，了解它如何改变数字艺术创作方式，以及如何利用提示工程获得最佳效果。',
+                        category: 'AI图像工具',
+                        icon: 'fas fa-paint-brush',
+                        bgColor: 'linear-gradient(135deg, #4cc9f0, #4895ef)',
+                        tags: ['MidJourney', 'AI绘画', '图像生成', '提示工程', '艺术创作']
+                    },
+                    {
+                        id: 'runway',
+                        title: 'Runway Gen-2：从文本到视频的革命',
+                        excerpt: '深入分析Runway Gen-2的核心技术，展示如何通过简单文本提示生成高质量视频内容，以及它在影视行业的应用前景。',
+                        category: 'AI视频工具',
+                        icon: 'fas fa-video',
+                        bgColor: 'linear-gradient(135deg, #f72585, #b5179e)',
+                        tags: ['Runway', '视频生成', '文本转视频', '影视制作', 'AI技术']
+                    },
+                    {
+                        id: 'dalle',
+                        title: 'DALL·E 3与Adobe Firefly对比评测',
+                        excerpt: '两大AI图像生成巨头正面交锋：谁在创意控制上更胜一筹？谁更适合专业设计师？本文全面对比功能、质量和应用场景。',
+                        category: 'AI图像工具',
+                        icon: 'fas fa-magic',
+                        bgColor: 'linear-gradient(135deg, #7209b7, #560bad)',
+                        tags: ['DALL·E', 'Adobe Firefly', 'AI绘画', '图像生成', '设计工具']
+                    },
+                    {
+                        id: 'pika',
+                        title: 'Pika Labs：文本生成视频的新选择',
+                        excerpt: 'Pika Labs以其独特的技术路线在AI视频生成领域崭露头角。本文详细测试其生成质量、风格控制和实际应用效果。',
+                        category: 'AI视频工具',
+                        icon: 'fas fa-rocket',
+                        bgColor: 'linear-gradient(135deg, #3a0ca3, #4361ee)',
+                        tags: ['Pika Labs', '视频生成', 'AI工具', '文本转视频', '创新技术']
+                    },
+                    {
+                        id: 'stable-diffusion',
+                        title: 'Stable Diffusion进阶：ControlNet完全指南',
+                        excerpt: '掌握ControlNet技术，精确控制Stable Diffusion的生成过程。从基础设置到高级应用，一步步提升你的AI绘画技能。',
+                        category: '视频下载',
+                        icon: 'fas fa-graduation-cap',
+                        bgColor: 'linear-gradient(135deg, #4895ef, #4cc9f0)',
+                        tags: ['Stable Diffusion', 'ControlNet', 'AI教程', '绘画技巧', '技术指南']
+                    },
+                    {
+                        id: 'premiere-ai',
+                        title: 'Premiere Pro + AI：高效视频制作工作流',
+                        excerpt: '如何将AI工具整合到Premiere Pro工作流程中？本文分享10个实用技巧，大幅提升视频编辑效率和质量。',
+                        category: '视频下载',
+                        icon: 'fas fa-cut',
+                        bgColor: 'linear-gradient(135deg, #b5179e, #f72585)',
+                        tags: ['Premiere Pro', '视频编辑', 'AI工作流', '效率提升', '制作技巧']
+                    }
+                ];
+
+                // 高亮搜索关键词
+                function highlightText(text, keyword) {
+                    if (!keyword) return text;
+                    const regex = new RegExp(`(${keyword})`, 'gi');
+                    return text.replace(regex, '<span class="search-highlight">$1</span>');
+                }
+
+                // 搜索功能
+                function performSearch(query) {
+                    if (!query.trim()) {
+                        searchResults.classList.remove('active');
+                        return;
+                    }
+
+                    const keywords = query.toLowerCase().split(' ').filter(k => k.length > 0);
+                    const results = searchData.filter(item => {
+                        const searchText = `${item.title} ${item.excerpt} ${item.category} ${item.tags.join(' ')}`.toLowerCase();
+                        return keywords.some(keyword => searchText.includes(keyword));
+                    });
+
+                    displaySearchResults(results, query);
+                }
+
+                // 显示搜索结果
+                function displaySearchResults(results, query) {
+                    if (results.length === 0) {
+                        searchResults.innerHTML = `
+                            <div class="no-results">
+                                <i class="fas fa-search"></i>
+                                <p>未找到相关结果</p>
+                                <p style="font-size: 0.9rem; margin-top: 5px;">尝试使用其他关键词搜索</p>
+                            </div>
+                        `;
+                    } else {
+                        searchResults.innerHTML = results.map(item => `
+                            <div class="search-result-item" data-id="${item.id}" onclick="handleSearchResultClick('${item.id}')">
+                                <div class="search-result-icon" style="background: ${item.bgColor}">
+                                    <i class="${item.icon}"></i>
+                                </div>
+                                <div class="search-result-content">
+                                    <div class="search-result-title">${highlightText(item.title, query)}</div>
+                                    <div class="search-result-excerpt">${highlightText(item.excerpt, query)}</div>
+                                </div>
+                                <div class="search-result-category">${item.category}</div>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    searchResults.classList.add('active');
+                }
+
+                // 处理搜索结果点击
+                function handleSearchResultClick(itemId) {
+                    const item = searchData.find(data => data.id === itemId);
+                    if (item && item.url) {
+                        window.location.href = item.url;
+                    } else {
+                        // 滚动到对应的文章卡片
+                        const targetSection = document.getElementById(itemId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                    searchResults.classList.remove('active');
+                    searchInput.value = '';
+                }
+
+                // 搜索输入事件
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch(this.value);
+                    }, 300); // 300ms 防抖
+                });
+
+                // 搜索按钮点击事件
+                searchBtn.addEventListener('click', function() {
+                    performSearch(searchInput.value);
+                });
+
+                // 回车键搜索
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch(this.value);
+                    }
+                });
+
+                // 点击外部关闭搜索结果
+                document.addEventListener('click', function(e) {
+                    if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !searchBtn.contains(e.target)) {
+                        searchResults.classList.remove('active');
+                    }
+                });
+
+                // 搜索框获得焦点时显示最近搜索
+                searchInput.addEventListener('focus', function() {
+                    if (this.value.trim()) {
+                        performSearch(this.value);
+                    }
+                });
+
+                // Google 登录集成
+                function handleCredentialResponse(response) {
+                    const data = parseJwt(response.credential);
+                    // 显示用户信息
+                    document.getElementById('user-profile').style.display = 'flex';
+                    document.getElementById('google-login-btn').style.display = 'none';
+                    // 显示头像图片
+                    if (data.picture) {
+                        document.getElementById('user-avatar').innerHTML = `<img src="${data.picture}" style="width:40px;height:40px;border-radius:50%;">`;
+                    } else {
+                        document.getElementById('user-avatar').innerText = data.given_name ? data.given_name[0] : data.name[0];
+                    }
+                    document.getElementById('user-name').innerText = data.name;
+                }
+
+                // 解析JWT
+                function parseJwt (token) {
+                    var base64Url = token.split('.')[1];
+                    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                    return JSON.parse(jsonPayload);
+                }
+
+                // 直接初始化Google登录按钮（不再用window.onload）
+                if (window.google && google.accounts && google.accounts.id) {
+                    google.accounts.id.initialize({
+                        client_id: "148741481582-gdq94od1nd76o914noc3nsi9msm73grb.apps.googleusercontent.com",
+                        callback: handleCredentialResponse
+                    });
+                    google.accounts.id.renderButton(
+                        document.getElementById("google-login-btn"),
+                        { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
+                    );
+                } else {
+                    // 如果SDK还没加载，等它加载后再初始化
+                    window.addEventListener('DOMContentLoaded', function() {
+                        if (window.google && google.accounts && google.accounts.id) {
+                            google.accounts.id.initialize({
+                                client_id: "148741481582-gdq94od1nd76o914noc3nsi9msm73grb.apps.googleusercontent.com",
+                                callback: handleCredentialResponse
+                            });
+                            google.accounts.id.renderButton(
+                                document.getElementById("google-login-btn"),
+                                { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
+                            );
+                        }
+                    });
+                }
+
+                function setLangSelect(lang) {
+                    document.getElementById('lang-select').value = lang;
+                }
+                document.getElementById('lang-select').addEventListener('change', function() {
+                    changeLang(this.value);
+                });
+                // 页面加载时自动设置下拉选中项
+                $(function(){
+                    setLangSelect(i18next.language || 'en');
+                });
+            </script>
+        </body>
+        <script>
+        fetch('sidebar.html')
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('sidebar').outerHTML = html;
+          });
+        </script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        </html>

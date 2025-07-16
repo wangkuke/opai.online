@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewStats | YouTube View Analytics & Channel Trends</title>
+    <meta name="description" content="ViewStats is the ultimate free YouTube view analytics tool. Instantly analyze your channel's view count, trends, peak times, and more. No registration required. Perfect for creators, brands, and MCNs.">
+    <meta name="keywords" content="viewstats, youtube view analytics, youtube view stats, youtube channel trends, youtube view count, youtube analytics tool, channel view analysis, viewstats.com">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://viewstats.com/info">
+    <meta property="og:title" content="ViewStats | YouTube View Analytics & Channel Trends">
+    <meta property="og:description" content="Analyze YouTube channel view counts, trends, and peak times with ViewStats. Free, accurate, and privacy-friendly analytics for creators and brands.">
+    <meta property="og:image" content="src/viewstats_og.png">
+    <meta property="og:site_name" content="ViewStats">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://viewstats.com/info">
+    <meta property="twitter:title" content="ViewStats | YouTube View Analytics & Channel Trends">
+    <meta property="twitter:description" content="Analyze YouTube channel view counts, trends, and peak times with ViewStats. Free, accurate, and privacy-friendly analytics for creators and brands.">
+    <meta property="twitter:image" content="src/viewstats_og.png">
+    <link rel="canonical" href="https://viewstats.com/info">
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "ViewStats",
+      "url": "https://viewstats.com/info",
+      "description": "ViewStats is a free YouTube view analytics tool. Instantly analyze channel view counts, trends, and peak times. No registration required. Privacy-friendly.",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ViewStats",
+        "url": "https://viewstats.com/info",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "src/viewstats_og.png"
+        }
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "ViewStats Key Features",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "YouTube View Analytics", "description": "Check your YouTube channel's view count and trends instantly."},
+          {"@type": "ListItem", "position": 2, "name": "Channel Trends", "description": "Visualize your channel's view growth and peak times."},
+          {"@type": "ListItem", "position": 3, "name": "Multi-Channel Comparison", "description": "Compare view stats across multiple channels."},
+          {"@type": "ListItem", "position": 4, "name": "Data Export", "description": "Export view analytics data to Excel/CSV for further analysis."},
+          {"@type": "ListItem", "position": 5, "name": "Completely Free", "description": "All features are 100% free, no registration, no ads, secure and private."}
+        ]
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": "2024-12-01"
+    }
+    </script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 继承ytlarge.html风格 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .logo i { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; }
+        .category-section { margin-bottom: 25px; padding: 0 15px; }
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .category-title i { margin-right: 10px; font-size: 1.2rem; }
+        .category-list { list-style: none; padding: 0 5px; }
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .category-list li:hover { background: rgba(255,255,255,0.1); }
+        .category-list li:hover::before { background: var(--primary); }
+        .category-list li.active { background: rgba(230,57,70,0.3); }
+        .category-list li.active::before { background: var(--accent); }
+        .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nav-links { display: flex; list-style: none; gap: 25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--primary); }
+        .user-actions { display: flex; align-items: center; gap: 15px; }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.25);
+        }
+        .btn i { margin-right: 8px; }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+            background: var(--secondary);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .user-profile:hover { background: rgba(255,255,255,0.85); }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+        }
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245,247,251,0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+        .stats-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .stats-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(230,57,70,0.10);
+            background: #eee;
+        }
+        .stats-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .stats-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+        .stats-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+        .stats-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(230,57,70,0.12);
+        }
+        .stats-btn:hover {
+            background: var(--secondary);
+        }
+        .stats-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .stats-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .qr-img-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* 统计数据卡片 */
+        .stats-summary {
+            display: flex;
+            gap: 28px;
+            margin: 30px 0 20px 0;
+            flex-wrap: wrap;
+        }
+        .summary-card {
+            flex: 1 1 220px;
+            background: var(--card-bg);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 28px 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 180px;
+            margin-bottom: 10px;
+        }
+        .summary-card .summary-title {
+            font-size: 1.05rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .summary-card .summary-title i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        .summary-card .summary-value {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        /* 趋势图占位 */
+        .trend-chart-box {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .trend-chart-placeholder {
+            width: 90%;
+            height: 180px;
+            background: repeating-linear-gradient(135deg, #e9ecef, #e9ecef 10px, #f8f9fa 10px, #f8f9fa 20px);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        /* 相关推荐区域样式 */
+        .related-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            margin-top: 40px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+        .section-title i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
+        }
+        .article-image {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .article-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        .article-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+        .article-content {
+            padding: 20px;
+        }
+        .article-title {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-excerpt {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3;
+        }
+        .article-overlay i {
+            color: white;
+            font-size: 2rem;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+        .article-card:hover .article-overlay i {
+            transform: translateX(0);
+        }
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .read-time, .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .read-time i, .article-date i {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+        }
+        @media (max-width: 992px) {
+            .app-layout { grid-template-columns: 1fr; grid-template-areas: "header" "content"; }
+            .sidebar { display: none; }
+        }
+        @media (max-width: 768px) {
+            .main-section { padding: 18px 6px; }
+            .related-section { padding: 0 20px; margin-top: 30px; }
+            .section-title { font-size: 1.5rem; margin-bottom: 25px; }
+            .articles-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+            .article-image { height: 140px; }
+            .article-content { padding: 16px; }
+            .article-title { font-size: 1rem; }
+            .article-excerpt { font-size: 0.9rem; }
+            .article-meta { margin-top: 12px; padding-top: 12px; font-size: 0.8rem; }
+            .article-overlay i { font-size: 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .related-section { padding: 0 15px; }
+            .articles-grid { grid-template-columns: 1fr; gap: 16px; }
+            .article-image { height: 120px; }
+            .article-category { font-size: 0.8rem; padding: 4px 10px; }
+            .article-category i { font-size: 0.7rem; }
+            .article-content { padding: 14px; }
+            .article-title { font-size: 0.95rem; margin-bottom: 10px; }
+            .article-excerpt { font-size: 0.85rem; -webkit-line-clamp: 2; }
+            .article-meta { margin-top: 10px; padding-top: 10px; font-size: 0.75rem; flex-direction: column; align-items: flex-start; gap: 5px; }
+            .article-overlay i { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <div id="sidebar"></div>
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Monetization Checker</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li><a href="#">Tutorials</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <div class="user-actions">
+                <a class="btn" href="https://www.viewstats.com/info" target="_blank">
+                    <i class="fas fa-chart-bar"></i> Try Now
+                </a>
+                <div class="user-profile">
+                    <div class="user-avatar">VS</div>
+                    <span>Analytics Assistant</span>
+                </div>
+            </div>
+        </header>
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- 头部卡片 -->
+            <div class="stats-card">
+                <div class="stats-img">
+                    <img src="src/viewstats.png" alt="ViewStats - YouTube Analytics Tool" />
+                </div>
+                <div class="stats-info">
+                    <h1>ViewStats: YouTube View Analytics</h1>
+                    <p>ViewStats is the ultimate free YouTube analytics tool for creators, MCNs, and brands to instantly analyze channel view counts, trends, and peak times. With ViewStats, simply enter your channel link or ID to get accurate view statistics and insights—no registration required.</p>
+                    <div class="stats-btns">
+                        <a href="https://www.viewstats.com/info" target="_blank" class="btn stats-btn">Try ViewStats Now</a>
+                        <a class="btn stats-btn-outline" id="viewstatsQrBtn">Try ViewStats on Mobile</a>
+                        <div class="qr-dropdown" id="viewstatsQrDropdown" style="display:none;">
+                            <div class="qr-img-box">
+                                <div id="viewstatsQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
+                                <div class="qr-tip">Scan to try ViewStats on mobile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 详细功能介绍 -->
+            <section class="main-section">
+                <h2><i class="fas fa-eye"></i> About ViewStats</h2>
+                <p>ViewStats is a dedicated YouTube view analytics and trend analysis toolkit. Instantly check your channel's total views, daily averages, peak days, and most active hours with ViewStats. 100% free, no registration, no ads, and privacy-friendly. Perfect for creators, MCNs, and brands to understand channel performance and audience behavior using ViewStats.</p>
+                <p style="color:var(--gray);font-size:0.98rem;">Key features: View trend chart, total/average/peak stats, peak hour analysis, historical comparison, data export, free forever, privacy protection.</p>
+                <h2><i class="fas fa-star"></i> Key Features</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-chart-area" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>View trend chart: Visualize channel/video view trends over time.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-eye" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Total view count: Instantly get your channel's total views.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-bolt" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Peak day analysis: Find your highest daily view count and the corresponding date.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-clock" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Peak hour analysis: Discover when your audience is most active.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-balance-scale" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Historical comparison: Compare view stats across multiple channels or videos.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-file-export" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Data export: Export your view analytics for further analysis and reporting.</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-gift" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Completely free: All features are 100% free, no registration, no ads, secure and private.</span>
+                    </li>
+                </ul>
+                <h2><i class="fas fa-link"></i> Official Website</h2>
+                <p><strong>Official Site:</strong> <a href="https://viewstats.com/info" target="_blank" style="color: var(--primary); text-decoration: none;">https://viewstats.com/</a></p>
+                <p>Visit ViewStats to experience the most professional YouTube view analytics and trend analysis service. ViewStats helps you unlock your channel's full potential.</p>
+                <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions (FAQ)</h2>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">How does ViewStats analyze view counts?</h3>
+                    <p>Simply enter your channel or video link, and ViewStats will automatically fetch and analyze public data to generate trend charts and statistics.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">What types of view analytics are supported by ViewStats?</h3>
+                    <p>ViewStats supports total view count, daily averages, peak days, peak hours, historical comparison, and more.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Can I export the data from ViewStats?</h3>
+                    <p>Yes, you can export all analytics data from ViewStats to Excel/CSV for further analysis and reporting.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Is my data safe and private with ViewStats?</h3>
+                    <p>Absolutely. No registration required, and all analytics are based on public data. ViewStats never stores or shares your information.</p>
+                </div>
+            </section>
+            <!-- 相关推荐 -->
+            <section class="related-section">
+                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> Related Articles</h2>
+                <div class="articles-grid"></div>
+            </section>
+        </main>
+    </div>
+    <script>
+    // 相关推荐 - 聚焦YouTube观看量与数据分析
+    const viewstatsRelated = [
+      {
+        title: "How to Analyze YouTube Channel View Trends with ViewStats?",
+        category: "Data Analysis",
+        bg: "linear-gradient(135deg, #e63946, #f1faee)",
+        excerpt: "A detailed guide on using ViewStats trend charts and analytics tools to understand channel traffic changes.",
+        icon: "fas fa-chart-line"
+      },
+      {
+        title: "Best YouTube Analytics Tools for Creators (Including ViewStats)",
+        category: "Tool Recommendation",
+        bg: "linear-gradient(135deg, #457b9d, #a8dadc)",
+        excerpt: "A roundup of the best YouTube view analytics and data tools like ViewStats to help creators optimize content.",
+        icon: "fas fa-tools"
+      },
+      {
+        title: "How to Increase YouTube Video Views with ViewStats?",
+        category: "Traffic Growth",
+        bg: "linear-gradient(135deg, #1d3557, #f1faee)",
+        excerpt: "Practical tips and strategies using ViewStats to help your videos get more exposure and views.",
+        icon: "fas fa-lightbulb"
+      }
+    ];
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+    function renderRelated() {
+      const cards = shuffle(viewstatsRelated).slice(0, 3);
+      const container = document.querySelector('.articles-grid');
+      container.innerHTML = cards.map((card, index) => `
+        <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+          <div class="article-image" style="background: ${card.bg};">
+            <div class="article-category">
+              <i class="${card.icon}"></i>
+              ${card.category}
+            </div>
+            <div class="article-overlay">
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </div>
+          <div class="article-content">
+            <h3 class="article-title">${card.title}</h3>
+            <p class="article-excerpt">${card.excerpt}</p>
+            <div class="article-meta">
+              <span class="read-time">
+                <i class="fas fa-clock"></i>
+                3 min read
+              </span>
+              <span class="article-date">
+                <i class="fas fa-calendar"></i>
+                2024
+              </span>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderRelated();
+    });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+    // ViewStats二维码弹窗交互
+    (function(){
+        var btn = document.getElementById('viewstatsQrBtn');
+        var dropdown = document.getElementById('viewstatsQrDropdown');
+        var qrBox = document.getElementById('viewstatsQrBox');
+        var qrCreated = false;
+        function createQr() {
+            if (!qrCreated) {
+                new QRCode(qrBox, {
+                    text: 'https://www.viewstats.com/info',
+                    width: 120,
+                    height: 120,
+                    colorDark: '#212529',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                qrCreated = true;
+            }
+        }
+        function showDropdown() {
+            createQr();
+            var btnRect = btn.getBoundingClientRect();
+            var parentRect = btn.parentElement.getBoundingClientRect();
+            dropdown.style.position = 'absolute';
+            dropdown.style.left = (btnRect.left - parentRect.left + btnRect.width/2 - dropdown.offsetWidth/2) + 'px';
+            dropdown.style.top = (btnRect.bottom - parentRect.top + 8) + 'px';
+            dropdown.style.display = 'block';
+        }
+        function hideDropdown() {
+            dropdown.style.display = 'none';
+        }
+        var isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+        if (isMobile) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (dropdown.style.display === 'block') {
+                    hideDropdown();
+                } else {
+                    showDropdown();
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target) && e.target !== btn) {
+                    hideDropdown();
+                }
+            });
+        } else {
+            btn.addEventListener('mouseenter', function() {
+                showDropdown();
+            });
+            btn.addEventListener('mouseleave', function() {
+                setTimeout(function(){ hideDropdown(); }, 100);
+            });
+            dropdown.addEventListener('mouseenter', function() {
+                showDropdown();
+            });
+            dropdown.addEventListener('mouseleave', function() {
+                hideDropdown();
+            });
+        }
+    })();
+    </script>
+    <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar').outerHTML = html;
+      });
+    </script>
+</body>
+</html> 
