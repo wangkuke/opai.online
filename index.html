@@ -1302,13 +1302,13 @@
                 <li><a href="#" data-i18n="nav.community"></a></li>
                 <li><a href="#" data-i18n="nav.about"></a></li>
             </ul>
-            <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
-                <select id="lang-select" class="lang-select">
-                    <option value="en">English</option>
-                    <option value="zh">中文</option>
-                </select>
-            </div>
             <div class="user-actions">
+                <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
+                    <select id="lang-select" class="lang-select">
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
                 <button class="btn" id="createPostBtn" data-i18n="btn.publish"></button>
                 <!-- Google 登录按钮容器 -->
                 <div id="google-login-btn"></div>
@@ -1853,7 +1853,7 @@
                     const data = parseJwt(response.credential);
                     // 显示用户信息
                     document.getElementById('user-profile').style.display = 'flex';
-                    document.getElementById('google-login-btn').style.display = 'none';
+                    // 不再隐藏谷歌登录按钮
                     // 显示头像图片
                     if (data.picture) {
                         document.getElementById('user-avatar').innerHTML = `<img src="${data.picture}" style="width:40px;height:40px;border-radius:50%;">`;
@@ -1863,7 +1863,6 @@
                     document.getElementById('user-name').innerText = data.name;
                 }
 
-                // 解析JWT
                 function parseJwt (token) {
                     var base64Url = token.split('.')[1];
                     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -1873,30 +1872,17 @@
                     return JSON.parse(jsonPayload);
                 }
 
-                // 直接初始化Google登录按钮（不再用window.onload）
-                if (window.google && google.accounts && google.accounts.id) {
-                    google.accounts.id.initialize({
-                        client_id: "148741481582-gdq94od1nd76o914noc3nsi9msm73grb.apps.googleusercontent.com",
-                        callback: handleCredentialResponse
-                    });
-                    google.accounts.id.renderButton(
-                        document.getElementById("google-login-btn"),
-                        { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
-                    );
-                } else {
-                    // 如果SDK还没加载，等它加载后再初始化
-                    window.addEventListener('DOMContentLoaded', function() {
-                        if (window.google && google.accounts && google.accounts.id) {
-                            google.accounts.id.initialize({
-                                client_id: "148741481582-gdq94od1nd76o914noc3nsi9msm73grb.apps.googleusercontent.com",
-                                callback: handleCredentialResponse
-                            });
-                            google.accounts.id.renderButton(
-                                document.getElementById("google-login-btn"),
-                                { theme: "outline", size: "large", shape: "pill", text: "signin_with" }
-                            );
-                        }
-                    });
+                function initGoogleLogin() {
+                    if (window.google && google.accounts && google.accounts.id) {
+                        google.accounts.id.initialize({
+                            client_id: "148741481582-gdq94od1nd76o914noc3nsi9msm73grb.apps.googleusercontent.com",
+                            callback: handleCredentialResponse
+                        });
+                        google.accounts.id.renderButton(
+                            document.getElementById("google-login-btn"),
+                            { theme: "outline", size: "medium", shape: "rectangular", text: "signin" }
+                        );
+                    }
                 }
 
                 function setLangSelect(lang) {
@@ -2052,5 +2038,5 @@
             document.getElementById('sidebar').outerHTML = html;
           });
         </script>
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleLogin()"></script>
         </html>
