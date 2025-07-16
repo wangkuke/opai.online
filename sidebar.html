@@ -60,3 +60,17 @@
       color: var(--success) !important; /* 悬停时高亮，和其它项一致 */
     }
     </style>
+<script>
+(function() {
+  // 仅在 Ai/1.html 页面生效
+  if (location.pathname.endsWith('/Ai/1.html') || location.pathname.endsWith('Ai/1.html')) {
+    document.querySelectorAll('.sidebar a').forEach(function(a) {
+      var href = a.getAttribute('href');
+      // 只处理以.html结尾的相对链接
+      if (href && !href.startsWith('http') && !href.startsWith('/') && !href.startsWith('#') && href.endsWith('.html')) {
+        a.setAttribute('href', '../' + href);
+      }
+    });
+  }
+})();
+</script>
