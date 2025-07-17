@@ -5,9 +5,14 @@
 
 class I18nLoader {
     constructor() {
+        // 如果没有设置语言，则默认为英语
+        if (!localStorage.getItem('language')) {
+            localStorage.setItem('language', 'en');
+        }
         this.currentLanguage = localStorage.getItem('language') || 'en';
         this.translations = {};
         this.isLoaded = false;
+        console.log(`i18n loader initialized with language: ${this.currentLanguage}`);
     }
 
     // 加载语言文件
@@ -68,8 +73,11 @@ class I18nLoader {
             // 更新页面特定内容
             this.updatePageSpecificContent();
             
-            // 更新侧边栏翻译
-            this.updateSidebarTranslations();
+            // 如果切换到中文，确保侧边栏保持英文
+            if (lang === 'zh' && window.applySidebarEnglishTranslations) {
+                console.log('Language switched to Chinese, keeping sidebar in English');
+                setTimeout(window.applySidebarEnglishTranslations, 100);
+            }
         }
     }
 
@@ -141,6 +149,31 @@ class I18nLoader {
             const translation = this.t(key);
             element.textContent = translation;
         });
+        
+        // 特别处理侧边栏元素
+        this.updateSidebarElements();
+    }
+    
+    // 特别处理侧边栏元素
+    updateSidebarElements() {
+        // 获取所有带有data-i18n属性的侧边栏元素
+        const sidebarElements = document.querySelectorAll('.sidebar [data-i18n]');
+        
+        // 如果找到侧边栏元素，应用翻译
+        if (sidebarElements.length > 0) {
+            console.log(`Found ${sidebarElements.length} sidebar elements to translate`);
+            
+            sidebarElements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = this.t(key);
+                
+                // 如果找到翻译，应用它
+                if (translation && translation !== key) {
+                    element.textContent = translation;
+                    console.log(`Translated sidebar element "${key}" to "${translation}"`);
+                }
+            });
+        }
     }
 
     // 更新语言切换器的活跃状态

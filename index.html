@@ -78,8 +78,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- 加载侧边栏修复脚本 -->
-    <script src="fix-sidebar-i18n.js"></script>
+    <!-- 加载侧边栏英文加载器 -->
+    <script src="sidebar-english.js"></script>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -2196,18 +2196,28 @@
     </script>
 </body>
 <script>
-    // 使用新的侧边栏加载器
-    if (window.loadSidebar) {
-        window.loadSidebar();
+    // 使用sidebar-loader.js中的功能加载侧边栏
+    // 使用 fix-sidebar-i18n.js 处理侧边栏加载和翻译
+    // 该脚本会自动加载侧边栏并应用英文翻译
+    if (window.fixSidebarI18n) {
+        console.log('Using enhanced sidebar i18n fix');
+        // fixSidebarI18n 函数会在脚本内部自动调用
     } else {
-        // 如果侧边栏加载器尚未加载，使用旧方法
+        console.log('Sidebar i18n fix not available, using direct method');
         fetch('sidebar.html')
             .then(res => res.text())
             .then(html => {
                 document.getElementById('sidebar').outerHTML = html;
-                // 尝试应用翻译
+                // 强制设置为英文
                 if (window.i18n && window.i18n.isLoaded) {
+                    // 临时保存当前语言
+                    const originalLang = window.i18n.currentLanguage;
+                    // 切换到英文
+                    window.i18n.currentLanguage = 'en';
+                    // 更新文本
                     window.i18n.updatePageText();
+                    // 恢复原始语言
+                    window.i18n.currentLanguage = originalLang;
                 }
             });
     }
