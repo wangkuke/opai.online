@@ -67,6 +67,29 @@ class I18nLoader {
 
             // 更新页面特定内容
             this.updatePageSpecificContent();
+            
+            // 更新侧边栏翻译
+            this.updateSidebarTranslations();
+        }
+    }
+
+    // 更新侧边栏翻译
+    updateSidebarTranslations() {
+        console.log('Updating sidebar translations from i18n-loader...');
+        
+        // 如果存在侧边栏更新函数，调用它
+        if (window.updateSidebarTranslations && typeof window.updateSidebarTranslations === 'function') {
+            window.updateSidebarTranslations();
+        } else {
+            // 否则手动更新侧边栏
+            const sidebarElements = document.querySelectorAll('.sidebar [data-i18n]');
+            sidebarElements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = this.t(key);
+                if (translation && translation !== key) {
+                    element.textContent = translation;
+                }
+            });
         }
     }
 

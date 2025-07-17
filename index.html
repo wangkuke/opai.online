@@ -77,6 +77,9 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 加载侧边栏修复脚本 -->
+    <script src="fix-sidebar-i18n.js"></script>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -2193,11 +2196,21 @@
     </script>
 </body>
 <script>
-    fetch('sidebar.html')
-        .then(res => res.text())
-        .then(html => {
-            document.getElementById('sidebar').outerHTML = html;
-        });
+    // 使用新的侧边栏加载器
+    if (window.loadSidebar) {
+        window.loadSidebar();
+    } else {
+        // 如果侧边栏加载器尚未加载，使用旧方法
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar').outerHTML = html;
+                // 尝试应用翻译
+                if (window.i18n && window.i18n.isLoaded) {
+                    window.i18n.updatePageText();
+                }
+            });
+    }
 </script>
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleLogin()"></script>
 
