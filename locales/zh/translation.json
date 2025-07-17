@@ -51,6 +51,8 @@
   "article.ad.excerpt": "文章还在更新中",
   "model.grok": "Grok",
   "model.grok.desc": "Grok4是最前沿的AI大模型平台，可以生成文字，图片，虚拟人",
+  "model.cici": "Cici AI",
+  "model.cici.desc": "Cici AI是您的AI聊天助手，可进行智能对话、写作、翻译和编程。获取答案，寻找灵感，讨论任何话题",
   "video.green": "GreenVideo 视频下载",
   "video.green.desc": "免费下载YouTube、B站、抖音视频",
   "video.tiqu": "TiQu.cc",
