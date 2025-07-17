@@ -563,14 +563,14 @@
 <body>
     <div class="app-layout">
         <div id="sidebar"></div>
-        <!-- 顶部导航栏 -->
+        <!-- Top Navigation Bar -->
         <header class="header">
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#">Monetization Checker</a></li>
-                <li><a href="#">Analytics</a></li>
+                <li><a href="#">AI Tools</a></li>
                 <li><a href="#">Tutorials</a></li>
                 <li><a href="#">Blog</a></li>
+                <li><a href="#">Community</a></li>
                 <li><a href="#">About</a></li>
             </ul>
             <div class="user-actions">
@@ -578,7 +578,7 @@
                 <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
                     <select id="lang-select" class="lang-select" onchange="languageSwitcher.switchLanguage(this.value)">
                         <option value="en">English</option>
-                        <option value="zh" selected>中文</option>
+                        <option value="zh">中文</option>
                     </select>
                 </div>
                 <script>
@@ -645,9 +645,12 @@
                     }
                 </style>
                 
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> Publish Article
+                </button>
                 <div class="user-profile">
-                    <div class="user-avatar">VS</div>
-                    <span>Analytics Assistant</span>
+                    <div class="user-avatar">AI</div>
+                    <span>AI Explorer</span>
                 </div>
             </div>
         </header>
