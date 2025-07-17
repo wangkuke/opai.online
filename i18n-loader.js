@@ -5,7 +5,7 @@
 
 class I18nLoader {
     constructor() {
-        this.currentLanguage = localStorage.getItem('language') || 'zh';
+        this.currentLanguage = localStorage.getItem('language') || 'en';
         this.translations = {};
         this.isLoaded = false;
     }
@@ -21,7 +21,7 @@ class I18nLoader {
             this.translations.en = await enResponse.json();
             this.translations.zh = await zhResponse.json();
             this.isLoaded = true;
-            
+
             return true;
         } catch (error) {
             console.error('Failed to load translations:', error);
@@ -38,12 +38,12 @@ class I18nLoader {
 
         const translation = this.translations[this.currentLanguage];
         const result = translation && translation[key] ? translation[key] : (defaultValue || key);
-        
+
         // 调试信息
         if (result === key && !defaultValue) {
             console.log(`Translation missing for key: ${key} in language: ${this.currentLanguage}`);
         }
-        
+
         return result;
     }
 
@@ -54,7 +54,7 @@ class I18nLoader {
             localStorage.setItem('language', lang);
             this.updatePageText();
             this.updateLanguageSwitcher();
-            
+
             // 触发自定义事件，用于更新动态内容
             if (typeof renderRelated === 'function') {
                 renderRelated();
@@ -77,7 +77,7 @@ class I18nLoader {
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.remove('active');
         });
-        
+
         const activeBtn = document.querySelector(`.lang-btn[onclick*="${this.currentLanguage}"]`);
         if (activeBtn) {
             activeBtn.classList.add('active');
@@ -95,7 +95,7 @@ class I18nLoader {
         if (loaded) {
             this.updatePageText();
             this.updateLanguageSwitcher();
-            
+
             // 监听侧边栏加载完成事件
             this.observeSidebarChanges();
         }
@@ -151,18 +151,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('Initializing i18n...');
     await window.i18n.init();
     console.log('i18n initialized, current language:', window.i18n.getCurrentLanguage());
-    
+
     // 为了确保侧边栏翻译正确，添加多次延迟检查
     setTimeout(() => {
         console.log('First i18n update...');
         window.i18n.updatePageText();
     }, 200);
-    
+
     setTimeout(() => {
         console.log('Second i18n update...');
         window.i18n.updatePageText();
     }, 500);
-    
+
     setTimeout(() => {
         console.log('Third i18n update...');
         window.i18n.updatePageText();
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // 提供一个全局函数供其他脚本调用
-window.updateI18nText = function() {
+window.updateI18nText = function () {
     if (window.i18n && window.i18n.isLoaded) {
         console.log('Manual i18n update triggered');
         window.i18n.updatePageText();
@@ -180,7 +180,7 @@ window.updateI18nText = function() {
 };
 
 // 提供一个强制修复函数
-window.fixI18n = function() {
+window.fixI18n = function () {
     console.log('Force fixing i18n...');
     if (window.i18n) {
         if (!window.i18n.isLoaded) {
