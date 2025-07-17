@@ -89,6 +89,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
     <!-- 引入侧边栏国际化修复脚本 -->
     <script src="fix-sidebar-i18n.js"></script>
@@ -634,12 +635,12 @@
         <!-- 顶部导航栏 -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="#">AI工具</a></li>
-                <li><a href="#">教程</a></li>
-                <li><a href="#">博客</a></li>
-                <li><a href="#">社区</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
+                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="#" data-i18n="nav.community">Community</a></li>
+                <li><a href="#" data-i18n="nav.about">About</a></li>
             </ul>
             <div class="user-actions">
                 <!-- 添加下拉形式语言切换器 -->
@@ -730,15 +731,15 @@
                     <img src="src/higgsfield.png" alt="Higgsfield - AI Video Effects & Generation Platform" />
                 </div>
                 <div class="higgsfield-info">
-                    <h1>Higgsfield</h1>
-                    <p>Higgsfield is the ultimate AI-powered video effects and generation platform. Create stunning, cinematic videos with big-budget visual effects, consistent characters, AI lipsync, camera controls, and more. Perfect for creators, brands, and storytellers.</p>
+                    <h1 data-i18n="higgsfield.title">Higgsfield</h1>
+                    <p data-i18n="higgsfield.description">Higgsfield is a leading AI video effects and generation platform. Explore advanced AI visual effects, consistent character creation, AI lipsync, camera control, and more. The best Higgsfield AI tool for US creators.</p>
                     <div class="higgsfield-btns">
-                        <a href="https://higgsfield.ai/" target="_blank" class="btn higgsfield-btn">Visit Official Site</a>
-                        <a href="https://higgsfield.ai/" target="_blank" class="btn higgsfield-btn-outline" id="higgsfieldQrBtn">Try on Mobile</a>
+                        <a href="https://higgsfield.ai/" target="_blank" class="btn higgsfield-btn" data-i18n="higgsfield.visit">Visit Official Site</a>
+                        <a href="https://higgsfield.ai/" target="_blank" class="btn higgsfield-btn-outline" id="higgsfieldQrBtn" data-i18n="higgsfield.mobile">Try Higgsfield Online</a>
                         <div class="qr-dropdown" id="higgsfieldQrDropdown">
                             <div class="qr-img-box">
                                 <div id="higgsfieldQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
-                                <div class="qr-tip">手机扫码体验Higgsfield</div>
+                                <div class="qr-tip" data-i18n="higgsfield.qr.tip">Scan to try Higgsfield on mobile</div>
                             </div>
                         </div>
                     </div>
@@ -913,6 +914,9 @@ fetch('sidebar.html')
   .then(res => res.text())
   .then(html => {
     document.getElementById('sidebar').outerHTML = html;
+    if (window.i18n) {
+      window.i18n.updateSidebarTranslations();
+    }
   });
 </script>
 <script>

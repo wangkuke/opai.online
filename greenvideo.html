@@ -675,6 +675,9 @@
             margin: 0 auto;
         }
     </style>
+    <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
+    <script src="language-switcher.js"></script>
 </head>
 <body>
     <div class="app-layout">
@@ -682,12 +685,12 @@
         <!-- 顶部导航栏 -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="#">AI工具</a></li>
-                <li><a href="#">教程</a></li>
-                <li><a href="#">博客</a></li>
-                <li><a href="#">社区</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="#" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
             </ul>
             <div class="user-actions">
                 <button class="btn" id="createPostBtn">
@@ -707,11 +710,11 @@
                     <img src="src/greenvideo.png" alt="GreenVideo - 免费视频下载工具" />
                 </div>
                 <div class="jimengai-info">
-                    <h1>GreenVideo 视频下载</h1>
-                    <p>GreenVideo是一款专业的免费视频下载工具，支持YouTube、哔哩哔哩B站、抖音、快手等主流平台的无水印视频下载。提供快速、安全、高质量的视频下载服务，让您轻松获取喜爱的视频内容。</p>
+                    <h1 data-i18n="greenvideo.title">GreenVideo 视频下载</h1>
+                    <p data-i18n="greenvideo.description">GreenVideo是一款专业的免费视频下载工具，支持YouTube、哔哩哔哩B站、抖音、快手等主流平台的无水印视频下载。提供快速、安全、高质量的视频下载服务，让您轻松获取喜爱的视频内容。</p>
                     <div class="jimengai-btns">
-                        <a href="https://greenvideo.cc/" target="_blank" class="btn jimeng-btn">访问官网</a>
-                        <a href="https://greenvideo.cc/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn">手机版</a>
+                        <a href="https://greenvideo.cc/" target="_blank" class="btn jimeng-btn" data-i18n="greenvideo.visit">访问官网</a>
+                        <a href="https://greenvideo.cc/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn" data-i18n="greenvideo.mobile">手机版</a>
                         <div id="qrcode-popup" style="display:none;"></div>
                     </div>
                 </div>
@@ -1039,6 +1042,9 @@
           .then(res => res.text())
           .then(html => {
             document.getElementById('sidebar').outerHTML = html;
+            if (window.i18n) {
+              window.i18n.updateSidebarTranslations();
+            }
           });
     </script>
     </div>

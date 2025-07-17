@@ -11,9 +11,8 @@
         content="AI Course, YouTube Shorts, Monetization, AI Content Creation, AI Tools, YouTube Automation, Online Course, Make Money Online, YouTube Monetization, AI Video, Content Strategy, Trending Niches">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入通用 i18n 加载器 -->
-    <script src="i18n-loader.js"></script>
     <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
     <style>
         * {
@@ -746,84 +745,15 @@
         <!-- Top Navigation Bar -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">AI Tools</a></li>
-                <li><a href="#">Tutorials</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Community</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
+                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="#" data-i18n="nav.community">Community</a></li>
+                <li><a href="#" data-i18n="nav.about">About</a></li>
             </ul>
             <div class="user-actions">
-                <!-- 添加下拉形式语言切换器 -->
-                <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
-                    <select id="lang-select" class="lang-select" onchange="languageSwitcher.switchLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="zh">中文</option>
-                    </select>
-                </div>
-                <script>
-                    // 确保下拉选择器显示正确的语言
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const langSelect = document.getElementById('lang-select');
-                        if (langSelect && window.languageSwitcher) {
-                            langSelect.value = window.languageSwitcher.getCurrentLanguage();
-                        }
-                    });
-                </script>
-                
-                <!-- 添加语言切换器样式 -->
-                <style>
-                    .lang-select {
-                        border: 1.5px solid var(--primary);
-                        background: #fff;
-                        color: var(--primary);
-                        border-radius: 22px;
-                        padding: 7px 36px 7px 16px;
-                        font-size: 1.08rem;
-                        font-weight: 600;
-                        cursor: pointer;
-                        outline: none;
-                        transition: border 0.2s, color 0.2s, box-shadow 0.2s;
-                        box-shadow: 0 2px 8px rgba(67,97,238,0.10);
-                        appearance: none;
-                        -webkit-appearance: none;
-                        -moz-appearance: none;
-                        position: relative;
-                        background-image: url('data:image/svg+xml;utf8,<svg fill="%234361ee" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-                        background-repeat: no-repeat;
-                        background-position: right 12px center;
-                        background-size: 18px 18px;
-                    }
-                    .lang-select:focus, .lang-select:hover {
-                        border: 1.5px solid var(--secondary);
-                        color: var(--secondary);
-                        box-shadow: 0 4px 16px rgba(67,97,238,0.18);
-                        background-color: #f3f6fd;
-                    }
-                    .lang-select option {
-                        font-size: 1.05rem;
-                        padding: 8px 0;
-                        color: var(--primary);
-                        background: #fff;
-                    }
-                    @media (prefers-color-scheme: dark) {
-                        .lang-select {
-                            background: #232946;
-                            color: #4cc9f0;
-                            border: 1.5px solid #4cc9f0;
-                            background-image: url('data:image/svg+xml;utf8,<svg fill="%234cc9f0" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-                        }
-                        .lang-select:focus, .lang-select:hover {
-                            border: 1.5px solid #4895ef;
-                            color: #4895ef;
-                            background-color: #232946;
-                        }
-                        .lang-select option {
-                            background: #232946;
-                            color: #4cc9f0;
-                        }
-                    }
-                </style>
+                <!-- 删除静态语言切换栏，交由JS自动插入 -->
                 
                 <button class="btn" id="createPostBtn">
                     <i class="fas fa-plus"></i> Publish Article
@@ -850,8 +780,7 @@
                     <div class="grok-btns">
                         <a href="Ai/AiCourse.html" class="btn grok-btn" data-i18n="course.visit">Visit Official Site</a>
                         <div style="position:relative;display:inline-block;">
-                            <a href="Ai/AiCourse.html" class="btn grok-btn-outline" id="aiQrBtn"
-                                data-i18n="course.mobile">Mobile Access</a>
+                            <a href="Ai/AiCourse.html" class="btn grok-btn-outline" id="aiQrBtn" data-i18n="course.mobile">Mobile Access</a>
                             <div class="qr-dropdown" id="aiQrDropdown" style="display:none;position:absolute;">
                                 <div class="qr-img-box">
                                     <div id="aiQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
@@ -951,102 +880,24 @@
         </main>
     </div>
     <script>
-        // 使用全局 i18n 系统
-        function getHomepageCards() {
-            return [
-                {
-                    title: window.i18n.t('article.niche.title'),
-                    category: window.i18n.getCurrentLanguage() === 'zh' ? "课程技巧" : "Course Tips",
-                    bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-                    excerpt: window.i18n.t('article.niche.excerpt'),
-                    icon: "fas fa-lightbulb"
-                },
-                {
-                    title: window.i18n.t('article.tools.title'),
-                    category: window.i18n.getCurrentLanguage() === 'zh' ? "AI实践" : "AI Practice",
-                    bg: "linear-gradient(135deg, #f72585, #b5179e)",
-                    excerpt: window.i18n.t('article.tools.excerpt'),
-                    icon: "fas fa-robot"
-                },
-                {
-                    title: window.i18n.t('article.monetization.title'),
-                    category: window.i18n.getCurrentLanguage() === 'zh' ? "变现指南" : "Monetization Guide",
-                    bg: "linear-gradient(135deg, #7209b7, #560bad)",
-                    excerpt: window.i18n.t('article.monetization.excerpt'),
-                    icon: "fas fa-dollar-sign"
-                }
-            ];
-        }
-
-        function shuffle(arr) {
-            return arr.sort(() => Math.random() - 0.5);
-        }
-
-        function renderRelated() {
-            if (!window.i18n || !window.i18n.isLoaded) {
-                setTimeout(renderRelated, 200);
-                return;
-            }
-
-            const cards = shuffle(getHomepageCards()).slice(0, 3);
-            const container = document.querySelector('.articles-grid');
-            if (!container) return;
-
-            container.innerHTML = cards.map((card, index) => `
-                <article class="article-card" style="animation-delay: ${index * 0.1}s;">
-                  <div class="article-image" style="background: ${card.bg};">
-                    <div class="article-category">
-                      <i class="${card.icon}"></i>
-                      ${card.category}
-                    </div>
-                    <div class="article-overlay">
-                      <i class="fas fa-arrow-right"></i>
-                    </div>
-                  </div>
-                  <div class="article-content">
-                    <h3 class="article-title">${card.title}</h3>
-                    <p class="article-excerpt">${card.excerpt}</p>
-                    <div class="article-meta">
-                      <span class="read-time">
-                        <i class="fas fa-clock"></i>
-                        5 min read
-                      </span>
-                      <span class="article-date">
-                        <i class="fas fa-calendar"></i>
-                        2024
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              `).join('');
-        }
-
         // Sidebar async load
         fetch('sidebar.html')
             .then(res => res.text())
             .then(html => {
                 document.getElementById('sidebar').outerHTML = html;
                 // 侧边栏加载完成后更新文本
-                if (window.i18n && window.i18n.isLoaded) {
-                    window.i18n.updatePageText();
+                if (window.i18n) {
+                    window.i18n.updateSidebarTranslations();
                 }
             });
 
         // 监听语言切换事件
         window.addEventListener('languageChanged', function (event) {
-            renderRelated();
+            // No specific action needed here as content is static
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            // 等待 i18n 系统初始化完成后再渲染
-            const waitForI18n = () => {
-                if (window.i18n && window.i18n.isLoaded) {
-                    renderRelated();
-                } else {
-                    setTimeout(waitForI18n, 100);
-                }
-            };
-            waitForI18n();
+            // 确保语言切换器在页面加载后被正确初始化
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>

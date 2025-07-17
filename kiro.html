@@ -75,6 +75,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
     <!-- 引入侧边栏国际化修复脚本 -->
     <script src="fix-sidebar-i18n.js"></script>
@@ -796,12 +797,12 @@
         <!-- Top Navigation Bar -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">AI Tools</a></li>
-                <li><a href="#">Tutorials</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Community</a></li>
-                <li><a href="#">About</a></li>
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
+                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="#" data-i18n="nav.community">Community</a></li>
+                <li><a href="#" data-i18n="nav.about">About</a></li>
             </ul>
             <div class="user-actions">
                 <!-- 添加下拉形式语言切换器 -->
@@ -899,19 +900,15 @@
                     <img src="src/kiro.png" alt="Kiro - AI Assistant for Developers" />
                 </div>
                 <div class="kiro-info">
-                    <h1>Kiro - The Ultimate AI Coding Assistant</h1>
-                    <p>Kiro is the leading AI assistant and IDE built specifically for developers, featuring intelligent
-                        code generation, infrastructure assistance, debugging support, and CLI automation capabilities.
-                        Trusted by thousands of American developers, Kiro dramatically enhances productivity and
-                        streamlines the software development process with its advanced AI capabilities.</p>
+                    <h1 data-i18n="kiro.title">Kiro - The Ultimate AI Coding Assistant</h1>
+                    <p data-i18n="kiro.description">Kiro 是一款AI智能编程助手，支持代码生成、调试、自动补全等多种功能，助力开发者高效编程。</p>
                     <div class="kiro-btns">
-                        <a href="https://kiro.ai/" target="_blank" class="btn kiro-btn">Get Kiro Now</a>
-                        <a href="https://kiro.ai/" target="_blank" class="btn kiro-btn-outline" id="kiroQrBtn">Try Kiro
-                            Free</a>
+                        <a href="https://kiro.ai/" target="_blank" class="btn kiro-btn" data-i18n="kiro.visit">访问官网</a>
+                        <a href="https://kiro.ai/" target="_blank" class="btn kiro-btn-outline" id="kiroQrBtn" data-i18n="kiro.mobile">手机版</a>
                         <div class="qr-dropdown" id="kiroQrDropdown">
                             <div class="qr-img-box">
                                 <div id="kiroQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
-                                <div class="qr-tip">Scan to try Kiro on mobile</div>
+                                <div class="qr-tip" data-i18n="kiro.qr.tip">扫码体验Kiro手机版</div>
                             </div>
                         </div>
                     </div>
@@ -1114,6 +1111,9 @@
             .then(res => res.text())
             .then(html => {
                 document.getElementById('sidebar').outerHTML = html;
+                if (window.i18n) {
+                    window.i18n.updateSidebarTranslations();
+                }
             });
     </script>
     <script>

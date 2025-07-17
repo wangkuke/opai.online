@@ -543,12 +543,12 @@
         <!-- 顶部导航栏 -->
         <header class="header">
             <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="#">AI工具</a></li>
-                <li><a href="#">教程</a></li>
-                <li><a href="#">博客</a></li>
-                <li><a href="#">社区</a></li>
-                <li><a href="#">关于</a></li>
+                <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="#" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
             </ul>
             <div class="user-actions">
                 <button class="btn" id="createPostBtn">
@@ -568,83 +568,83 @@
                     <img src="src/savetube.png" alt="SaveTube - 免费视频下载工具" />
                 </div>
                 <div class="jimengai-info">
-                    <h1>SaveTube 视频下载</h1>
-                    <p>SaveTube是一款支持YouTube、Instagram、Twitter等多平台的免费视频下载工具，支持YouTube Shorts、MP3、4K下载，完全免费，无广告，无水印。</p>
+                    <h1 data-i18n="savetube.title">SaveTube 视频下载</h1>
+                    <p data-i18n="savetube.description">SaveTube是一款支持YouTube、Instagram、Twitter等多平台的免费视频下载工具，支持YouTube Shorts、MP3、4K下载，完全免费，无广告，无水印。</p>
                     <div class="jimengai-btns">
-                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn">访问官网</a>
-                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn">手机版</a>
+                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn" data-i18n="savetube.visit">访问官网</a>
+                        <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn" data-i18n="savetube.mobile">手机版</a>
                         <div id="qrcode-popup" style="display:none;"></div>
                     </div>
                 </div>
             </div>
             <!-- 主内容区 -->
             <section class="main-section">
-                <h2><i class="fas fa-download"></i> SaveTube 官方网站</h2>
-                <p>SaveTube是一款功能强大的在线视频下载工具，支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载，支持多种格式和高质量输出。</p>
-                <p style="color:var(--gray);font-size:0.98rem;">平台特色：免费视频下载、YouTube Shorts下载、MP3下载、4K下载、无广告、无水印、支持多平台、高清视频下载、批量下载、视频格式转换、在线下载、安全下载。</p>
-                <h2><i class="fas fa-info-circle"></i> 关于 SaveTube</h2>
-                <p>SaveTube致力于为用户提供最便捷、最安全的视频下载体验。无论是YouTube Shorts、音乐、电影、娱乐还是教育内容，SaveTube都能一键下载，支持多种格式和清晰度选择。</p>
-                <p style="color:var(--gray);font-size:0.98rem;">SaveTube支持MP4、MP3、WAV等多种格式下载，用户可根据需求选择合适的格式和质量。还可提取音频，满足多样化需求。</p>
-                <h2><i class="fas fa-star"></i> 核心功能与特色</h2>
+                <h2 data-i18n="savetube.section.official"><i class="fas fa-download"></i> SaveTube 官方网站</h2>
+                <p data-i18n="savetube.official.desc">SaveTube是一款功能强大的在线视频下载工具，支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载，支持多种格式和高质量输出。</p>
+                <p style="color:var(--gray);font-size:0.98rem;" data-i18n="savetube.official.feature">平台特色：免费视频下载、YouTube Shorts下载、MP3下载、4K下载、无广告、无水印、支持多平台、高清视频下载、批量下载、视频格式转换、在线下载、安全下载。</p>
+                <h2 data-i18n="savetube.section.about"><i class="fas fa-info-circle"></i> 关于 SaveTube</h2>
+                <p data-i18n="savetube.about.1">SaveTube致力于为用户提供最便捷、最安全的视频下载体验。无论是YouTube Shorts、音乐、电影、娱乐还是教育内容，SaveTube都能一键下载，支持多种格式和清晰度选择。</p>
+                <p style="color:var(--gray);font-size:0.98rem;" data-i18n="savetube.about.2">SaveTube支持MP4、MP3、WAV等多种格式下载，用户可根据需求选择合适的格式和质量。还可提取音频，满足多样化需求。</p>
+                <h2 data-i18n="savetube.section.feature"><i class="fas fa-star"></i> 核心功能与特色</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>多平台支持：YouTube、Instagram、Twitter、Facebook、TikTok等</span>
+                        <span data-i18n="savetube.feature.1">多平台支持：YouTube、Instagram、Twitter、Facebook、TikTok等</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>无水印下载：原版无水印，保持原始质量</span>
+                        <span data-i18n="savetube.feature.2">无水印下载：原版无水印，保持原始质量</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>支持YouTube Shorts、MP3、4K下载</span>
+                        <span data-i18n="savetube.feature.3">支持YouTube Shorts、MP3、4K下载</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>用户友好界面：简洁直观，适合所有用户</span>
+                        <span data-i18n="savetube.feature.4">用户友好界面：简洁直观，适合所有用户</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>高质量输出：支持高清视频下载，最高可达4K</span>
+                        <span data-i18n="savetube.feature.5">高质量输出：支持高清视频下载，最高可达4K</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>快速下载：优化引擎，极速体验</span>
+                        <span data-i18n="savetube.feature.6">快速下载：优化引擎，极速体验</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>安全可靠：无广告、无病毒，保护设备安全</span>
+                        <span data-i18n="savetube.feature.7">安全可靠：无广告、无病毒，保护设备安全</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>格式丰富：支持多种视频/音频格式</span>
+                        <span data-i18n="savetube.feature.8">格式丰富：支持多种视频/音频格式</span>
                     </li>
                 </ul>
-                <h2><i class="fas fa-link"></i> 官方网站访问</h2>
-                <p><strong>官方网站：</strong> <a href="https://yt.savetube.me/" target="_blank" style="color: var(--primary); text-decoration: none;">https://yt.savetube.me/</a></p>
-                <p>访问SaveTube官网，体验极速、免费的多平台视频下载服务。</p>
-                <h2><i class="fas fa-rocket"></i> SaveTube 使用方法</h2>
+                <h2 data-i18n="savetube.section.link"><i class="fas fa-link"></i> 官方网站访问</h2>
+                <p><strong data-i18n="savetube.link.label">官方网站：</strong> <a href="https://yt.savetube.me/" target="_blank" style="color: var(--primary); text-decoration: none;">https://yt.savetube.me/</a></p>
+                <p data-i18n="savetube.link.desc">访问SaveTube官网，体验极速、免费的多平台视频下载服务。</p>
+                <h2 data-i18n="savetube.section.usage"><i class="fas fa-rocket"></i> SaveTube 使用方法</h2>
                 <ol style="margin: 20px 0 20px 20px;">
-                    <li>打开YouTube或其他支持平台，复制你想下载的视频链接</li>
-                    <li>访问 <a href="https://yt.savetube.me/" target="_blank">SaveTube官网</a>，粘贴链接到输入框</li>
-                    <li>选择所需格式和清晰度，点击下载按钮即可</li>
+                    <li data-i18n="savetube.usage.1">打开YouTube或其他支持平台，复制你想下载的视频链接</li>
+                    <li data-i18n="savetube.usage.2">访问 SaveTube官网，粘贴链接到输入框</li>
+                    <li data-i18n="savetube.usage.3">选择所需格式和清晰度，点击下载按钮即可</li>
                 </ol>
-                <h2><i class="fas fa-question-circle"></i> 常见问题 (FAQ)</h2>
+                <h2 data-i18n="savetube.section.faq"><i class="fas fa-question-circle"></i> 常见问题 (FAQ)</h2>
                 <div style="margin: 20px 0;">
-                    <h3 style="color: var(--primary); margin-bottom: 10px;">SaveTube支持哪些平台？</h3>
-                    <p>支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载。</p>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="savetube.faq.q1">SaveTube支持哪些平台？</h3>
+                    <p data-i18n="savetube.faq.a1">支持YouTube、Instagram、Twitter、Facebook、TikTok等主流平台的视频和音频下载。</p>
                 </div>
                 <div style="margin: 20px 0;">
-                    <h3 style="color: var(--primary); margin-bottom: 10px;">下载的视频可以商用吗？</h3>
-                    <p>请遵守各平台版权政策，下载内容仅供个人学习和交流，商用需获得原作者授权。</p>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="savetube.faq.q2">下载的视频可以商用吗？</h3>
+                    <p data-i18n="savetube.faq.a2">请遵守各平台版权政策，下载内容仅供个人学习和交流，商用需获得原作者授权。</p>
                 </div>
                 <div style="margin: 20px 0;">
-                    <h3 style="color: var(--primary); margin-bottom: 10px;">是否有使用次数或时长限制？</h3>
-                    <p>SaveTube完全免费，无次数和时长限制。</p>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="savetube.faq.q3">是否有使用次数或时长限制？</h3>
+                    <p data-i18n="savetube.faq.a3">SaveTube完全免费，无次数和时长限制。</p>
                 </div>
                 <div style="margin: 20px 0;">
-                    <h3 style="color: var(--primary); margin-bottom: 10px;">是否支持移动端？</h3>
-                    <p>支持，SaveTube官网可在手机、平板等移动设备上流畅使用。</p>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="savetube.faq.q4">是否支持移动端？</h3>
+                    <p data-i18n="savetube.faq.a4">支持，SaveTube官网可在手机、平板等移动设备上流畅使用。</p>
                 </div>
             </section>
             <!-- 相关推荐区域 -->
@@ -784,6 +784,9 @@
           .then(res => res.text())
           .then(html => {
             document.getElementById('sidebar').outerHTML = html;
+            if (window.i18n) {
+              window.i18n.updateSidebarTranslations();
+            }
           });
     </script>
     </div>
