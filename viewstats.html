@@ -58,8 +58,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入全局语言切换器 -->
     <script src="language-switcher.js"></script>
-    <!-- 引入更健壮的侧边栏国际化修复脚本 -->
-    <script src="robust-sidebar-i18n.js"></script>
+    <!-- 引入全局 i18n 方案 -->
+    <script src="i18n-loader.js"></script>
+    <!-- 移除 robust-sidebar-i18n.js 的引用 -->
     <style>
         /* 继承ytlarge.html风格 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -867,6 +868,26 @@
             });
         }
     })();
+    </script>
+    <script>
+    // 页面加载完成后初始化全局 i18n
+    document.addEventListener('DOMContentLoaded', async function() {
+      if (window.i18n && typeof window.i18n.init === 'function') {
+        await window.i18n.init();
+        // 初始翻译
+        window.i18n.updatePageText();
+      }
+      // 语言切换时同步调用 window.i18n.switchLanguage
+      if (window.languageSwitcher) {
+        const origSwitch = window.languageSwitcher.switchLanguage;
+        window.languageSwitcher.switchLanguage = function(lang) {
+          if (window.i18n && typeof window.i18n.switchLanguage === 'function') {
+            window.i18n.switchLanguage(lang);
+          }
+          origSwitch.call(window.languageSwitcher, lang);
+        };
+      }
+    });
     </script>
     <script>
     fetch('sidebar.html')
