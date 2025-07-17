@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI YouTube Shorts Course | Monetize with AI</title>
-    <meta name="description" content="Learn how to create and monetize YouTube Shorts with AI tools. Step-by-step guide for beginners to start earning on YouTube.">
-    <meta name="keywords" content="AI Course, YouTube Shorts, Monetization, AI Content Creation, AI Tools, YouTube Automation, Online Course, Make Money Online, YouTube Monetization, AI Video, Content Strategy, Trending Niches">
+    <meta name="description"
+        content="Learn how to create and monetize YouTube Shorts with AI tools. Step-by-step guide for beginners to start earning on YouTube.">
+    <meta name="keywords"
+        content="AI Course, YouTube Shorts, Monetization, AI Content Creation, AI Tools, YouTube Automation, Online Course, Make Money Online, YouTube Monetization, AI Video, Content Strategy, Trending Niches">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
@@ -25,6 +34,7 @@
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             --transition: all 0.3s ease;
         }
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-attachment: fixed;
@@ -32,6 +42,7 @@
             line-height: 1.6;
             min-height: 100vh;
         }
+
         .app-layout {
             display: grid;
             grid-template-columns: 180px 1fr;
@@ -39,6 +50,7 @@
             grid-template-areas: "sidebar header" "sidebar content";
             min-height: 100vh;
         }
+
         .sidebar {
             grid-area: sidebar;
             background: var(--sidebar-bg);
@@ -49,6 +61,137 @@
             overflow-y: auto;
             border-right: 1px solid var(--glass-border);
         }
+
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .category-section {
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0 5px;
+        }
+
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .category-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-list li:hover::before {
+            background: var(--success);
+        }
+
+        .category-list li.active {
+            background: rgba(114, 9, 183, 0.3);
+        }
+
+        .category-list li.active::before {
+            background: var(--accent);
+        }
+
+        .category-list li i {
+            position: absolute;
+            left: 15px;
+            font-size: 1rem;
+        }
+
+        .category-list a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .category-list a:visited {
+            color: inherit;
+        }
+
+        .category-list a:hover {
+            color: var(--success);
+        }
+
+        /* 让侧边栏链接和普通文本一样 */
+        .category-list .plain-link {
+            color: inherit !important;
+            text-decoration: none !important;
+            background: none !important;
+            font: inherit !important;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .category-list .plain-link:visited,
+        .category-list .plain-link:active,
+        .category-list .plain-link:focus {
+            color: inherit !important;
+        }
+
+        .category-list .plain-link:hover {
+            color: var(--success) !important;
+        }
+
         .header {
             grid-area: header;
             background: var(--header-bg);
@@ -56,14 +199,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: blur(5px);
             border-bottom: 1px solid var(--glass-border);
         }
-        .nav-links { display: flex; list-style: none; gap: 25px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
@@ -73,17 +222,34 @@
             position: relative;
             transition: var(--transition);
         }
+
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 0; left: 0; width: 0; height: 3px;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
             background: var(--primary);
             transition: var(--transition);
             border-radius: 2px;
         }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .nav-links a.active { color: var(--primary); }
-        .user-actions { display: flex; align-items: center; gap: 15px; }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .btn {
             padding: 10px 22px;
             border-radius: 30px;
@@ -98,38 +264,57 @@
             color: white;
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
         }
-        .btn i { margin-right: 8px; }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
             background: var(--secondary);
         }
+
         .user-profile {
             display: flex;
             align-items: center;
             cursor: pointer;
             padding: 5px 15px 5px 5px;
             border-radius: 30px;
-            background: rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
         }
-        .user-profile:hover { background: rgba(255,255,255,0.85); }
-        .user-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; align-items: center; justify-content: center;
-            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.85);
         }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
         .content {
             grid-area: content;
             padding: 30px;
-            background: rgba(245,247,251,0.85);
+            background: rgba(245, 247, 251, 0.85);
             backdrop-filter: blur(5px);
             overflow-y: auto;
             min-height: calc(100vh - 70px);
         }
+
         .main-section {
             max-width: 1100px;
             margin: 0 auto;
@@ -139,6 +324,7 @@
             padding: 40px 32px 32px 32px;
             margin-top: 30px;
         }
+
         .main-section h2 {
             font-size: 1.3rem;
             color: var(--secondary);
@@ -146,16 +332,19 @@
             display: flex;
             align-items: center;
         }
+
         .main-section h2 i {
             margin-right: 10px;
             color: var(--primary);
         }
+
         .main-section p {
             font-size: 1.05rem;
             color: var(--dark);
             margin-bottom: 18px;
             line-height: 1.8;
         }
+
         .section-title {
             font-size: 1.8rem;
             color: var(--primary);
@@ -164,22 +353,26 @@
             align-items: center;
             font-weight: 700;
         }
+
         .section-title i {
             margin-right: 12px;
             color: var(--accent);
         }
+
         .related-section {
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 30px;
             margin-top: 40px;
         }
+
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
+
         .article-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -189,10 +382,12 @@
             cursor: pointer;
             border: 1px solid var(--glass-border);
         }
+
         .article-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
         }
+
         .article-image {
             height: 160px;
             position: relative;
@@ -201,6 +396,7 @@
             justify-content: center;
             overflow: hidden;
         }
+
         .article-image::before {
             content: '';
             position: absolute;
@@ -208,9 +404,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
             z-index: 1;
         }
+
         .article-category {
             position: absolute;
             top: 15px;
@@ -224,9 +421,11 @@
             z-index: 2;
             backdrop-filter: blur(10px);
         }
+
         .article-content {
             padding: 20px;
         }
+
         .article-title {
             font-size: 1.1rem;
             color: var(--dark);
@@ -238,6 +437,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .article-excerpt {
             font-size: 0.95rem;
             color: var(--gray);
@@ -247,6 +447,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .article-overlay {
             position: absolute;
             top: 0;
@@ -261,18 +462,22 @@
             transition: var(--transition);
             z-index: 3;
         }
+
         .article-overlay i {
             color: white;
             font-size: 2rem;
             transform: translateX(-10px);
             transition: var(--transition);
         }
+
         .article-card:hover .article-overlay {
             opacity: 1;
         }
+
         .article-card:hover .article-overlay i {
             transform: translateX(0);
         }
+
         .article-meta {
             display: flex;
             justify-content: space-between;
@@ -283,84 +488,107 @@
             font-size: 0.85rem;
             color: var(--gray);
         }
-        .read-time, .article-date {
+
+        .read-time,
+        .article-date {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        .read-time i, .article-date i {
+
+        .read-time i,
+        .article-date i {
             font-size: 0.8rem;
             color: var(--primary);
         }
+
         @media (max-width: 1200px) {
             .articles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 20px;
             }
         }
+
         @media (max-width: 768px) {
             .related-section {
                 padding: 0 20px;
                 margin-top: 30px;
             }
+
             .section-title {
                 font-size: 1.5rem;
                 margin-bottom: 25px;
             }
+
             .articles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
                 gap: 18px;
             }
+
             .article-image {
                 height: 140px;
             }
+
             .article-content {
                 padding: 16px;
             }
+
             .article-title {
                 font-size: 1rem;
             }
+
             .article-excerpt {
                 font-size: 0.9rem;
             }
+
             .article-meta {
                 margin-top: 12px;
                 padding-top: 12px;
                 font-size: 0.8rem;
             }
+
             .article-overlay i {
                 font-size: 1.5rem;
             }
         }
+
         @media (max-width: 480px) {
             .related-section {
                 padding: 0 15px;
             }
+
             .articles-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
+
             .article-image {
                 height: 120px;
             }
+
             .article-category {
                 font-size: 0.8rem;
                 padding: 4px 10px;
             }
+
             .article-category i {
                 font-size: 0.7rem;
             }
+
             .article-content {
                 padding: 14px;
             }
+
             .article-title {
                 font-size: 0.95rem;
                 margin-bottom: 10px;
             }
+
             .article-excerpt {
                 font-size: 0.85rem;
                 -webkit-line-clamp: 2;
             }
+
             .article-meta {
                 margin-top: 10px;
                 padding-top: 10px;
@@ -369,15 +597,18 @@
                 align-items: flex-start;
                 gap: 5px;
             }
+
             .article-overlay i {
                 font-size: 1.2rem;
             }
         }
+
         .grok-btns {
             display: flex;
             gap: 18px;
             position: relative;
         }
+
         .grok-btn {
             background: var(--primary);
             color: #fff;
@@ -389,9 +620,11 @@
             transition: background 0.2s;
             box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
         }
+
         .grok-btn:hover {
             background: var(--secondary);
         }
+
         .grok-btn-outline {
             background: transparent;
             color: var(--primary);
@@ -402,10 +635,12 @@
             text-decoration: none;
             transition: background 0.2s, color 0.2s;
         }
+
         .grok-btn-outline:hover {
             background: var(--primary);
             color: #fff;
         }
+
         .grok-card {
             display: flex;
             align-items: center;
@@ -419,14 +654,16 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .grok-img img {
             width: 180px;
             height: 180px;
             object-fit: cover;
             border-radius: 14px;
-            box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+            box-shadow: 0 4px 18px rgba(67, 97, 238, 0.10);
             background: #eee;
         }
+
         .grok-info {
             flex: 1;
             display: flex;
@@ -434,55 +671,71 @@
             justify-content: center;
             position: relative;
         }
+
         .grok-info p {
             font-size: 1.08rem;
             color: var(--dark);
             margin-bottom: 18px;
         }
+
         @media (max-width: 700px) {
             .grok-card {
                 flex-direction: column;
                 padding: 18px 8px;
                 gap: 18px;
             }
+
             .grok-img img {
                 width: 120px;
                 height: 120px;
             }
         }
-    .qr-dropdown {
-        display: none;
-        position: absolute;
-        z-index: 100;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(31,38,135,0.15);
-        padding: 18px 18px 10px 18px;
-        min-width: 140px;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,0.18);
-        animation: fadeIn 0.2s;
-    }
-    .qr-img-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .qr-img-box img {
-        margin-bottom: 8px;
-        border-radius: 8px;
-        background: #f8f9fa;
-    }
-    .qr-tip {
-        font-size: 0.92rem;
-        color: #6c757d;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+
+        .qr-dropdown {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            padding: 18px 18px 10px 18px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeIn 0.2s;
+        }
+
+        .qr-img-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-img-box img {
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .qr-tip {
+            font-size: 0.92rem;
+            color: #6c757d;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="app-layout">
         <div id="sidebar"></div>
@@ -515,7 +768,9 @@
                 </div>
                 <div class="grok-info">
                     <h1>AI YouTube Shorts Course</h1>
-                    <p>This course takes you from beginner to YPP (YouTube Partner Program), mastering AI content creation skills and starting your YouTube monetization journey. Covers account setup, content creation, monetization guidance, and trending niche analysis.</p>
+                    <p>This course takes you from beginner to YPP (YouTube Partner Program), mastering AI content
+                        creation skills and starting your YouTube monetization journey. Covers account setup, content
+                        creation, monetization guidance, and trending niche analysis.</p>
                     <div class="grok-btns">
                         <a href="Ai/AiCourse.html" class="btn grok-btn">Visit Official Site</a>
                         <div style="position:relative;display:inline-block;">
@@ -533,41 +788,81 @@
             <!-- Main Course Content -->
             <section class="main-section">
                 <h2><i class="fas fa-graduation-cap"></i> Course Overview</h2>
-                <p>This course will guide you step by step to master YouTube Shorts creation and monetization skills, using AI tools to efficiently produce content and quickly meet YPP requirements for earning revenue.</p>
+                <p>This course will guide you step by step to master YouTube Shorts creation and monetization skills,
+                    using AI tools to efficiently produce content and quickly meet YPP requirements for earning revenue.
+                </p>
                 <ul style="list-style:none;padding:0;margin:20px 0;">
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-route" style="color:var(--success);margin-right:12px;"></i>Three learning phases: Account Setup, Content Creation, Monetization Guidance</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-lightbulb" style="color:var(--success);margin-right:12px;"></i>AI Creation Skills: Master AI tools to boost your content productivity</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-dollar-sign" style="color:var(--success);margin-right:12px;"></i>Monetization Guidance: Detailed explanation of YPP requirements and process</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-route"
+                            style="color:var(--success);margin-right:12px;"></i>Three learning phases: Account Setup,
+                        Content Creation, Monetization Guidance</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-lightbulb"
+                            style="color:var(--success);margin-right:12px;"></i>AI Creation Skills: Master AI tools to
+                        boost your content productivity</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-dollar-sign"
+                            style="color:var(--success);margin-right:12px;"></i>Monetization Guidance: Detailed
+                        explanation of YPP requirements and process</li>
                 </ul>
                 <h2 id="phase1"><i class="fas fa-flag-checkered"></i> Phase 1: Account Setup</h2>
-                <p>Understand the YouTube platform and monetization paths, complete account registration and basic settings.</p>
+                <p>Understand the YouTube platform and monetization paths, complete account registration and basic
+                    settings.</p>
                 <ul style="list-style:none;padding:0;margin:20px 0;">
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Learn YouTube's basic rules and main monetization methods</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Understand YPP requirements and thresholds</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Successfully register and set up your YouTube account</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Learn YouTube's basic rules and main
+                        monetization methods</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Understand YPP requirements and
+                        thresholds</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Successfully register and set up your
+                        YouTube account</li>
                 </ul>
                 <h2 id="phase2"><i class="fas fa-robot"></i> Phase 2: Content Creation</h2>
-                <p>Identify your content direction, learn AI creation skills, and complete your first Shorts video production and publishing.</p>
+                <p>Identify your content direction, learn AI creation skills, and complete your first Shorts video
+                    production and publishing.</p>
                 <ul style="list-style:none;padding:0;margin:20px 0;">
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Explore trending AI Shorts niches and find your content focus</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Master AI tools for video creation and learn to write effective prompts</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Produce and publish your first AI-generated Shorts video</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Explore trending AI Shorts niches and
+                        find your content focus</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Master AI tools for video creation and
+                        learn to write effective prompts</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Produce and publish your first
+                        AI-generated Shorts video</li>
                 </ul>
                 <h2 id="phase3"><i class="fas fa-rocket"></i> Phase 3: Monetization</h2>
-                <p>Establish a content production workflow, continuously optimize video quality, meet YPP requirements, and start earning revenue.</p>
+                <p>Establish a content production workflow, continuously optimize video quality, meet YPP requirements,
+                    and start earning revenue.</p>
                 <ul style="list-style:none;padding:0;margin:20px 0;">
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Build an efficient AI content creation workflow for consistent video updates</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Optimize video content to increase watch time and engagement</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle" style="color:var(--success);margin-right:12px;"></i>Meet YPP requirements, complete the application process, and start earning</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Build an efficient AI content creation
+                        workflow for consistent video updates</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Optimize video content to increase watch
+                        time and engagement</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-check-circle"
+                            style="color:var(--success);margin-right:12px;"></i>Meet YPP requirements, complete the
+                        application process, and start earning</li>
                 </ul>
                 <h2 id="tracks"><i class="fas fa-fire"></i> Trending Niches</h2>
                 <ul style="list-style:none;padding:0;margin:20px 0;">
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-star" style="color:var(--accent);margin-right:12px;"></i>Talent Shows: AI transformation, curiosity, growth content</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-paw" style="color:var(--accent);margin-right:12px;"></i>Animal Series: Animal stories, rescue, alerts</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-gamepad" style="color:var(--accent);margin-right:12px;"></i>Squid Game: Popular IP remixes</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-cat" style="color:var(--accent);margin-right:12px;"></i>AI Animal Stories: AI-generated animal characters and stories</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-robot" style="color:var(--accent);margin-right:12px;"></i>Robot Beauties: Sci-fi, comedy, and more</li>
-                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-cat" style="color:var(--accent);margin-right:12px;"></i>Cat Stories: Alternative social stories</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-star"
+                            style="color:var(--accent);margin-right:12px;"></i>Talent Shows: AI transformation,
+                        curiosity, growth content</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-paw"
+                            style="color:var(--accent);margin-right:12px;"></i>Animal Series: Animal stories, rescue,
+                        alerts</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-gamepad"
+                            style="color:var(--accent);margin-right:12px;"></i>Squid Game: Popular IP remixes</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-cat"
+                            style="color:var(--accent);margin-right:12px;"></i>AI Animal Stories: AI-generated animal
+                        characters and stories</li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-robot"
+                            style="color:var(--accent);margin-right:12px;"></i>Robot Beauties: Sci-fi, comedy, and more
+                    </li>
+                    <li style="padding:8px 0;display:flex;align-items:center;"><i class="fas fa-cat"
+                            style="color:var(--accent);margin-right:12px;"></i>Cat Stories: Alternative social stories
+                    </li>
                 </ul>
             </section>
             <!-- Related Articles -->
@@ -578,155 +873,139 @@
         </main>
     </div>
     <script>
-    // Sidebar async load
-    fetch('sidebar.html')
-      .then(res => res.text())
-      .then(html => {
-        // 提取 style 内容
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        const styleTag = tempDiv.querySelector('style');
-        if (styleTag) {
-          document.head.appendChild(styleTag);
+        // Sidebar async load
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar').outerHTML = html;
+            });
+        // Related articles logic (localized for course)
+        const homepageCards = [
+            {
+                title: "How to Choose the Right AI Shorts Niche?",
+                category: "Course Tips",
+                bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
+                excerpt: "Analyze trending AI Shorts niches to help you efficiently find your content direction.",
+                icon: "fas fa-lightbulb"
+            },
+            {
+                title: "Practical Use of AI Tools in Content Creation",
+                category: "AI Practice",
+                bg: "linear-gradient(135deg, #f72585, #b5179e)",
+                excerpt: "Detailed explanation of how AI tools can improve the efficiency and quality of Shorts creation.",
+                icon: "fas fa-robot"
+            },
+            {
+                title: "Complete Guide to YouTube Shorts Monetization",
+                category: "Monetization Guide",
+                bg: "linear-gradient(135deg, #7209b7, #560bad)",
+                excerpt: "From zero to one, master every step of YouTube Shorts monetization.",
+                icon: "fas fa-dollar-sign"
+            }
+        ];
+        function shuffle(arr) {
+            return arr.sort(() => Math.random() - 0.5);
         }
-        // 只插入 aside.sidebar 部分
-        const sidebar = tempDiv.querySelector('.sidebar');
-        if (sidebar) {
-          document.getElementById('sidebar').replaceWith(sidebar);
+        function renderRelated() {
+            const cards = shuffle(homepageCards).slice(0, 3);
+            const container = document.querySelector('.articles-grid');
+            container.innerHTML = cards.map((card, index) => `
+    <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+      <div class="article-image" style="background: ${card.bg};">
+        <div class="article-category">
+          <i class="${card.icon}"></i>
+          ${card.category}
+        </div>
+        <div class="article-overlay">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </div>
+      <div class="article-content">
+        <h3 class="article-title">${card.title}</h3>
+        <p class="article-excerpt">${card.excerpt}</p>
+        <div class="article-meta">
+          <span class="read-time">
+            <i class="fas fa-clock"></i>
+            5 min read
+          </span>
+          <span class="article-date">
+            <i class="fas fa-calendar"></i>
+            2024
+          </span>
+        </div>
+      </div>
+    </article>
+  `).join('');
         }
-        // 处理 sidebar.html 里的 script（如果有）
-        const scriptTag = tempDiv.querySelector('script');
-        if (scriptTag) {
-          eval(scriptTag.innerText);
-        }
-      });
-    // Related articles logic (localized for course)
-    const homepageCards = [
-      {
-        title: "How to Choose the Right AI Shorts Niche?",
-        category: "Course Tips",
-        bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-        excerpt: "Analyze trending AI Shorts niches to help you efficiently find your content direction.",
-        icon: "fas fa-lightbulb"
-      },
-      {
-        title: "Practical Use of AI Tools in Content Creation",
-        category: "AI Practice",
-        bg: "linear-gradient(135deg, #f72585, #b5179e)",
-        excerpt: "Detailed explanation of how AI tools can improve the efficiency and quality of Shorts creation.",
-        icon: "fas fa-robot"
-      },
-      {
-        title: "Complete Guide to YouTube Shorts Monetization",
-        category: "Monetization Guide",
-        bg: "linear-gradient(135deg, #7209b7, #560bad)",
-        excerpt: "From zero to one, master every step of YouTube Shorts monetization.",
-        icon: "fas fa-dollar-sign"
-      }
-    ];
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-    function renderRelated() {
-      const cards = shuffle(homepageCards).slice(0, 3);
-      const container = document.querySelector('.articles-grid');
-      container.innerHTML = cards.map((card, index) => `
-        <article class="article-card" style="animation-delay: ${index * 0.1}s;">
-          <div class="article-image" style="background: ${card.bg};">
-            <div class="article-category">
-              <i class="${card.icon}"></i>
-              ${card.category}
-            </div>
-            <div class="article-overlay">
-              <i class="fas fa-arrow-right"></i>
-            </div>
-          </div>
-          <div class="article-content">
-            <h3 class="article-title">${card.title}</h3>
-            <p class="article-excerpt">${card.excerpt}</p>
-            <div class="article-meta">
-              <span class="read-time">
-                <i class="fas fa-clock"></i>
-                5 min read
-              </span>
-              <span class="article-date">
-                <i class="fas fa-calendar"></i>
-                2024
-              </span>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      renderRelated();
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            renderRelated();
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
-    // AI QR code popup interaction
-    (function(){
-        var btn = document.getElementById('aiQrBtn');
-        var dropdown = document.getElementById('aiQrDropdown');
-        var qrBox = document.getElementById('aiQrBox');
-        var qrCreated = false;
-        function createQr() {
-            if (!qrCreated) {
-                new QRCode(qrBox, {
-                    text: window.location.origin + '/Ai/AiCourse.html',
-                    width: 120,
-                    height: 120,
-                    colorDark: '#212529',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                qrCreated = true;
+        // AI QR code popup interaction
+        (function () {
+            var btn = document.getElementById('aiQrBtn');
+            var dropdown = document.getElementById('aiQrDropdown');
+            var qrBox = document.getElementById('aiQrBox');
+            var qrCreated = false;
+            function createQr() {
+                if (!qrCreated) {
+                    new QRCode(qrBox, {
+                        text: window.location.origin + '/Ai/AiCourse.html',
+                        width: 120,
+                        height: 120,
+                        colorDark: '#212529',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrCreated = true;
+                }
             }
-        }
-        function showDropdown() {
-            createQr();
-            var btnRect = btn.getBoundingClientRect();
-            var parentRect = btn.parentElement.getBoundingClientRect();
-            dropdown.style.position = 'absolute';
-            dropdown.style.left = (btnRect.left - parentRect.left + btnRect.width/2 - dropdown.offsetWidth/2) + 'px';
-            dropdown.style.top = (btnRect.bottom - parentRect.top + 8) + 'px';
-            dropdown.style.display = 'block';
-        }
-        function hideDropdown() {
-            dropdown.style.display = 'none';
-        }
-        var isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
-        if (isMobile) {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (dropdown.style.display === 'block') {
-                    hideDropdown();
-                } else {
+            function showDropdown() {
+                createQr();
+                var btnRect = btn.getBoundingClientRect();
+                var parentRect = btn.parentElement.getBoundingClientRect();
+                dropdown.style.position = 'absolute';
+                dropdown.style.left = (btnRect.left - parentRect.left + btnRect.width / 2 - dropdown.offsetWidth / 2) + 'px';
+                dropdown.style.top = (btnRect.bottom - parentRect.top + 8) + 'px';
+                dropdown.style.display = 'block';
+            }
+            function hideDropdown() {
+                dropdown.style.display = 'none';
+            }
+            var isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+            if (isMobile) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (dropdown.style.display === 'block') {
+                        hideDropdown();
+                    } else {
+                        showDropdown();
+                    }
+                });
+                document.addEventListener('click', function (e) {
+                    if (!dropdown.contains(e.target) && e.target !== btn) {
+                        hideDropdown();
+                    }
+                });
+            } else {
+                btn.addEventListener('mouseenter', function () {
                     showDropdown();
-                }
-            });
-            document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target) && e.target !== btn) {
+                });
+                btn.addEventListener('mouseleave', function () {
+                    setTimeout(function () { hideDropdown(); }, 100);
+                });
+                dropdown.addEventListener('mouseenter', function () {
+                    showDropdown();
+                });
+                dropdown.addEventListener('mouseleave', function () {
                     hideDropdown();
-                }
-            });
-        } else {
-            btn.addEventListener('mouseenter', function() {
-                showDropdown();
-            });
-            btn.addEventListener('mouseleave', function() {
-                setTimeout(function(){ hideDropdown(); }, 100);
-            });
-            dropdown.addEventListener('mouseenter', function() {
-                showDropdown();
-            });
-            dropdown.addEventListener('mouseleave', function() {
-                hideDropdown();
-            });
-        }
-    })();
+                });
+            }
+        })();
     </script>
 </body>
+
 </html>
-    
