@@ -1030,6 +1030,11 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Initializing sidebar language fix...');
         
+        // 强制设置默认语言为英语，防止侧边栏闪现
+        if (!localStorage.getItem('language')) {
+            localStorage.setItem('language', 'en');
+        }
+
         // 监听侧边栏加载
         watchSidebarLoad();
         
