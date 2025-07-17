@@ -59,7 +59,55 @@ class I18nLoader {
             if (typeof renderRelated === 'function') {
                 renderRelated();
             }
+
+            // 触发全局语言切换事件
+            window.dispatchEvent(new CustomEvent('languageChanged', { 
+                detail: { language: lang } 
+            }));
+
+            // 更新页面特定内容
+            this.updatePageSpecificContent();
         }
+    }
+
+    // 更新页面特定内容
+    updatePageSpecificContent() {
+        // 更新课程页面的特定内容
+        const courseTitle = document.querySelector('.grok-info h1');
+        if (courseTitle) courseTitle.textContent = this.t('course.title');
+        
+        const courseDesc = document.querySelector('.grok-info p');
+        if (courseDesc) courseDesc.textContent = this.t('course.description');
+        
+        const visitBtn = document.querySelector('.grok-btn');
+        if (visitBtn && visitBtn.textContent.includes('Visit') || visitBtn.textContent.includes('访问')) {
+            visitBtn.textContent = this.t('course.visit');
+        }
+        
+        const mobileBtn = document.querySelector('.grok-btn-outline');
+        if (mobileBtn && (mobileBtn.textContent.includes('Mobile') || mobileBtn.textContent.includes('手机'))) {
+            mobileBtn.textContent = this.t('course.mobile');
+        }
+        
+        const qrTip = document.querySelector('.qr-tip');
+        if (qrTip) qrTip.textContent = this.t('course.qr.tip');
+
+        // 更新主要内容区域的标题
+        const mainSectionH2s = document.querySelectorAll('.main-section h2');
+        mainSectionH2s.forEach(h2 => {
+            const text = h2.textContent.trim();
+            if (text.includes('Course Overview') || text.includes('课程概览')) {
+                h2.innerHTML = `<i class="fas fa-graduation-cap"></i> ${this.t('course.overview.title')}`;
+            } else if (text.includes('Phase 1') || text.includes('第一阶段')) {
+                h2.innerHTML = `<i class="fas fa-flag-checkered"></i> ${this.t('course.phase1.title')}`;
+            } else if (text.includes('Phase 2') || text.includes('第二阶段')) {
+                h2.innerHTML = `<i class="fas fa-robot"></i> ${this.t('course.phase2.title')}`;
+            } else if (text.includes('Phase 3') || text.includes('第三阶段')) {
+                h2.innerHTML = `<i class="fas fa-rocket"></i> ${this.t('course.phase3.title')}`;
+            } else if (text.includes('Trending Niches') || text.includes('热门赛道')) {
+                h2.innerHTML = `<i class="fas fa-fire"></i> ${this.t('course.tracks.title')}`;
+            }
+        });
     }
 
     // 更新页面文本

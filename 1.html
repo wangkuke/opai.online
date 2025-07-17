@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入通用 i18n 加载器 -->
     <script src="i18n-loader.js"></script>
+    <!-- 引入全局语言切换器 -->
+    <script src="language-switcher.js"></script>
     <style>
         * {
             margin: 0;
@@ -752,11 +754,7 @@
                 <li><a href="#" data-i18n="nav.about">About</a></li>
             </ul>
             <div class="user-actions">
-                <!-- 语言切换按钮 -->
-                <div class="language-switcher" style="margin-right: 15px;">
-                    <button class="btn" onclick="window.i18n.switchLanguage('zh')" style="padding: 8px 16px; margin-right: 5px; font-size: 0.9rem;">中文</button>
-                    <button class="btn" onclick="window.i18n.switchLanguage('en')" style="padding: 8px 16px; font-size: 0.9rem;">EN</button>
-                </div>
+                <!-- 语言切换按钮将由 language-switcher.js 自动创建 -->
                 <button class="btn" id="createPostBtn">
                     <i class="fas fa-plus"></i> <span data-i18n="btn.post">Post Article</span>
                 </button>
@@ -880,113 +878,74 @@
         </main>
     </div>
     <script>
-        // i18n 语言配置
-        const i18nResources = {
-            en: {
-                'nav.home': 'Home',
-                'nav.tools': 'AI Tools',
-                'nav.tutorials': 'Tutorials',
-                'nav.blog': 'Blog',
-                'nav.community': 'Community',
-                'nav.about': 'About',
-                'btn.post': 'Post Article',
-                'user.student': 'AI Student',
-                'course.title': 'AI YouTube Shorts Course',
-                'course.description': 'This course takes you from beginner to YPP (YouTube Partner Program), mastering AI content creation skills and starting your YouTube monetization journey. Covers account setup, content creation, monetization guidance, and trending niche analysis.',
-                'course.visit': 'Visit Official Site',
-                'course.mobile': 'Mobile Access',
-                'course.qr.tip': 'Scan to access on mobile',
-                'course.overview.title': 'Course Overview',
-                'course.overview.description': 'This course will guide you step by step to master YouTube Shorts creation and monetization skills, using AI tools to efficiently produce content and quickly meet YPP requirements for earning revenue.',
-                'course.phase1.title': 'Phase 1: Account Setup',
-                'course.phase1.description': 'Understand the YouTube platform and monetization paths, complete account registration and basic settings.',
-                'course.phase2.title': 'Phase 2: Content Creation',
-                'course.phase2.description': 'Identify your content direction, learn AI creation skills, and complete your first Shorts video production and publishing.',
-                'course.phase3.title': 'Phase 3: Monetization',
-                'course.phase3.description': 'Establish a content production workflow, continuously optimize video quality, meet YPP requirements, and start earning revenue.',
-                'course.tracks.title': 'Trending Niches',
-                'recommended.title': 'Recommended Articles',
-                'article.niche.title': 'How to Choose the Right AI Shorts Niche?',
-                'article.niche.excerpt': 'Analyze trending AI Shorts niches to help you efficiently find your content direction.',
-                'article.tools.title': 'Practical Use of AI Tools in Content Creation',
-                'article.tools.excerpt': 'Detailed explanation of how AI tools can improve the efficiency and quality of Shorts creation.',
-                'article.monetization.title': 'Complete Guide to YouTube Shorts Monetization',
-                'article.monetization.excerpt': 'From zero to one, master every step of YouTube Shorts monetization.'
-            },
-            zh: {
-                'nav.home': '首页',
-                'nav.tools': 'AI工具',
-                'nav.tutorials': '教程',
-                'nav.blog': '博客',
-                'nav.community': '社区',
-                'nav.about': '关于',
-                'btn.post': '发布文章',
-                'user.student': 'AI学员',
-                'course.title': 'AI YouTube Shorts 课程',
-                'course.description': '本课程带你从新手到开通YPP（YouTube合作伙伴计划），掌握AI内容创作技能，开启YouTube变现之旅。涵盖账号设置、内容创作、变现指导和热门赛道分析。',
-                'course.visit': '访问官方网站',
-                'course.mobile': '手机访问',
-                'course.qr.tip': '扫码手机访问',
-                'course.overview.title': '课程概览',
-                'course.overview.description': '本课程将一步步指导你掌握YouTube Shorts创作和变现技能，使用AI工具高效产出内容，快速达到YPP要求获得收益。',
-                'course.phase1.title': '第一阶段：账号设置',
-                'course.phase1.description': '了解YouTube平台和变现路径，完成账号注册和基础设置。',
-                'course.phase2.title': '第二阶段：内容创作',
-                'course.phase2.description': '确定内容方向，学习AI创作技能，完成第一个Shorts视频制作和发布。',
-                'course.phase3.title': '第三阶段：变现',
-                'course.phase3.description': '建立内容生产流程，持续优化视频质量，达到YPP要求并开始获得收益。',
-                'course.tracks.title': '热门赛道',
-                'recommended.title': '推荐文章',
-                'article.niche.title': '如何选择合适的AI Shorts赛道？',
-                'article.niche.excerpt': '分析热门AI Shorts赛道，帮你高效找到内容方向。',
-                'article.tools.title': 'AI工具在内容创作中的实用技巧',
-                'article.tools.excerpt': '详细讲解AI工具如何提升Shorts创作的效率和质量。',
-                'article.monetization.title': 'YouTube Shorts变现完整指南',
-                'article.monetization.excerpt': '从零到一，掌握YouTube Shorts变现的每一步。'
+        // 使用全局 i18n 系统
+        function getHomepageCards() {
+            return [
+                {
+                    title: window.i18n.t('article.niche.title'),
+                    category: window.i18n.getCurrentLanguage() === 'zh' ? "课程技巧" : "Course Tips",
+                    bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
+                    excerpt: window.i18n.t('article.niche.excerpt'),
+                    icon: "fas fa-lightbulb"
+                },
+                {
+                    title: window.i18n.t('article.tools.title'),
+                    category: window.i18n.getCurrentLanguage() === 'zh' ? "AI实践" : "AI Practice",
+                    bg: "linear-gradient(135deg, #f72585, #b5179e)",
+                    excerpt: window.i18n.t('article.tools.excerpt'),
+                    icon: "fas fa-robot"
+                },
+                {
+                    title: window.i18n.t('article.monetization.title'),
+                    category: window.i18n.getCurrentLanguage() === 'zh' ? "变现指南" : "Monetization Guide",
+                    bg: "linear-gradient(135deg, #7209b7, #560bad)",
+                    excerpt: window.i18n.t('article.monetization.excerpt'),
+                    icon: "fas fa-dollar-sign"
+                }
+            ];
+        }
+
+        function shuffle(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+
+        function renderRelated() {
+            if (!window.i18n || !window.i18n.isLoaded) {
+                setTimeout(renderRelated, 200);
+                return;
             }
-        };
-
-        // 当前语言
-        let currentLanguage = localStorage.getItem('language') || 'zh';
-
-        // 翻译函数
-        function t(key) {
-            return i18nResources[currentLanguage][key] || key;
-        }
-
-        // 更新页面文本
-        function updatePageText() {
-            // 更新导航
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                element.textContent = t(key);
-            });
             
-            // 更新特定元素
-            const courseTitle = document.querySelector('.grok-info h1');
-            if (courseTitle) courseTitle.textContent = t('course.title');
+            const cards = shuffle(getHomepageCards()).slice(0, 3);
+            const container = document.querySelector('.articles-grid');
+            if (!container) return;
             
-            const courseDesc = document.querySelector('.grok-info p');
-            if (courseDesc) courseDesc.textContent = t('course.description');
-            
-            const visitBtn = document.querySelector('.grok-btn');
-            if (visitBtn) visitBtn.textContent = t('course.visit');
-            
-            const mobileBtn = document.querySelector('.grok-btn-outline');
-            if (mobileBtn) mobileBtn.textContent = t('course.mobile');
-            
-            const qrTip = document.querySelector('.qr-tip');
-            if (qrTip) qrTip.textContent = t('course.qr.tip');
-        }
-
-        // 语言切换函数
-        function switchLanguage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem('language', lang);
-            updatePageText();
-            
-            // 更新文章内容
-            renderRelated();
+            container.innerHTML = cards.map((card, index) => `
+                <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+                  <div class="article-image" style="background: ${card.bg};">
+                    <div class="article-category">
+                      <i class="${card.icon}"></i>
+                      ${card.category}
+                    </div>
+                    <div class="article-overlay">
+                      <i class="fas fa-arrow-right"></i>
+                    </div>
+                  </div>
+                  <div class="article-content">
+                    <h3 class="article-title">${card.title}</h3>
+                    <p class="article-excerpt">${card.excerpt}</p>
+                    <div class="article-meta">
+                      <span class="read-time">
+                        <i class="fas fa-clock"></i>
+                        5 min read
+                      </span>
+                      <span class="article-date">
+                        <i class="fas fa-calendar"></i>
+                        2024
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              `).join('');
         }
 
         // Sidebar async load
@@ -995,72 +954,26 @@
             .then(html => {
                 document.getElementById('sidebar').outerHTML = html;
                 // 侧边栏加载完成后更新文本
-                updatePageText();
-            });
-        // Related articles logic (localized for course)
-        function getHomepageCards() {
-            return [
-                {
-                    title: t('article.niche.title'),
-                    category: currentLanguage === 'zh' ? "课程技巧" : "Course Tips",
-                    bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-                    excerpt: t('article.niche.excerpt'),
-                    icon: "fas fa-lightbulb"
-                },
-                {
-                    title: t('article.tools.title'),
-                    category: currentLanguage === 'zh' ? "AI实践" : "AI Practice",
-                    bg: "linear-gradient(135deg, #f72585, #b5179e)",
-                    excerpt: t('article.tools.excerpt'),
-                    icon: "fas fa-robot"
-                },
-                {
-                    title: t('article.monetization.title'),
-                    category: currentLanguage === 'zh' ? "变现指南" : "Monetization Guide",
-                    bg: "linear-gradient(135deg, #7209b7, #560bad)",
-                    excerpt: t('article.monetization.excerpt'),
-                    icon: "fas fa-dollar-sign"
+                if (window.i18n && window.i18n.isLoaded) {
+                    window.i18n.updatePageText();
                 }
-            ];
-        }
-        function shuffle(arr) {
-            return arr.sort(() => Math.random() - 0.5);
-        }
-        function renderRelated() {
-            const cards = shuffle(getHomepageCards()).slice(0, 3);
-            const container = document.querySelector('.articles-grid');
-            container.innerHTML = cards.map((card, index) => `
-    <article class="article-card" style="animation-delay: ${index * 0.1}s;">
-      <div class="article-image" style="background: ${card.bg};">
-        <div class="article-category">
-          <i class="${card.icon}"></i>
-          ${card.category}
-        </div>
-        <div class="article-overlay">
-          <i class="fas fa-arrow-right"></i>
-        </div>
-      </div>
-      <div class="article-content">
-        <h3 class="article-title">${card.title}</h3>
-        <p class="article-excerpt">${card.excerpt}</p>
-        <div class="article-meta">
-          <span class="read-time">
-            <i class="fas fa-clock"></i>
-            5 min read
-          </span>
-          <span class="article-date">
-            <i class="fas fa-calendar"></i>
-            2024
-          </span>
-        </div>
-      </div>
-    </article>
-  `).join('');
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            // 初始化语言设置
-            updatePageText();
+            });
+
+        // 监听语言切换事件
+        window.addEventListener('languageChanged', function(event) {
             renderRelated();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // 等待 i18n 系统初始化完成后再渲染
+            const waitForI18n = () => {
+                if (window.i18n && window.i18n.isLoaded) {
+                    renderRelated();
+                } else {
+                    setTimeout(waitForI18n, 100);
+                }
+            };
+            waitForI18n();
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
