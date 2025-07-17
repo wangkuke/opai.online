@@ -773,13 +773,15 @@
                 </div>
                 <div class="grok-info">
                     <h1 data-i18n="course.title">AI YouTube Shorts Course</h1>
-                    <p data-i18n="course.description">This course takes you from beginner to YPP (YouTube Partner Program), mastering AI content
+                    <p data-i18n="course.description">This course takes you from beginner to YPP (YouTube Partner
+                        Program), mastering AI content
                         creation skills and starting your YouTube monetization journey. Covers account setup, content
                         creation, monetization guidance, and trending niche analysis.</p>
                     <div class="grok-btns">
                         <a href="Ai/AiCourse.html" class="btn grok-btn" data-i18n="course.visit">Visit Official Site</a>
                         <div style="position:relative;display:inline-block;">
-                            <a href="Ai/AiCourse.html" class="btn grok-btn-outline" id="aiQrBtn" data-i18n="course.mobile">Mobile Access</a>
+                            <a href="Ai/AiCourse.html" class="btn grok-btn-outline" id="aiQrBtn"
+                                data-i18n="course.mobile">Mobile Access</a>
                             <div class="qr-dropdown" id="aiQrDropdown" style="display:none;position:absolute;">
                                 <div class="qr-img-box">
                                     <div id="aiQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
@@ -872,7 +874,8 @@
             </section>
             <!-- Related Articles -->
             <section class="related-section">
-                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> <span data-i18n="recommended.title">Recommended Articles</span></h2>
+                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> <span
+                        data-i18n="recommended.title">Recommended Articles</span></h2>
                 <div class="articles-grid"></div>
             </section>
         </main>
@@ -914,11 +917,11 @@
                 setTimeout(renderRelated, 200);
                 return;
             }
-            
+
             const cards = shuffle(getHomepageCards()).slice(0, 3);
             const container = document.querySelector('.articles-grid');
             if (!container) return;
-            
+
             container.innerHTML = cards.map((card, index) => `
                 <article class="article-card" style="animation-delay: ${index * 0.1}s;">
                   <div class="article-image" style="background: ${card.bg};">
@@ -960,7 +963,7 @@
             });
 
         // 监听语言切换事件
-        window.addEventListener('languageChanged', function(event) {
+        window.addEventListener('languageChanged', function (event) {
             renderRelated();
         });
 

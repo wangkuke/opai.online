@@ -1,37 +1,6 @@
-/**
- * 侧边栏加载器
- * 负责异步加载侧边栏并确保正确应用翻译
- */
-
-// 加载侧边栏并应用翻译
-function loadSidebar() {
-    console.log('Loading sidebar...');
-    
-    fetch('sidebar.html')
-        .then(res => res.text())
-        .then(html => {
-            // 替换侧边栏内容
-            const sidebarContainer = document.getElementById('sidebar');
-            if (sidebarContainer) {
-                sidebarContainer.outerHTML = html;
-                console.log('Sidebar loaded successfully');
-                
-                // 等待一小段时间确保DOM更新完成
-                setTimeout(() => {
-                    // 应用当前语言翻译
-                    applySidebarTranslations();
-                    
-                    // 设置语言切换事件监听器
-                    setupLanguageChangeListeners();
-                }, 100);
-            }
-        })
-        .catch(err => {
-            console.error('Error loading sidebar:', err);
-        });
-}
-
-// 简单的翻译映射表
+<!-- 将此代码添加到 HTML 文件的 </body> 标签之前 -->
+<script>
+// 简单的侧边栏翻译映射表
 const sidebarTranslations = {
     'en': {
         'sidebar.home': 'Home',
@@ -111,8 +80,8 @@ function applySidebarTranslations() {
 }
 
 // 设置语言变化事件监听器
-function setupLanguageChangeListeners() {
-    console.log('Setting up language change listeners...');
+function setupSidebarLanguageListeners() {
+    console.log('Setting up sidebar language change listeners...');
     
     // 监听语言变化事件
     window.addEventListener('languageChanged', function(e) {
@@ -136,7 +105,38 @@ function setupLanguageChangeListeners() {
     }
 }
 
+// 监听侧边栏加载
+function watchSidebarLoad() {
+    // 使用 MutationObserver 监听 DOM 变化
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                // 检查是否有侧边栏元素被添加
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar) {
+                    console.log('Sidebar detected, applying translations...');
+                    applySidebarTranslations();
+                    observer.disconnect(); // 停止观察
+                }
+            }
+        });
+    });
+    
+    // 开始观察 body 元素的变化
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
-    loadSidebar();
+    console.log('Initializing sidebar language fix...');
+    
+    // 监听侧边栏加载
+    watchSidebarLoad();
+    
+    // 设置语言变化事件监听器
+    setupSidebarLanguageListeners();
+    
+    // 定期检查侧边栏并应用翻译
+    setInterval(applySidebarTranslations, 2000);
 });
+</script>

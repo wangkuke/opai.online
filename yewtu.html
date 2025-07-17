@@ -25,8 +25,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 引入全局语言切换器 -->
     <script src="language-switcher.js"></script>
-    <!-- 引入更健壮的侧边栏国际化修复脚本 -->
-    <script src="robust-sidebar-i18n.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         :root {
@@ -868,6 +866,149 @@
       .then(html => {
         document.getElementById('sidebar').outerHTML = html;
       });
+    </script>
+    
+    <!-- 侧边栏国际化修复 -->
+    <script>
+    // 简单的侧边栏翻译映射表
+    const sidebarTranslations = {
+        'en': {
+            'sidebar.home': 'Home',
+            'sidebar.tools': 'AI Tools',
+            'sidebar.tutorials': 'Tutorials',
+            'sidebar.blog': 'Blog',
+            'sidebar.community': 'Community',
+            'sidebar.about': 'About',
+            'sidebar.aiTools': 'AI Tools',
+            'sidebar.videoTools': 'Video Tools',
+            'sidebar.imageTools': 'Image Tools',
+            'sidebar.textTools': 'Text Tools',
+            'sidebar.audioTools': 'Audio Tools',
+            'sidebar.otherTools': 'Other Tools',
+            'sidebar.popular': 'Popular',
+            'sidebar.new': 'New',
+            'sidebar.recommended': 'Recommended',
+            'sidebar.all': 'All Tools'
+        },
+        'zh': {
+            'sidebar.home': '首页',
+            'sidebar.tools': 'AI工具',
+            'sidebar.tutorials': '教程',
+            'sidebar.blog': '博客',
+            'sidebar.community': '社区',
+            'sidebar.about': '关于',
+            'sidebar.aiTools': 'AI工具',
+            'sidebar.videoTools': '视频工具',
+            'sidebar.imageTools': '图像工具',
+            'sidebar.textTools': '文本工具',
+            'sidebar.audioTools': '音频工具',
+            'sidebar.otherTools': '其他工具',
+            'sidebar.popular': '热门',
+            'sidebar.new': '最新',
+            'sidebar.recommended': '推荐',
+            'sidebar.all': '所有工具'
+        }
+    };
+
+    // 获取当前语言
+    function getCurrentLanguage() {
+        return localStorage.getItem('language') || 'en';
+    }
+
+    // 获取翻译
+    function getSidebarTranslation(key, lang) {
+        const langTranslations = sidebarTranslations[lang] || sidebarTranslations['en'];
+        return langTranslations[key] || key;
+    }
+
+    // 应用翻译到侧边栏
+    function applySidebarTranslations() {
+        const currentLang = getCurrentLanguage();
+        console.log(`Applying ${currentLang} translations to sidebar...`);
+        
+        // 获取所有带有data-i18n属性的侧边栏元素
+        const sidebarElements = document.querySelectorAll('.sidebar [data-i18n]');
+        
+        if (sidebarElements.length === 0) {
+            console.log('No sidebar elements found, will retry...');
+            setTimeout(applySidebarTranslations, 500);
+            return;
+        }
+        
+        console.log(`Found ${sidebarElements.length} sidebar elements to translate`);
+        
+        // 应用翻译
+        sidebarElements.forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (!key) return;
+            
+            const translation = getSidebarTranslation(key, currentLang);
+            if (translation) {
+                element.textContent = translation;
+            }
+        });
+    }
+
+    // 设置语言变化事件监听器
+    function setupSidebarLanguageListeners() {
+        console.log('Setting up sidebar language change listeners...');
+        
+        // 监听语言变化事件
+        window.addEventListener('languageChanged', function(e) {
+            console.log('Language changed event detected');
+            setTimeout(applySidebarTranslations, 50);
+        });
+        
+        // 监听全局语言变化事件
+        window.addEventListener('globalLanguageChanged', function(e) {
+            console.log('Global language changed event detected');
+            setTimeout(applySidebarTranslations, 50);
+        });
+        
+        // 监听下拉选择器变化
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            langSelect.addEventListener('change', function(e) {
+                console.log('Language select changed');
+                setTimeout(applySidebarTranslations, 100);
+            });
+        }
+    }
+
+    // 监听侧边栏加载
+    function watchSidebarLoad() {
+        // 使用 MutationObserver 监听 DOM 变化
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    // 检查是否有侧边栏元素被添加
+                    const sidebar = document.querySelector('.sidebar');
+                    if (sidebar) {
+                        console.log('Sidebar detected, applying translations...');
+                        applySidebarTranslations();
+                        observer.disconnect(); // 停止观察
+                    }
+                }
+            });
+        });
+        
+        // 开始观察 body 元素的变化
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initializing sidebar language fix...');
+        
+        // 监听侧边栏加载
+        watchSidebarLoad();
+        
+        // 设置语言变化事件监听器
+        setupSidebarLanguageListeners();
+        
+        // 定期检查侧边栏并应用翻译
+        setInterval(applySidebarTranslations, 2000);
+    });
     </script>
 </body>
 </html> 
