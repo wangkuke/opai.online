@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to MP4 Converter - SaveFrom | Free YouTube Video Downloader</title>
+    <meta name="title" content="YouTube to MP4 Converter - Free YouTube Video Downloader | SaveFrom">
+    <meta name="description" content="YouTube to MP4 Converter by SaveFrom is a professional online tool to convert and download YouTube videos to MP4 format in HD for free. No software installation required. Fast, safe, and easy to use.">
+    <meta name="keywords" content="YouTube to MP4 Converter, YouTube MP4 download, YouTube video downloader, SaveFrom, free YouTube converter, online MP4 converter, HD video download, YouTube to MP4 online">
+    <meta name="author" content="AI Tools Explorer">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="https://en1.savefrom.net/">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 复制自savetube.html的全部样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .logo i { font-size: 2.5rem; color: var(--success); margin-bottom: 10px; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; }
+        .category-section { margin-bottom: 25px; padding: 0 15px; }
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .category-title i { margin-right: 10px; font-size: 1.2rem; }
+        .category-list { list-style: none; padding: 0 5px; }
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .category-list li:hover { background: rgba(255,255,255,0.1); }
+        .category-list li:hover::before { background: var(--success); }
+        .category-list li.active { background: rgba(114,9,183,0.3); }
+        .category-list li.active::before { background: var(--accent); }
+        .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nav-links { display: flex; list-style: none; gap: 25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--primary); }
+        .user-actions { display: flex; align-items: center; gap: 15px; }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+        .btn i { margin-right: 8px; }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: var(--secondary);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .user-profile:hover { background: rgba(255,255,255,0.85); }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+        }
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245,247,251,0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+        .jimengai-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .jimengai-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+            background: #eee;
+        }
+        .jimengai-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .jimengai-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+        .jimengai-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+        .jimeng-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
+        }
+        .jimeng-btn:hover {
+            background: var(--secondary);
+        }
+        .jimeng-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .jimeng-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        @media (max-width: 992px) {
+            .app-layout { grid-template-columns: 1fr; grid-template-areas: "header" "content"; }
+            .sidebar { display: none; }
+        }
+        @media (max-width: 768px) {
+            .main-section { padding: 18px 6px; }
+        }
+        @media (max-width: 700px) {
+            .jimengai-card {
+                flex-direction: column;
+                padding: 18px 8px;
+                gap: 18px;
+            }
+            .jimengai-img img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        /* 相关推荐区域样式 */
+        .related-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            margin-top: 40px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+        .section-title i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
+        }
+        .article-image {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .article-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        .article-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+        .article-content {
+            padding: 20px;
+        }
+        .article-title {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-excerpt {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3;
+        }
+        .article-overlay i {
+            color: white;
+            font-size: 2rem;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+        .article-card:hover .article-overlay i {
+            transform: translateX(0);
+        }
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .read-time, .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .read-time i, .article-date i {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+        }
+        @media (max-width: 768px) {
+            .related-section {
+                padding: 0 20px;
+                margin-top: 30px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 18px;
+            }
+            .article-image {
+                height: 140px;
+            }
+            .article-content {
+                padding: 16px;
+            }
+            .article-title {
+                font-size: 1rem;
+            }
+            .article-excerpt {
+                font-size: 0.9rem;
+            }
+            .article-meta {
+                margin-top: 12px;
+                padding-top: 12px;
+                font-size: 0.8rem;
+            }
+            .article-overlay i {
+                font-size: 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .related-section {
+                padding: 0 15px;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .article-image {
+                height: 120px;
+            }
+            .article-category {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            .article-category i {
+                font-size: 0.7rem;
+            }
+            .article-content {
+                padding: 14px;
+            }
+            .article-title {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+            .article-excerpt {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+            .article-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                font-size: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .article-overlay i {
+                font-size: 1.2rem;
+            }
+        }
+        #qrcode-popup {
+            position: absolute;
+            z-index: 9999;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 12px 12px 8px 12px;
+            min-width: 120px;
+            min-height: 120px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            top: 100%;
+            left: 0;
+            margin-top: 10px;
+        }
+        #qrcode-popup canvas {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <div id="sidebar"></div>
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="#" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
+            </ul>
+            <div class="user-actions">
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> 发布文章
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">AI</div>
+                    <span>OPAI探索者</span>
+                </div>
+            </div>
+        </header>
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- SaveFrom卡片 -->
+            <div class="jimengai-card">
+                <div class="jimengai-img">
+                    <img src="src/savefrom.png" alt="YouTube to MP4 Converter - SaveFrom Tool for US Users" />
+                </div>
+                <div class="jimengai-info">
+                    <h1>YouTube to MP4 Converter - Free YouTube Video Downloader</h1>
+                    <p>SaveFrom is a leading YouTube to MP4 Converter for US users, allowing you to convert and download YouTube videos to MP4 format instantly. No registration or software required, 100% free and secure.</p>
+                    <div class="jimengai-btns">
+                        <a href="https://en1.savefrom.net/21-youtube-to-mp4-37Nq.html" target="_blank" class="btn jimeng-btn">Visit Official Site</a>
+                        <a href="https://en1.savefrom.net/21-youtube-to-mp4-37Nq.html" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn">Mobile Version</a>
+                        <div id="qrcode-popup" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>       
+     <!-- 主内容区 -->
+            <section class="main-section">
+                <h2><i class="fas fa-download"></i> Why Choose Our YouTube to MP4 Converter?</h2>
+                <p>Our YouTube to MP4 Converter is designed for American users who want a fast, reliable, and free way to save YouTube videos as MP4 files. Enjoy HD quality, multiple format support, and a user-friendly experience.</p>
+                
+                <h2><i class="fas fa-info-circle"></i> About SaveFrom</h2>
+                <p>SaveFrom is dedicated to providing users with the most convenient YouTube video download experience. As a professional YouTube downloader, SaveFrom supports converting YouTube videos to MP4, MP3 and other formats to meet different user needs.</p>
+                <p style="color:var(--gray);font-size:0.98rem;">SaveFrom supports multiple video quality options, from SD to HD, and users can choose the appropriate format and quality as needed. It also supports audio extraction, converting YouTube videos to MP3 audio files.</p>
+                
+                <h2><i class="fas fa-star"></i> Key Features of Our YouTube to MP4 Converter</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Convert YouTube to MP4 in seconds, no registration needed</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Download HD and Full HD YouTube videos as MP4</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Free and unlimited YouTube to MP4 conversions</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Works on all devices: Windows, Mac, iOS, Android</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span>Safe, secure, and ad-free YouTube to MP4 conversion</span>
+                    </li>
+                </ul>
+                
+                <h2><i class="fas fa-link"></i> Official Website</h2>
+                <p><strong>Official Site:</strong> <a href="https://en1.savefrom.net/21-youtube-to-mp4-37Nq.html" target="_blank" style="color: var(--primary); text-decoration: none;">https://en1.savefrom.net/</a></p>
+                <p>Visit SaveFrom official site to experience professional YouTube video download service, supporting YouTube to MP4 and MP3.</p>
+                
+                <h2><i class="fas fa-rocket"></i> How to Use the YouTube to MP4 Converter</h2>
+                <ol style="margin: 20px 0 20px 20px;">
+                    <li>Copy the YouTube video link you want to convert</li>
+                    <li>Paste the link into the SaveFrom YouTube to MP4 Converter input box</li>
+                    <li>Select MP4 as your desired format and choose the video quality</li>
+                    <li>Click the download button and save the MP4 file to your device</li>
+                </ol>
+                
+                <h2><i class="fas fa-lightbulb"></i> Tips</h2>
+                <ul style="margin: 20px 0 20px 20px;">
+                    <li>Select the appropriate video quality: choose SD, HD, or UHD as needed</li>
+                    <li>Audio download: choose MP3 format to save storage if you only need audio</li>
+                    <li>Network: ensure a stable connection for the best download experience</li>
+                    <li>Browser compatibility: Chrome, Firefox and other modern browsers are recommended</li>
+                </ul>
+                
+                <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions (FAQ)</h2>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">How do I convert YouTube videos to MP4?</h3>
+                    <p>Simply copy the YouTube video link, paste it into the input box on SaveFrom, select MP4 format, and click download. Your video will be converted and saved as an MP4 file instantly.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Is the YouTube to MP4 Converter free for US users?</h3>
+                    <p>Yes, our YouTube to MP4 Converter is 100% free for all users, including those in the United States. No registration or payment required.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Is it safe to use this YouTube to MP4 Converter?</h3>
+                    <p>Absolutely. SaveFrom provides a secure, ad-free, and virus-free environment for converting and downloading YouTube videos to MP4.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">How fast is the download?</h3>
+                    <p>SaveFrom uses an optimized download engine to provide a fast and stable experience.</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">Does it support batch download?</h3>
+                    <p>Yes, SaveFrom supports batch download and can process multiple video links at once.</p>
+                </div>
+            </section>
+            
+            <!-- 相关推荐区域 -->
+            <section class="related-section">
+                <h2 class="section-title"><i class="fas fa-thumbs-up"></i> Related Video Tools</h2>
+                <div class="articles-grid"></div>
+            </section>
+        </main>
+        
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+        <script>
+        // 相关工具卡片数据
+        const homepageCards = [
+          {
+            title: "SaveTube - YouTube短片视频下载器",
+            category: "视频下载工具",
+            bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
+            excerpt: "专业的YouTube Shorts下载工具，支持无水印下载，多平台支持，完全免费使用。",
+            icon: "fas fa-video"
+          },
+          {
+            title: "Y2Mate - YouTube视频下载器",
+            category: "视频下载工具", 
+            bg: "linear-gradient(135deg, #ff0000, #cc0000)",
+            excerpt: "知名的YouTube视频下载工具，支持高清视频下载，MP3转换，操作简单便捷。",
+            icon: "fas fa-youtube"
+          },
+          {
+            title: "4K Video Downloader - 专业下载工具",
+            category: "视频下载工具",
+            bg: "linear-gradient(135deg, #667eea, #764ba2)",
+            excerpt: "专业的4K视频下载工具，支持YouTube、Vimeo等平台，高质量视频下载。",
+            icon: "fas fa-download"
+          }
+        ];
+        
+        function shuffle(arr) {
+          return arr.sort(() => Math.random() - 0.5);
+        }
+        
+        function renderRelated() {
+          const cards = shuffle(homepageCards).slice(0, 3);
+          const container = document.querySelector('.related-section .articles-grid');
+          container.style.opacity = '0';
+          container.style.transform = 'translateY(20px)';
+          
+          container.innerHTML = cards.map((card, index) => `
+            <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+              <div class="article-image" style="background: ${card.bg};">
+                <div class="article-category">
+                  <i class="${card.icon}"></i>
+                  ${card.category}
+                </div>
+                <div class="article-overlay">
+                  <i class="fas fa-arrow-right"></i>
+                </div>
+              </div>
+              <div class="article-content">
+                <h3 class="article-title">${card.title}</h3>
+                <p class="article-excerpt">${card.excerpt}</p>
+                <div class="article-meta">
+                  <span class="read-time">
+                    <i class="fas fa-clock"></i>
+                    5分钟阅读
+                  </span>
+                  <span class="article-date">
+                    <i class="fas fa-calendar"></i>
+                    2024
+                  </span>
+                </div>
+              </div>
+            </article>
+          `).join('');
+          
+          setTimeout(() => {
+            container.style.transition = 'all 0.6s ease';
+            container.style.opacity = '1';
+            container.style.transform = 'translateY(0)';
+          }, 100);
+          
+          const articleCards = container.querySelectorAll('.article-card');
+          articleCards.forEach(card => {
+            card.addEventListener('click', function() {
+              this.style.transform = 'scale(0.95)';
+              setTimeout(() => {
+                this.style.transform = 'scale(1)';
+              }, 150);
+            });
+          });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+          renderRelated();
+          
+          const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+          };
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+              }
+            });
+          }, observerOptions);
+          
+          document.querySelectorAll('.article-card').forEach(card => {
+            observer.observe(card);
+          });
+        });
+        
+        // 二维码弹窗逻辑
+        const mobileBtn = document.getElementById('mobileViewBtn');
+        const qrPopup = document.getElementById('qrcode-popup');
+        let qrCreated = false;
+        
+        mobileBtn.addEventListener('mouseenter', function(e) {
+          if (!qrCreated) {
+            qrPopup.innerHTML = '';
+            new QRCode(qrPopup, {
+              text: 'https://en1.savefrom.net/21-youtube-to-mp4-37Nq.html',
+              width: 120,
+              height: 120,
+              colorDark: '#222',
+              colorLight: '#fff',
+              correctLevel: QRCode.CorrectLevel.H
+            });
+            qrCreated = true;
+          }
+          
+          const btnRect = this.getBoundingClientRect();
+          const containerRect = this.parentElement.getBoundingClientRect();
+          qrPopup.style.position = 'absolute';
+          qrPopup.style.left = (btnRect.left - containerRect.left) + 'px';
+          qrPopup.style.top = (btnRect.bottom - containerRect.top + 10) + 'px';
+          qrPopup.style.display = 'block';
+        });
+        
+        mobileBtn.addEventListener('mouseleave', function() {
+          qrPopup.style.display = 'none';
+        });
+        
+        qrPopup.addEventListener('mouseenter', function() {
+          qrPopup.style.display = 'block';
+        });
+        
+        qrPopup.addEventListener('mouseleave', function() {
+          qrPopup.style.display = 'none';
+        });
+        
+        // 加载侧边栏
+        fetch('sidebar.html')
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('sidebar').outerHTML = html;
+            if (window.i18n) {
+              window.i18n.updateSidebarTranslations();
+            }
+          });
+        </script>
+    </div>
+</body>
+</html>
