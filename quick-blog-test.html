@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Blog Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .article-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Quick Blog System Test</h1>
+    
+    <div id="status-container"></div>
+    
+    <h2>📄 Current Articles</h2>
+    <div class="articles-grid" id="articles-display"></div>
+    
+    <button onclick="forceCreateArticles()" style="padding: 10px 20px; margin: 10px;">🔧 Force Create Demo Articles</button>
+    <button onclick="refreshDisplay()" style="padding: 10px 20px; margin: 10px;">🔄 Refresh Display</button>
+
+    <!-- 加载博客系统 -->
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="notion-config.js"></script>
+    <script src="blog-notion-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script src="demo-articles.js"></script>
+
+    <script>
+        function updateStatus(message, type = 'success') {
+            const container = document.getElementById('status-container');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            container.appendChild(statusDiv);
+            console.log(message);
+        }
+
+        async function checkBlogSystem() {
+            updateStatus('🔍 Checking blog system...', 'warning');
+            
+            // 检查组件
+            if (typeof Article === 'undefined') {
+                updateStatus('❌ Article model not loaded', 'error');
+                return false;
+            }
+            updateStatus('✅ Article model loaded');
+
+            if (typeof BlogStorage === 'undefined') {
+                updateStatus('❌ BlogStorage not loaded', 'error');
+                return false;
+            }
+            updateStatus('✅ BlogStorage loaded');
+
+            // 检查存储实例
+            if (!window.blogStorage) {
+                updateStatus('⚠️ Creating blogStorage instance...', 'warning');
+                window.blogStorage = new BlogStorage();
+            }
+            updateStatus('✅ BlogStorage instance ready');
+
+            return true;
+        }
+
+        async function forceCreateArticles() {
+            updateStatus('🔧 Force creating demo articles...', 'warning');
+            
+            if (!await checkBlogSystem()) {
+                updateStatus('❌ Blog system not ready', 'error');
+                return;
+            }
+
+            // 清除现有文章
+            try {
+                await window.blogStorage.clearAllArticles();
+                updateStatus('🗑️ Cleared existing articles');
+            } catch (error) {
+                updateStatus(`⚠️ Clear error: ${error.message}`, 'warning');
+            }
+
+            // 创建演示文章
+            if (typeof createDemoArticles === 'function') {
+                const count = createDemoArticles();
+                updateStatus(`✅ Created ${count} demo articles`);
+            } else {
+                updateStatus('❌ createDemoArticles function not available', 'error');
+            }
+
+            // 刷新显示
+            setTimeout(refreshDisplay, 500);
+        }
+
+        async function refreshDisplay() {
+            const container = document.getElementById('articles-display');
+            
+            if (!window.blogStorage) {
+                container.innerHTML = '<div class="error">❌ No storage available</div>';
+                return;
+            }
+
+            try {
+                const articles = await window.blogStorage.getArticles({ status: 'published' });
+                updateStatus(`📊 Found ${articles.length} published articles`);
+
+                if (articles.length === 0) {
+                    container.innerHTML = '<div class="warning">⚠️ No published articles found. Click "Force Create Demo Articles" to create some.</div>';
+                    return;
+                }
+
+                container.innerHTML = articles.map(article => `
+                    <div class="article-card">
+                        <h3>${article.title}</h3>
+                        <p><strong>Category:</strong> ${article.category}</p>
+                        <p><strong>Status:</strong> ${article.status}</p>
+                        <p><strong>Author:</strong> ${article.author}</p>
+                        <p><strong>Tags:</strong> ${article.tags.join(', ')}</p>
+                        <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 3px;">
+                            <strong>Excerpt:</strong><br>
+                            ${article.excerpt}
+                        </div>
+                    </div>
+                `).join('');
+
+                updateStatus(`✅ Displayed ${articles.length} articles`);
+            } catch (error) {
+                updateStatus(`❌ Error loading articles: ${error.message}`, 'error');
+                container.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // 页面加载时自动检查
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStatus('🚀 Page loaded, initializing...', 'warning');
+            
+            setTimeout(async () => {
+                await checkBlogSystem();
+                await refreshDisplay();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

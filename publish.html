@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="blog.create_article">Create New Article - OPAI</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border: #dee2e6;
+            --success: #4cc9f0;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-switch {
+            margin-right: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #3a9bc1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 201, 240, 0.4);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Article Form */
+        .article-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .form-control.error:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 300px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        /* Character Counter */
+        .char-counter {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .char-counter.warning {
+            color: var(--warning);
+        }
+
+        .char-counter.error {
+            color: var(--error);
+        }
+
+        /* Loading State */
+        .btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .article-form {
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Rich Text Editor Styles */
+        .editor-toolbar {
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .editor-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .editor-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        #content-editor {
+            border-radius: 0 0 12px 12px;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                <span data-i18n="sidebar.logo">OPAI</span>
+            </a>
+            
+            <div class="header-actions">
+                <div class="lang-switch"></div>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span data-i18n="blog.back_to_home">Back to Home</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-title">
+            <h1 data-i18n="blog.create_article">Create New Article</h1>
+            <p>Share your knowledge and insights with the OPAI community</p>
+        </div>
+
+        <form class="article-form" id="article-form">
+            <div class="success-message" id="success-message">
+                <i class="fas fa-check-circle"></i>
+                <span data-i18n="blog.article_saved">Article saved successfully!</span>
+            </div>
+
+            <div class="form-group">
+                <label for="article-title" data-i18n="blog.title">Article Title</label>
+                <input 
+                    type="text" 
+                    id="article-title" 
+                    class="form-control" 
+                    data-i18n="[placeholder]blog.placeholder.title"
+                    placeholder="Enter article title..."
+                    maxlength="200"
+                    required
+                >
+                <div class="char-counter" id="title-counter">0/200</div>
+                <div class="error-message" id="title-error" data-i18n="blog.validation.title_required">Title is required</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="article-category" data-i18n="blog.category">Category</label>
+                    <select id="article-category" class="form-control">
+                        <option value="General" data-i18n="blog.category.general">General</option>
+                        <option value="Tutorial" data-i18n="blog.category.tutorial">Tutorial</option>
+                        <option value="News" data-i18n="blog.category.news">News</option>
+                        <option value="Review" data-i18n="blog.category.review">Review</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="article-tags" data-i18n="blog.tags">Tags</label>
+                    <input 
+                        type="text" 
+                        id="article-tags" 
+                        class="form-control" 
+                        data-i18n="[placeholder]blog.placeholder.tags"
+                        placeholder="Enter tags separated by commas"
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content-editor" data-i18n="blog.content">Content</label>
+                <div class="editor-toolbar">
+                    <button type="button" class="editor-btn" data-command="bold" title="Bold">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="italic" title="Italic">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="underline" title="Underline">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="insertUnorderedList" title="Bullet List">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="insertOrderedList" title="Numbered List">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="createLink" title="Insert Link">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+                <div 
+                    id="content-editor" 
+                    class="form-control" 
+                    contenteditable="true" 
+                    data-placeholder="Write your article content here..."
+                    style="min-height: 300px;"
+                ></div>
+                <div class="error-message" id="content-error" data-i18n="blog.validation.content_required">Content is required</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="save-draft-btn">
+                    <i class="fas fa-save"></i>
+                    <span data-i18n="blog.save_draft">Save Draft</span>
+                </button>
+                <button type="submit" class="btn btn-success" id="publish-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span data-i18n="blog.publish">Publish Article</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="i18n-loader.js"></script>
+    <script src="language-switcher.js"></script>
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script>
+        /**
+         * Article Publishing Form Handler
+         */
+        class ArticlePublisher {
+            constructor() {
+                this.form = document.getElementById('article-form');
+                this.titleInput = document.getElementById('article-title');
+                this.categorySelect = document.getElementById('article-category');
+                this.tagsInput = document.getElementById('article-tags');
+                this.contentEditor = document.getElementById('content-editor');
+                this.publishBtn = document.getElementById('publish-btn');
+                this.saveDraftBtn = document.getElementById('save-draft-btn');
+                this.successMessage = document.getElementById('success-message');
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupRichTextEditor();
+                this.setupCharacterCounter();
+                this.setupPlaceholder();
+            }
+
+            setupEventListeners() {
+                // Form submission
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.publishArticle();
+                });
+
+                // Save draft
+                this.saveDraftBtn.addEventListener('click', () => {
+                    this.saveDraft();
+                });
+
+                // Real-time validation
+                this.titleInput.addEventListener('input', () => {
+                    this.validateTitle();
+                });
+
+                this.contentEditor.addEventListener('input', () => {
+                    this.validateContent();
+                });
+
+                // Auto-save every 30 seconds
+                setInterval(() => {
+                    this.autoSave();
+                }, 30000);
+            }
+
+            setupRichTextEditor() {
+                // Rich text editor toolbar
+                const toolbarButtons = document.querySelectorAll('.editor-btn');
+                
+                toolbarButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const command = btn.dataset.command;
+                        
+                        if (command === 'createLink') {
+                            const url = prompt('Enter URL:');
+                            if (url) {
+                                document.execCommand(command, false, url);
+                            }
+                        } else {
+                            document.execCommand(command, false, null);
+                        }
+                        
+                        this.contentEditor.focus();
+                        this.updateToolbarState();
+                    });
+                });
+
+                // Update toolbar state on selection change
+                this.contentEditor.addEventListener('mouseup', () => {
+                    this.updateToolbarState();
+                });
+
+                this.contentEditor.addEventListener('keyup', () => {
+                    this.updateToolbarState();
+                });
+            }
+
+            updateToolbarState() {
+                const toolbarButtons = document.querySelectorAll('.editor-btn');
+                
+                toolbarButtons.forEach(btn => {
+                    const command = btn.dataset.command;
+                    if (document.queryCommandState(command)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            setupCharacterCounter() {
+                const titleCounter = document.getElementById('title-counter');
+                
+                this.titleInput.addEventListener('input', () => {
+                    const length = this.titleInput.value.length;
+                    const maxLength = 200;
+                    
+                    titleCounter.textContent = `${length}/${maxLength}`;
+                    
+                    if (length > maxLength * 0.9) {
+                        titleCounter.classList.add('warning');
+                    } else {
+                        titleCounter.classList.remove('warning');
+                    }
+                    
+                    if (length >= maxLength) {
+                        titleCounter.classList.add('error');
+                    } else {
+                        titleCounter.classList.remove('error');
+                    }
+                });
+            }
+
+            setupPlaceholder() {
+                const placeholder = this.contentEditor.dataset.placeholder;
+                
+                this.contentEditor.addEventListener('focus', () => {
+                    if (this.contentEditor.textContent.trim() === '') {
+                        this.contentEditor.innerHTML = '';
+                    }
+                });
+
+                this.contentEditor.addEventListener('blur', () => {
+                    if (this.contentEditor.textContent.trim() === '') {
+                        this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                    }
+                });
+
+                // Set initial placeholder
+                if (this.contentEditor.textContent.trim() === '') {
+                    this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                }
+            }
+
+            validateTitle() {
+                const title = this.titleInput.value.trim();
+                const titleError = document.getElementById('title-error');
+                
+                if (!title) {
+                    this.showError(this.titleInput, titleError, window.i18n ? window.i18n.t('blog.validation.title_required') : 'Title is required');
+                    return false;
+                } else if (title.length > 200) {
+                    this.showError(this.titleInput, titleError, window.i18n ? window.i18n.t('blog.validation.title_too_long') : 'Title must be less than 200 characters');
+                    return false;
+                } else {
+                    this.hideError(this.titleInput, titleError);
+                    return true;
+                }
+            }
+
+            validateContent() {
+                const content = this.contentEditor.textContent.trim();
+                const contentError = document.getElementById('content-error');
+                
+                if (!content || content === this.contentEditor.dataset.placeholder) {
+                    this.showError(this.contentEditor, contentError, window.i18n ? window.i18n.t('blog.validation.content_required') : 'Content is required');
+                    return false;
+                } else {
+                    this.hideError(this.contentEditor, contentError);
+                    return true;
+                }
+            }
+
+            showError(input, errorElement, message) {
+                input.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+
+            hideError(input, errorElement) {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+
+            validateForm() {
+                const titleValid = this.validateTitle();
+                const contentValid = this.validateContent();
+                
+                return titleValid && contentValid;
+            }
+
+            getFormData() {
+                const tags = this.tagsInput.value
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+
+                return {
+                    title: this.titleInput.value.trim(),
+                    content: this.contentEditor.innerHTML,
+                    category: this.categorySelect.value,
+                    tags: tags,
+                    author: 'Admin' // Could be dynamic in the future
+                };
+            }
+
+            async publishArticle() {
+                if (!this.validateForm()) {
+                    return;
+                }
+
+                this.setLoading(this.publishBtn, true);
+
+                try {
+                    const formData = this.getFormData();
+                    const article = new Article({
+                        ...formData,
+                        status: 'published'
+                    });
+
+                    // Use storage manager for unified storage access
+                    const storage = window.blogStorageManager || window.blogStorage;
+                    const result = await storage.saveArticle(article);
+                    
+                    if (result.success) {
+                        this.showSuccess(window.i18n ? window.i18n.t('blog.article_published') : 'Article published successfully!');
+                        
+                        // Show storage type info
+                        console.log('✓ Article saved to localStorage');
+                        
+                        // Redirect to home page after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000);
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    console.error('Error publishing article:', error);
+                    alert('Error publishing article: ' + error.message);
+                } finally {
+                    this.setLoading(this.publishBtn, false);
+                }
+            }
+
+            async saveDraft() {
+                if (!this.titleInput.value.trim()) {
+                    alert(window.i18n ? window.i18n.t('blog.validation.title_required') : 'Title is required to save draft');
+                    return;
+                }
+
+                this.setLoading(this.saveDraftBtn, true);
+
+                try {
+                    const formData = this.getFormData();
+                    const article = new Article({
+                        ...formData,
+                        status: 'draft'
+                    });
+
+                    // Use storage manager for unified storage access
+                    const storage = window.blogStorageManager || window.blogStorage;
+                    const result = await storage.saveArticle(article);
+                    
+                    if (result.success) {
+                        this.showSuccess(window.i18n ? window.i18n.t('blog.article_saved') : 'Article saved successfully!');
+                        
+                        // Show storage type info
+                        console.log('✓ Draft saved to localStorage');
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    console.error('Error saving draft:', error);
+                    alert('Error saving draft: ' + error.message);
+                } finally {
+                    this.setLoading(this.saveDraftBtn, false);
+                }
+            }
+
+            autoSave() {
+                // Only auto-save if there's content and title
+                if (this.titleInput.value.trim() && this.contentEditor.textContent.trim()) {
+                    const formData = this.getFormData();
+                    const article = new Article({
+                        ...formData,
+                        status: 'draft'
+                    });
+
+                    // Silent save - don't show success message
+                    window.blogStorage.saveArticle(article);
+                    console.log('Auto-saved draft');
+                }
+            }
+
+            setLoading(button, loading) {
+                if (loading) {
+                    button.classList.add('loading');
+                    button.disabled = true;
+                } else {
+                    button.classList.remove('loading');
+                    button.disabled = false;
+                }
+            }
+
+            showSuccess(message) {
+                this.successMessage.querySelector('span').textContent = message;
+                this.successMessage.classList.add('show');
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    this.successMessage.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for i18n to load
+            setTimeout(() => {
+                new ArticlePublisher();
+                console.log('Article publishing system initialized');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

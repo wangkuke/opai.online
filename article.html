@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="article-title">Article - OPAI</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border: #dee2e6;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Article Content */
+        .article-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .article-header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .article-category {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .article-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Article Body */
+        .article-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--dark);
+        }
+
+        .article-body h1,
+        .article-body h2,
+        .article-body h3,
+        .article-body h4,
+        .article-body h5,
+        .article-body h6 {
+            margin: 30px 0 15px 0;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .article-body h1 { font-size: 2rem; }
+        .article-body h2 { font-size: 1.7rem; }
+        .article-body h3 { font-size: 1.4rem; }
+        .article-body h4 { font-size: 1.2rem; }
+
+        .article-body p {
+            margin-bottom: 20px;
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .article-body li {
+            margin-bottom: 8px;
+        }
+
+        .article-body blockquote {
+            border-left: 4px solid var(--primary);
+            padding: 20px 25px;
+            margin: 25px 0;
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+        }
+
+        .article-body code {
+            background: var(--light-gray);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .article-body pre {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .article-body a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .article-body a:hover {
+            border-bottom-color: var(--primary);
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray);
+        }
+
+        .error-container i {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            opacity: 0.5;
+        }
+
+        .error-container h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .error-container p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--gray);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .article-container {
+                padding: 30px 25px;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .article-body {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                <span data-i18n="sidebar.logo">OPAI</span>
+            </a>
+            
+            <div class="header-actions">
+                <div class="lang-switch"></div>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span data-i18n="blog.back_to_home">Back to Home</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Loading State -->
+        <div id="loading-container" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Loading article...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-container" class="error-container" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Article Not Found</h2>
+            <p>The article you're looking for doesn't exist or has been removed.</p>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i>
+                <span data-i18n="blog.back_to_home">Back to Home</span>
+            </a>
+        </div>
+
+        <!-- Article Content -->
+        <article id="article-container" class="article-container" style="display: none;">
+            <header class="article-header">
+                <div id="article-category" class="article-category"></div>
+                <h1 id="article-title-display" class="article-title"></h1>
+                <div class="article-meta">
+                    <div class="article-author">
+                        <div id="author-avatar" class="author-avatar"></div>
+                        <div>
+                            <div><strong data-i18n="blog.author">Author</strong>: <span id="article-author"></span></div>
+                        </div>
+                    </div>
+                    <div class="article-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span><span data-i18n="blog.published_on">Published on</span> <span id="article-date"></span></span>
+                    </div>
+                </div>
+                <div id="article-tags" class="article-tags"></div>
+            </header>
+            
+            <div id="article-body" class="article-body"></div>
+        </article>
+    </div>
+
+    <!-- Scripts -->
+    <script src="i18n-loader.js"></script>
+    <script src="language-switcher.js"></script>
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script>
+        /**
+         * Article Detail Page Handler
+         */
+        class ArticleViewer {
+            constructor() {
+                this.articleId = null;
+                this.article = null;
+                this.loadingContainer = document.getElementById('loading-container');
+                this.errorContainer = document.getElementById('error-container');
+                this.articleContainer = document.getElementById('article-container');
+                
+                this.init();
+            }
+
+            init() {
+                // Get article ID from URL hash
+                this.articleId = this.getArticleIdFromUrl();
+                
+                if (!this.articleId) {
+                    this.showError();
+                    return;
+                }
+
+                this.loadArticle();
+            }
+
+            getArticleIdFromUrl() {
+                // Get article ID from hash (#article-id)
+                const hash = window.location.hash;
+                if (hash && hash.length > 1) {
+                    return hash.substring(1); // Remove the # symbol
+                }
+                
+                // Also check URL parameters as fallback
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id');
+            }
+
+            async loadArticle() {
+                try {
+                    this.showLoading();
+
+                    // Wait for storage to be ready
+                    const storage = await this.waitForStorage();
+
+                    // Load article from storage (now supports async)
+                    this.article = await storage.getArticle(this.articleId);
+                    
+                    if (!this.article) {
+                        this.showError();
+                        return;
+                    }
+
+                    this.displayArticle();
+                    this.updatePageTitle();
+                    this.updateMetaTags();
+                    
+                } catch (error) {
+                    console.error('Error loading article:', error);
+                    this.showError();
+                }
+            }
+
+            waitForStorage() {
+                return new Promise((resolve) => {
+                    const checkStorage = () => {
+                        if (window.blogStorageManager && window.blogStorageManager.isReady()) {
+                            resolve(window.blogStorageManager);
+                        } else if (window.blogStorage) {
+                            resolve(window.blogStorage);
+                        } else {
+                            setTimeout(checkStorage, 100);
+                        }
+                    };
+                    checkStorage();
+                });
+            }
+
+            displayArticle() {
+                if (!this.article) return;
+
+                // Hide loading, show article
+                this.loadingContainer.style.display = 'none';
+                this.errorContainer.style.display = 'none';
+                this.articleContainer.style.display = 'block';
+
+                // Populate article data
+                this.populateArticleData();
+            }
+
+            populateArticleData() {
+                // Category
+                const categoryElement = document.getElementById('article-category');
+                categoryElement.textContent = this.article.category;
+
+                // Title
+                const titleElement = document.getElementById('article-title-display');
+                titleElement.textContent = this.article.title;
+
+                // Author
+                const authorElement = document.getElementById('article-author');
+                authorElement.textContent = this.article.author;
+
+                // Author avatar
+                const avatarElement = document.getElementById('author-avatar');
+                avatarElement.textContent = this.getAuthorInitials(this.article.author);
+
+                // Date
+                const dateElement = document.getElementById('article-date');
+                dateElement.textContent = this.formatDate(this.article.publishDate);
+
+                // Tags
+                const tagsContainer = document.getElementById('article-tags');
+                tagsContainer.innerHTML = '';
+                
+                if (this.article.tags && this.article.tags.length > 0) {
+                    this.article.tags.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.className = 'tag';
+                        tagElement.textContent = `#${tag}`;
+                        tagsContainer.appendChild(tagElement);
+                    });
+                }
+
+                // Content
+                const bodyElement = document.getElementById('article-body');
+                bodyElement.innerHTML = this.sanitizeContent(this.article.content);
+            }
+
+            getAuthorInitials(authorName) {
+                if (!authorName) return 'A';
+                
+                const names = authorName.trim().split(' ');
+                if (names.length === 1) {
+                    return names[0].charAt(0).toUpperCase();
+                } else {
+                    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+                }
+            }
+
+            formatDate(dateString) {
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString(
+                        window.i18n ? window.i18n.getCurrentLanguage() : 'en',
+                        { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    );
+                } catch (error) {
+                    console.error('Error formatting date:', error);
+                    return 'Recently';
+                }
+            }
+
+            sanitizeContent(content) {
+                if (!content) return '';
+                
+                // Basic HTML sanitization - remove potentially dangerous tags
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                
+                // Remove script tags and other potentially dangerous elements
+                const dangerousTags = ['script', 'iframe', 'object', 'embed', 'form'];
+                dangerousTags.forEach(tag => {
+                    const elements = tempDiv.querySelectorAll(tag);
+                    elements.forEach(el => el.remove());
+                });
+
+                // Remove dangerous attributes
+                const allElements = tempDiv.querySelectorAll('*');
+                allElements.forEach(el => {
+                    // Remove event handlers
+                    const attributes = [...el.attributes];
+                    attributes.forEach(attr => {
+                        if (attr.name.startsWith('on')) {
+                            el.removeAttribute(attr.name);
+                        }
+                    });
+                });
+
+                return tempDiv.innerHTML;
+            }
+
+            updatePageTitle() {
+                if (this.article) {
+                    document.title = `${this.article.title} - OPAI`;
+                    
+                    // Update the title element as well
+                    const titleElement = document.getElementById('article-title');
+                    if (titleElement) {
+                        titleElement.textContent = `${this.article.title} - OPAI`;
+                    }
+                }
+            }
+
+            updateMetaTags() {
+                if (!this.article) return;
+
+                // Update or create meta description
+                let metaDescription = document.querySelector('meta[name="description"]');
+                if (!metaDescription) {
+                    metaDescription = document.createElement('meta');
+                    metaDescription.name = 'description';
+                    document.head.appendChild(metaDescription);
+                }
+                metaDescription.content = this.article.excerpt || this.article.title;
+
+                // Update or create Open Graph tags
+                this.updateOrCreateMetaTag('property', 'og:title', this.article.title);
+                this.updateOrCreateMetaTag('property', 'og:description', this.article.excerpt || this.article.title);
+                this.updateOrCreateMetaTag('property', 'og:type', 'article');
+                this.updateOrCreateMetaTag('property', 'og:url', window.location.href);
+
+                // Twitter Card tags
+                this.updateOrCreateMetaTag('name', 'twitter:title', this.article.title);
+                this.updateOrCreateMetaTag('name', 'twitter:description', this.article.excerpt || this.article.title);
+                this.updateOrCreateMetaTag('name', 'twitter:card', 'summary');
+            }
+
+            updateOrCreateMetaTag(attribute, value, content) {
+                let metaTag = document.querySelector(`meta[${attribute}="${value}"]`);
+                if (!metaTag) {
+                    metaTag = document.createElement('meta');
+                    metaTag.setAttribute(attribute, value);
+                    document.head.appendChild(metaTag);
+                }
+                metaTag.content = content;
+            }
+
+            showLoading() {
+                this.loadingContainer.style.display = 'block';
+                this.errorContainer.style.display = 'none';
+                this.articleContainer.style.display = 'none';
+            }
+
+            showError() {
+                this.loadingContainer.style.display = 'none';
+                this.errorContainer.style.display = 'block';
+                this.articleContainer.style.display = 'none';
+                
+                // Update page title for 404
+                document.title = 'Article Not Found - OPAI';
+            }
+
+            // Handle browser back/forward navigation
+            handlePopState() {
+                const newArticleId = this.getArticleIdFromUrl();
+                if (newArticleId !== this.articleId) {
+                    this.articleId = newArticleId;
+                    if (this.articleId) {
+                        this.loadArticle();
+                    } else {
+                        this.showError();
+                    }
+                }
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for i18n and other dependencies to load
+            setTimeout(() => {
+                const viewer = new ArticleViewer();
+                
+                // Handle browser navigation
+                window.addEventListener('popstate', () => {
+                    viewer.handlePopState();
+                });
+                
+                console.log('Article viewer initialized');
+            }, 500);
+        });
+
+        // Handle hash changes (for single-page navigation)
+        window.addEventListener('hashchange', () => {
+            location.reload(); // Simple approach - reload page when hash changes
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog System Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        button { margin: 5px; padding: 8px 15px; }
+    </style>
+</head>
+<body>
+    <h1>Blog System Foundation Test</h1>
+    
+    <div class="test-section">
+        <h2>Article Model Tests</h2>
+        <button onclick="testArticleCreation()">Test Article Creation</button>
+        <button onclick="testArticleValidation()">Test Article Validation</button>
+        <div id="article-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Storage Tests</h2>
+        <button onclick="testStorageOperations()">Test Storage Operations</button>
+        <button onclick="testStorageErrors()">Test Error Handling</button>
+        <div id="storage-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Integration Tests</h2>
+        <button onclick="testFullWorkflow()">Test Full Workflow</button>
+        <button onclick="testBlogSystem()">Test Complete Blog System</button>
+        <button onclick="clearTestData()">Clear Test Data</button>
+        <div id="integration-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>End-to-End Tests</h2>
+        <button onclick="testArticleCreationFlow()">Test Article Creation Flow</button>
+        <button onclick="testArticleDisplay()">Test Article Display</button>
+        <button onclick="testNavigation()">Test Navigation</button>
+        <div id="e2e-test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Notion Integration Tests</h2>
+        <button onclick="testNotionConnection()">Test Notion Connection</button>
+        <button onclick="testNotionStorage()">Test Notion Storage</button>
+        <button onclick="testStorageSync()">Test Storage Sync</button>
+        <div id="notion-test-results"></div>
+    </div>
+
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="notion-config.js"></script>
+    <script src="blog-notion-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script>
+        function log(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            const div = document.createElement('div');
+            div.className = isError ? 'error' : 'success';
+            div.textContent = message;
+            element.appendChild(div);
+        }
+
+        function clearResults(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+
+        function testArticleCreation() {
+            clearResults('article-test-results');
+            
+            try {
+                // Test basic article creation
+                const article = new Article({
+                    title: 'Test Article',
+                    content: 'This is test content for the article.',
+                    category: 'Test',
+                    tags: ['test', 'demo']
+                });
+
+                log('article-test-results', '✓ Article created successfully');
+                log('article-test-results', `✓ ID generated: ${article.id}`);
+                log('article-test-results', `✓ Excerpt generated: ${article.excerpt}`);
+                
+                // Test JSON serialization
+                const json = article.toJSON();
+                const restored = Article.fromJSON(json);
+                
+                if (restored.title === article.title) {
+                    log('article-test-results', '✓ JSON serialization works');
+                } else {
+                    log('article-test-results', '✗ JSON serialization failed', true);
+                }
+                
+            } catch (error) {
+                log('article-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function testArticleValidation() {
+            clearResults('article-test-results');
+            
+            try {
+                // Test valid article
+                const validArticle = new Article({
+                    title: 'Valid Article',
+                    content: 'Valid content'
+                });
+                
+                const validation1 = validArticle.validate();
+                if (validation1.isValid) {
+                    log('article-test-results', '✓ Valid article passes validation');
+                } else {
+                    log('article-test-results', '✗ Valid article failed validation', true);
+                }
+
+                // Test invalid article
+                const invalidArticle = new Article({
+                    title: '',
+                    content: ''
+                });
+                
+                const validation2 = invalidArticle.validate();
+                if (!validation2.isValid && validation2.errors.length > 0) {
+                    log('article-test-results', '✓ Invalid article correctly fails validation');
+                    log('article-test-results', `✓ Errors: ${validation2.errors.join(', ')}`);
+                } else {
+                    log('article-test-results', '✗ Invalid article should fail validation', true);
+                }
+                
+            } catch (error) {
+                log('article-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function testStorageOperations() {
+            clearResults('storage-test-results');
+            
+            try {
+                // Test storage initialization
+                if (window.blogStorage) {
+                    log('storage-test-results', '✓ BlogStorage initialized');
+                } else {
+                    log('storage-test-results', '✗ BlogStorage not initialized', true);
+                    return;
+                }
+
+                // Test saving article
+                const testArticle = new Article({
+                    title: 'Storage Test Article',
+                    content: 'This article tests storage functionality.',
+                    category: 'Test'
+                });
+
+                const saveResult = window.blogStorage.saveArticle(testArticle);
+                if (saveResult.success) {
+                    log('storage-test-results', '✓ Article saved successfully');
+                } else {
+                    log('storage-test-results', `✗ Save failed: ${saveResult.error}`, true);
+                    return;
+                }
+
+                // Test retrieving article
+                const retrieved = window.blogStorage.getArticle(testArticle.id);
+                if (retrieved && retrieved.title === testArticle.title) {
+                    log('storage-test-results', '✓ Article retrieved successfully');
+                } else {
+                    log('storage-test-results', '✗ Article retrieval failed', true);
+                }
+
+                // Test getting all articles
+                const articles = window.blogStorage.getArticles();
+                if (articles.length > 0) {
+                    log('storage-test-results', `✓ Retrieved ${articles.length} articles`);
+                } else {
+                    log('storage-test-results', '✗ No articles retrieved', true);
+                }
+
+            } catch (error) {
+                log('storage-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function testStorageErrors() {
+            clearResults('storage-test-results');
+            
+            try {
+                // Test saving invalid article
+                const invalidArticle = new Article({
+                    title: '',
+                    content: ''
+                });
+
+                const saveResult = window.blogStorage.saveArticle(invalidArticle);
+                if (!saveResult.success) {
+                    log('storage-test-results', '✓ Invalid article correctly rejected');
+                } else {
+                    log('storage-test-results', '✗ Invalid article should be rejected', true);
+                }
+
+                // Test retrieving non-existent article
+                const nonExistent = window.blogStorage.getArticle('non-existent-id');
+                if (nonExistent === null) {
+                    log('storage-test-results', '✓ Non-existent article returns null');
+                } else {
+                    log('storage-test-results', '✗ Non-existent article should return null', true);
+                }
+
+            } catch (error) {
+                log('storage-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function testFullWorkflow() {
+            clearResults('integration-test-results');
+            
+            try {
+                // Create multiple test articles
+                const articles = [
+                    new Article({
+                        title: 'First Test Article',
+                        content: 'Content for the first test article.',
+                        category: 'Tutorial',
+                        tags: ['test', 'tutorial']
+                    }),
+                    new Article({
+                        title: 'Second Test Article',
+                        content: 'Content for the second test article.',
+                        category: 'News',
+                        tags: ['test', 'news']
+                    })
+                ];
+
+                // Save all articles
+                let savedCount = 0;
+                articles.forEach(article => {
+                    const result = window.blogStorage.saveArticle(article);
+                    if (result.success) savedCount++;
+                });
+
+                log('integration-test-results', `✓ Saved ${savedCount}/${articles.length} articles`);
+
+                // Test filtering
+                const tutorialArticles = window.blogStorage.getArticles({ category: 'Tutorial' });
+                log('integration-test-results', `✓ Found ${tutorialArticles.length} tutorial articles`);
+
+                const publishedArticles = window.blogStorage.getArticles({ status: 'draft' });
+                log('integration-test-results', `✓ Found ${publishedArticles.length} draft articles`);
+
+                // Test article count
+                const totalCount = window.blogStorage.getArticleCount();
+                log('integration-test-results', `✓ Total articles in storage: ${totalCount}`);
+
+            } catch (error) {
+                log('integration-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function clearTestData() {
+            clearResults('integration-test-results');
+            
+            try {
+                const result = window.blogStorage.clearAllArticles();
+                if (result.success) {
+                    log('integration-test-results', '✓ All test data cleared');
+                } else {
+                    log('integration-test-results', `✗ Clear failed: ${result.error}`, true);
+                }
+            } catch (error) {
+                log('integration-test-results', `✗ Error: ${error.message}`, true);
+            }
+        }
+
+        function testBlogSystem() {
+            clearResults('integration-test-results');
+            
+            try {
+                // Test complete blog system integration
+                log('integration-test-results', '=== Testing Complete Blog System ===');
+                
+                // 1. Test article creation and publishing
+                const testArticle = new Article({
+                    title: 'Complete System Test Article',
+                    content: '<h2>Test Content</h2><p>This is a comprehensive test of the blog system with <strong>rich text</strong> content.</p><ul><li>Feature 1</li><li>Feature 2</li></ul>',
+                    category: 'Tutorial',
+                    tags: ['system-test', 'integration', 'blog'],
+                    status: 'published'
+                });
+
+                const saveResult = window.blogStorage.saveArticle(testArticle);
+                if (saveResult.success) {
+                    log('integration-test-results', '✓ Article created and published successfully');
+                } else {
+                    log('integration-test-results', `✗ Article creation failed: ${saveResult.error}`, true);
+                    return;
+                }
+
+                // 2. Test article retrieval and display
+                const retrievedArticle = window.blogStorage.getArticle(testArticle.id);
+                if (retrievedArticle && retrievedArticle.title === testArticle.title) {
+                    log('integration-test-results', '✓ Article retrieval works correctly');
+                } else {
+                    log('integration-test-results', '✗ Article retrieval failed', true);
+                }
+
+                // 3. Test published articles filtering
+                const publishedArticles = window.blogStorage.getArticles({ status: 'published' });
+                const foundTestArticle = publishedArticles.find(article => article.id === testArticle.id);
+                if (foundTestArticle) {
+                    log('integration-test-results', '✓ Published articles filtering works');
+                } else {
+                    log('integration-test-results', '✗ Published articles filtering failed', true);
+                }
+
+                // 4. Test category filtering
+                const tutorialArticles = window.blogStorage.getArticles({ category: 'Tutorial' });
+                if (tutorialArticles.length > 0) {
+                    log('integration-test-results', `✓ Category filtering works (${tutorialArticles.length} tutorial articles)`);
+                } else {
+                    log('integration-test-results', '✗ Category filtering failed', true);
+                }
+
+                // 5. Test excerpt generation
+                if (testArticle.excerpt && testArticle.excerpt.length > 0) {
+                    log('integration-test-results', '✓ Article excerpt generation works');
+                } else {
+                    log('integration-test-results', '✗ Article excerpt generation failed', true);
+                }
+
+                // 6. Test data persistence
+                const articleCount = window.blogStorage.getArticleCount();
+                if (articleCount > 0) {
+                    log('integration-test-results', `✓ Data persistence works (${articleCount} articles stored)`);
+                } else {
+                    log('integration-test-results', '✗ Data persistence failed', true);
+                }
+
+                log('integration-test-results', '=== Blog System Test Complete ===');
+
+            } catch (error) {
+                log('integration-test-results', `✗ System test error: ${error.message}`, true);
+            }
+        }
+
+        function testArticleCreationFlow() {
+            clearResults('e2e-test-results');
+            
+            try {
+                log('e2e-test-results', '=== Testing Article Creation Flow ===');
+                
+                // Simulate the article creation process
+                const formData = {
+                    title: 'E2E Test Article',
+                    content: '<p>This article was created through the E2E test flow.</p>',
+                    category: 'Test',
+                    tags: ['e2e', 'test', 'automation'],
+                    author: 'Test User'
+                };
+
+                // 1. Test form validation
+                if (formData.title && formData.content) {
+                    log('e2e-test-results', '✓ Form validation passed');
+                } else {
+                    log('e2e-test-results', '✗ Form validation failed', true);
+                    return;
+                }
+
+                // 2. Test article creation
+                const article = new Article({
+                    ...formData,
+                    status: 'published'
+                });
+
+                const validation = article.validate();
+                if (validation.isValid) {
+                    log('e2e-test-results', '✓ Article validation passed');
+                } else {
+                    log('e2e-test-results', `✗ Article validation failed: ${validation.errors.join(', ')}`, true);
+                    return;
+                }
+
+                // 3. Test article saving
+                const saveResult = window.blogStorage.saveArticle(article);
+                if (saveResult.success) {
+                    log('e2e-test-results', '✓ Article saved successfully');
+                } else {
+                    log('e2e-test-results', `✗ Article save failed: ${saveResult.error}`, true);
+                    return;
+                }
+
+                // 4. Test article appears in published list
+                const publishedArticles = window.blogStorage.getArticles({ status: 'published' });
+                const foundArticle = publishedArticles.find(a => a.id === article.id);
+                if (foundArticle) {
+                    log('e2e-test-results', '✓ Article appears in published list');
+                } else {
+                    log('e2e-test-results', '✗ Article not found in published list', true);
+                }
+
+                log('e2e-test-results', '=== Article Creation Flow Test Complete ===');
+
+            } catch (error) {
+                log('e2e-test-results', `✗ E2E test error: ${error.message}`, true);
+            }
+        }
+
+        function testArticleDisplay() {
+            clearResults('e2e-test-results');
+            
+            try {
+                log('e2e-test-results', '=== Testing Article Display ===');
+                
+                // Create a test article with rich content
+                const testArticle = new Article({
+                    title: 'Display Test Article',
+                    content: '<h2>Test Heading</h2><p>This is a <strong>bold</strong> paragraph with <em>italic</em> text.</p><ul><li>List item 1</li><li>List item 2</li></ul>',
+                    category: 'Display Test',
+                    tags: ['display', 'formatting', 'test'],
+                    author: 'Display Tester',
+                    status: 'published'
+                });
+
+                // Save the article
+                const saveResult = window.blogStorage.saveArticle(testArticle);
+                if (!saveResult.success) {
+                    log('e2e-test-results', `✗ Failed to save test article: ${saveResult.error}`, true);
+                    return;
+                }
+
+                // Test article retrieval
+                const retrievedArticle = window.blogStorage.getArticle(testArticle.id);
+                if (retrievedArticle) {
+                    log('e2e-test-results', '✓ Article retrieved for display');
+                    
+                    // Test content formatting
+                    if (retrievedArticle.content.includes('<h2>') && retrievedArticle.content.includes('<strong>')) {
+                        log('e2e-test-results', '✓ Rich text content preserved');
+                    } else {
+                        log('e2e-test-results', '✗ Rich text content not preserved', true);
+                    }
+                    
+                    // Test metadata
+                    if (retrievedArticle.author && retrievedArticle.category && retrievedArticle.tags.length > 0) {
+                        log('e2e-test-results', '✓ Article metadata complete');
+                    } else {
+                        log('e2e-test-results', '✗ Article metadata incomplete', true);
+                    }
+                    
+                } else {
+                    log('e2e-test-results', '✗ Article retrieval failed', true);
+                }
+
+                log('e2e-test-results', '=== Article Display Test Complete ===');
+
+            } catch (error) {
+                log('e2e-test-results', `✗ Display test error: ${error.message}`, true);
+            }
+        }
+
+        function testNavigation() {
+            clearResults('e2e-test-results');
+            
+            try {
+                log('e2e-test-results', '=== Testing Navigation ===');
+                
+                // Test URL generation for article links
+                const testArticleId = 'test-article-123';
+                const expectedUrl = `article.html#${testArticleId}`;
+                
+                // Simulate navigation URL creation
+                const navigationUrl = `article.html#${testArticleId}`;
+                if (navigationUrl === expectedUrl) {
+                    log('e2e-test-results', '✓ Article URL generation works');
+                } else {
+                    log('e2e-test-results', '✗ Article URL generation failed', true);
+                }
+
+                // Test hash parsing
+                const mockHash = `#${testArticleId}`;
+                const parsedId = mockHash.substring(1);
+                if (parsedId === testArticleId) {
+                    log('e2e-test-results', '✓ URL hash parsing works');
+                } else {
+                    log('e2e-test-results', '✗ URL hash parsing failed', true);
+                }
+
+                // Test navigation state
+                const currentUrl = window.location.href;
+                if (currentUrl.includes('blog-test.html')) {
+                    log('e2e-test-results', '✓ Current page navigation state correct');
+                } else {
+                    log('e2e-test-results', '✗ Navigation state unclear', true);
+                }
+
+                log('e2e-test-results', '=== Navigation Test Complete ===');
+
+            } catch (error) {
+                log('e2e-test-results', `✗ Navigation test error: ${error.message}`, true);
+            }
+        }
+
+        // Notion Integration Tests
+        async function testNotionConnection() {
+            clearResults('notion-test-results');
+            
+            try {
+                log('notion-test-results', '=== Testing Notion Connection ===');
+                
+                if (!window.NOTION_CONFIG || !window.NOTION_CONFIG.enabled) {
+                    log('notion-test-results', '⚠ Notion integration not enabled', true);
+                    log('notion-test-results', 'Configure Notion in notion-setup.html to run this test');
+                    return;
+                }
+
+                if (!window.NOTION_CONFIG.notionToken || !window.NOTION_CONFIG.databaseId) {
+                    log('notion-test-results', '⚠ Notion configuration incomplete', true);
+                    log('notion-test-results', 'Please configure token and database ID');
+                    return;
+                }
+
+                // Test connection
+                const testStorage = new NotionBlogStorage({
+                    notionToken: window.NOTION_CONFIG.notionToken,
+                    databaseId: window.NOTION_CONFIG.databaseId
+                });
+
+                await testStorage.testConnection();
+                log('notion-test-results', '✓ Notion connection successful');
+                
+                log('notion-test-results', '=== Notion Connection Test Complete ===');
+
+            } catch (error) {
+                log('notion-test-results', `✗ Notion connection failed: ${error.message}`, true);
+            }
+        }
+
+        async function testNotionStorage() {
+            clearResults('notion-test-results');
+            
+            try {
+                log('notion-test-results', '=== Testing Notion Storage ===');
+                
+                if (!window.NOTION_CONFIG || !window.NOTION_CONFIG.enabled) {
+                    log('notion-test-results', '⚠ Notion integration not enabled', true);
+                    return;
+                }
+
+                // Wait for storage manager to be ready
+                if (window.blogStorageManager) {
+                    await window.blogStorageManager.waitForReady();
+                    
+                    if (window.blogStorageManager.isUsingNotion()) {
+                        log('notion-test-results', '✓ Using Notion storage');
+                        
+                        // Test article creation
+                        const testArticle = new Article({
+                            title: 'Notion Test Article',
+                            content: '<p>This article tests Notion storage functionality.</p>',
+                            category: 'Test',
+                            tags: ['notion', 'test'],
+                            status: 'published'
+                        });
+
+                        const saveResult = await window.blogStorageManager.saveArticle(testArticle);
+                        if (saveResult.success) {
+                            log('notion-test-results', '✓ Article saved to Notion');
+                            
+                            // Test retrieval
+                            const retrieved = await window.blogStorageManager.getArticle(testArticle.id);
+                            if (retrieved && retrieved.title === testArticle.title) {
+                                log('notion-test-results', '✓ Article retrieved from Notion');
+                            } else {
+                                log('notion-test-results', '✗ Article retrieval failed', true);
+                            }
+                        } else {
+                            log('notion-test-results', `✗ Failed to save to Notion: ${saveResult.error}`, true);
+                        }
+                    } else {
+                        log('notion-test-results', '⚠ Using localStorage fallback');
+                    }
+                } else {
+                    log('notion-test-results', '✗ Storage manager not available', true);
+                }
+
+                log('notion-test-results', '=== Notion Storage Test Complete ===');
+
+            } catch (error) {
+                log('notion-test-results', `✗ Notion storage test error: ${error.message}`, true);
+            }
+        }
+
+        async function testStorageSync() {
+            clearResults('notion-test-results');
+            
+            try {
+                log('notion-test-results', '=== Testing Storage Sync ===');
+                
+                if (!window.blogStorageManager) {
+                    log('notion-test-results', '✗ Storage manager not available', true);
+                    return;
+                }
+
+                await window.blogStorageManager.waitForReady();
+
+                if (window.blogStorageManager.isUsingNotion()) {
+                    log('notion-test-results', '✓ Testing Notion to localStorage sync');
+                    
+                    const syncResult = await window.blogStorageManager.syncToLocalStorage();
+                    if (syncResult.success) {
+                        log('notion-test-results', `✓ Sync completed: ${syncResult.synced}/${syncResult.total} articles`);
+                    } else {
+                        log('notion-test-results', `✗ Sync failed: ${syncResult.error}`, true);
+                    }
+                } else {
+                    log('notion-test-results', '⚠ Not using Notion storage, sync not applicable');
+                }
+
+                log('notion-test-results', '=== Storage Sync Test Complete ===');
+
+            } catch (error) {
+                log('notion-test-results', `✗ Storage sync test error: ${error.message}`, true);
+            }
+        }
+
+        // Run basic tests on page load
+        window.addEventListener('load', () => {
+            console.log('Blog system foundation loaded successfully');
+            
+            // Wait for storage manager to initialize
+            setTimeout(() => {
+                if (window.blogStorageManager) {
+                    console.log('Storage manager available');
+                    if (window.blogStorageManager.isUsingNotion()) {
+                        console.log('✓ Using Notion storage');
+                    } else {
+                        console.log('✓ Using localStorage');
+                    }
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

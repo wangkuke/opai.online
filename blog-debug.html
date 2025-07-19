@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog System Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+        .article-card { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+        button { margin: 5px; padding: 8px 15px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Blog System Debug</h1>
+    
+    <div class="debug-section">
+        <h2>System Status</h2>
+        <div id="system-status">Loading...</div>
+        <button onclick="checkSystem()">🔄 Refresh Status</button>
+        <button onclick="createTestArticle()">➕ Create Test Article</button>
+        <button onclick="clearAllArticles()">🗑️ Clear All Articles</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Articles Display Test</h2>
+        <div class="articles-grid" id="test-articles-grid">
+            <!-- 动态生成的文章将在这里显示 -->
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Console Logs</h2>
+        <div id="console-logs" style="background: #f5f5f5; padding: 10px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <!-- 加载所有博客系统脚本 -->
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="notion-config.js"></script>
+    <script src="blog-notion-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script src="blog-cards.js"></script>
+    <script src="demo-articles.js"></script>
+
+    <script>
+        // 捕获控制台日志
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        const logsContainer = document.getElementById('console-logs');
+
+        function addLog(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.createElement('div');
+            logElement.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span class="${type}">${message}</span>`;
+            logsContainer.appendChild(logElement);
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'success');
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'warning');
+        };
+
+        // 系统检查函数
+        function checkSystem() {
+            const statusDiv = document.getElementById('system-status');
+            let html = '<h3>📋 System Components</h3>';
+
+            // 检查各个组件
+            const components = [
+                { name: 'Article Model', obj: 'Article', status: typeof window.Article !== 'undefined' },
+                { name: 'Blog Storage', obj: 'BlogStorage', status: typeof window.BlogStorage !== 'undefined' },
+                { name: 'Notion Config', obj: 'NOTION_CONFIG', status: typeof window.NOTION_CONFIG !== 'undefined' },
+                { name: 'Notion Storage', obj: 'NotionBlogStorage', status: typeof window.NotionBlogStorage !== 'undefined' },
+                { name: 'Storage Manager', obj: 'blogStorageManager', status: typeof window.blogStorageManager !== 'undefined' },
+                { name: 'Blog Cards', obj: 'BlogCards', status: typeof window.BlogCards !== 'undefined' },
+                { name: 'Demo Articles', obj: 'createDemoArticles', status: typeof window.createDemoArticles !== 'undefined' }
+            ];
+
+            components.forEach(comp => {
+                const status = comp.status ? '✅' : '❌';
+                const className = comp.status ? 'success' : 'error';
+                html += `<div class="${className}">${status} ${comp.name}</div>`;
+            });
+
+            // 检查存储状态
+            html += '<h3>💾 Storage Status</h3>';
+            if (window.blogStorageManager) {
+                if (window.blogStorageManager.isReady()) {
+                    html += '<div class="success">✅ Storage Manager Ready</div>';
+                    if (window.blogStorageManager.isUsingNotion()) {
+                        html += '<div class="success">✅ Using Notion Storage</div>';
+                    } else {
+                        html += '<div class="warning">⚠️ Using localStorage</div>';
+                    }
+                } else {
+                    html += '<div class="warning">⚠️ Storage Manager Not Ready</div>';
+                }
+            } else {
+                html += '<div class="error">❌ Storage Manager Not Found</div>';
+            }
+
+            // 检查文章数量
+            html += '<h3>📄 Articles Status</h3>';
+            try {
+                if (window.blogStorage) {
+                    const count = window.blogStorage.getArticleCount();
+                    html += `<div class="success">✅ Found ${count} articles in storage</div>`;
+                } else {
+                    html += '<div class="error">❌ No storage available</div>';
+                }
+            } catch (error) {
+                html += `<div class="error">❌ Error checking articles: ${error.message}</div>`;
+            }
+
+            statusDiv.innerHTML = html;
+        }
+
+        // 创建测试文章
+        async function createTestArticle() {
+            try {
+                const testArticle = new Article({
+                    title: `Test Article ${Date.now()}`,
+                    content: '<h2>Test Content</h2><p>This is a test article created for debugging purposes.</p><ul><li>Feature 1</li><li>Feature 2</li></ul>',
+                    category: 'Test',
+                    tags: ['test', 'debug', 'demo'],
+                    status: 'published'
+                });
+
+                const storage = window.blogStorageManager || window.blogStorage;
+                if (!storage) {
+                    throw new Error('No storage available');
+                }
+
+                const result = await storage.saveArticle(testArticle);
+                if (result.success) {
+                    console.log('✅ Test article created successfully');
+                    refreshArticlesDisplay();
+                } else {
+                    console.error('❌ Failed to create test article:', result.error);
+                }
+            } catch (error) {
+                console.error('❌ Error creating test article:', error);
+            }
+        }
+
+        // 清除所有文章
+        async function clearAllArticles() {
+            try {
+                const storage = window.blogStorageManager || window.blogStorage;
+                if (!storage) {
+                    throw new Error('No storage available');
+                }
+
+                const result = await storage.clearAllArticles();
+                if (result.success) {
+                    console.log('✅ All articles cleared');
+                    refreshArticlesDisplay();
+                } else {
+                    console.error('❌ Failed to clear articles:', result.error);
+                }
+            } catch (error) {
+                console.error('❌ Error clearing articles:', error);
+            }
+        }
+
+        // 刷新文章显示
+        async function refreshArticlesDisplay() {
+            const grid = document.getElementById('test-articles-grid');
+            
+            try {
+                const storage = window.blogStorageManager || window.blogStorage;
+                if (!storage) {
+                    grid.innerHTML = '<div class="error">❌ No storage available</div>';
+                    return;
+                }
+
+                const articles = await storage.getArticles({ status: 'published' });
+                
+                if (articles.length === 0) {
+                    grid.innerHTML = '<div class="warning">⚠️ No published articles found</div>';
+                    return;
+                }
+
+                grid.innerHTML = articles.map(article => `
+                    <div class="article-card">
+                        <h3>${article.title}</h3>
+                        <p><strong>Category:</strong> ${article.category}</p>
+                        <p><strong>Tags:</strong> ${article.tags.join(', ')}</p>
+                        <p><strong>Author:</strong> ${article.author}</p>
+                        <p><strong>Status:</strong> ${article.status}</p>
+                        <p><strong>Date:</strong> ${new Date(article.publishDate).toLocaleDateString()}</p>
+                        <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                            ${article.excerpt}
+                        </div>
+                    </div>
+                `).join('');
+
+                console.log(`✅ Displayed ${articles.length} articles`);
+            } catch (error) {
+                console.error('❌ Error refreshing articles:', error);
+                grid.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Debug page loaded');
+            
+            // 等待系统初始化
+            setTimeout(() => {
+                checkSystem();
+                refreshArticlesDisplay();
+            }, 2000);
+        });
+
+        // 监听存储系统准备事件
+        window.addEventListener('blogStorageReady', () => {
+            console.log('📡 Blog storage ready event received');
+            setTimeout(() => {
+                checkSystem();
+                refreshArticlesDisplay();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

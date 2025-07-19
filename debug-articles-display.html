@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Articles Display</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .status { padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .debug-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .code-block { background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; margin: 10px 0; overflow-x: auto; }
+        button { padding: 12px 24px; margin: 8px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .btn-danger { background: #dc3545; color: white; }
+        .articles-preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin: 15px 0; }
+        .article-preview { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Articles Display Issue</h1>
+    <p>This page will help diagnose why "Latest Articles" shows "blog.create_article" instead of real articles.</p>
+    
+    <div id="status-container"></div>
+    
+    <div class="debug-section">
+        <h2>📋 Step 1: Check System Status</h2>
+        <button class="btn-primary" onclick="checkSystemStatus()">🔍 Check System Status</button>
+        <div id="system-status"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🔗 Step 2: Test Notion Connection</h2>
+        <button class="btn-primary" onclick="testNotionConnection()">🔌 Test Notion Connection</button>
+        <div id="notion-status"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>📄 Step 3: Check Articles</h2>
+        <button class="btn-success" onclick="loadArticles()">📚 Load Articles</button>
+        <button class="btn-warning" onclick="createTestArticle()">➕ Create Test Article</button>
+        <div id="articles-status"></div>
+        <div id="articles-preview" class="articles-preview"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🎯 Step 4: Test Blog Cards</h2>
+        <button class="btn-primary" onclick="testBlogCards()">🃏 Test Blog Cards System</button>
+        <div id="blog-cards-status"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🔧 Step 5: Force Fix</h2>
+        <button class="btn-danger" onclick="forceFix()">🚨 Force Refresh Everything</button>
+        <div id="fix-status"></div>
+    </div>
+
+    <!-- Load all blog system scripts -->
+    <script src="i18n-loader.js"></script>
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="notion-config.js"></script>
+    <script src="blog-notion-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    <script src="blog-cards.js"></script>
+    <script src="demo-articles.js"></script>
+
+    <script>
+        function log(message, type = 'info') {
+            const container = document.getElementById('status-container');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            container.appendChild(div);
+            console.log(message);
+        }
+
+        async function checkSystemStatus() {
+            const statusDiv = document.getElementById('system-status');
+            let html = '<h3>🔍 System Components Status</h3>';
+            
+            // Check all components
+            const components = [
+                { name: 'i18n', check: () => window.i18n },
+                { name: 'Article Model', check: () => window.Article },
+                { name: 'BlogStorage', check: () => window.BlogStorage },
+                { name: 'NOTION_CONFIG', check: () => window.NOTION_CONFIG },
+                { name: 'NotionBlogStorage', check: () => window.NotionBlogStorage },
+                { name: 'blogStorageManager', check: () => window.blogStorageManager },
+                { name: 'BlogCards', check: () => window.BlogCards },
+                { name: 'blogCards instance', check: () => window.blogCards }
+            ];
+
+            components.forEach(comp => {
+                const exists = comp.check();
+                const status = exists ? '✅' : '❌';
+                html += `<div>${status} ${comp.name}</div>`;
+            });
+
+            // Check storage manager status
+            html += '<h4>💾 Storage Manager Status</h4>';
+            if (window.blogStorageManager) {
+                if (window.blogStorageManager.isReady()) {
+                    html += '<div class="success">✅ Storage Manager is ready</div>';
+                    if (window.blogStorageManager.isUsingNotion()) {
+                        html += '<div class="success">✅ Using Notion storage</div>';
+                    } else {
+                        html += '<div class="warning">⚠️ Using localStorage fallback</div>';
+                    }
+                } else {
+                    html += '<div class="warning">⚠️ Storage Manager not ready</div>';
+                }
+            } else {
+                html += '<div class="error">❌ Storage Manager not found</div>';
+            }
+
+            // Check Notion config
+            html += '<h4>⚙️ Notion Configuration</h4>';
+            if (window.NOTION_CONFIG) {
+                html += `<div>Enabled: ${window.NOTION_CONFIG.enabled ? '✅' : '❌'}</div>`;
+                html += `<div>Token: ${window.NOTION_CONFIG.notionToken ? '✅ Set' : '❌ Missing'}</div>`;
+                html += `<div>Database ID: ${window.NOTION_CONFIG.databaseId ? '✅ Set' : '❌ Missing'}</div>`;
+            } else {
+                html += '<div class="error">❌ NOTION_CONFIG not found</div>';
+            }
+
+            statusDiv.innerHTML = html;
+            log('System status checked', 'info');
+        }
+
+        async function testNotionConnection() {
+            const statusDiv = document.getElementById('notion-status');
+            log('Testing Notion connection...', 'warning');
+            
+            if (!window.NOTION_CONFIG || !window.NOTION_CONFIG.enabled) {
+                statusDiv.innerHTML = '<div class="error">❌ Notion integration not enabled</div>';
+                log('Notion integration not enabled', 'error');
+                return;
+            }
+
+            if (!window.NOTION_CONFIG.notionToken || !window.NOTION_CONFIG.databaseId) {
+                statusDiv.innerHTML = '<div class="error">❌ Notion configuration incomplete</div>';
+                log('Notion configuration incomplete', 'error');
+                return;
+            }
+
+            try {
+                const notionStorage = new NotionBlogStorage({
+                    notionToken: window.NOTION_CONFIG.notionToken,
+                    databaseId: window.NOTION_CONFIG.databaseId
+                });
+
+                await notionStorage.testConnection();
+                statusDiv.innerHTML = '<div class="success">✅ Notion connection successful!</div>';
+                log('Notion connection successful', 'success');
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Connection failed: ${error.message}</div>`;
+                log(`Notion connection failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadArticles() {
+            const statusDiv = document.getElementById('articles-status');
+            const previewDiv = document.getElementById('articles-preview');
+            
+            log('Loading articles...', 'warning');
+            
+            try {
+                // Wait for storage manager
+                if (window.blogStorageManager) {
+                    await window.blogStorageManager.waitForReady();
+                }
+                
+                const storage = window.blogStorageManager || window.blogStorage;
+                if (!storage) {
+                    throw new Error('No storage available');
+                }
+
+                // Get all articles
+                const allArticles = await storage.getArticles();
+                const publishedArticles = await storage.getArticles({ status: 'published' });
+                
+                statusDiv.innerHTML = `
+                    <div class="info">📊 Total articles: ${allArticles.length}</div>
+                    <div class="info">📰 Published articles: ${publishedArticles.length}</div>
+                `;
+                
+                if (publishedArticles.length === 0) {
+                    previewDiv.innerHTML = '<div class="warning">⚠️ No published articles found! This is why you see "blog.create_article"</div>';
+                    log('No published articles found - this explains the empty state', 'warning');
+                } else {
+                    previewDiv.innerHTML = publishedArticles.map(article => `
+                        <div class="article-preview">
+                            <h4>${article.title}</h4>
+                            <p><strong>Status:</strong> ${article.status}</p>
+                            <p><strong>Category:</strong> ${article.category}</p>
+                            <p><strong>Author:</strong> ${article.author}</p>
+                            <p><strong>Tags:</strong> ${article.tags.join(', ')}</p>
+                            <p><strong>Published:</strong> ${new Date(article.publishDate).toLocaleDateString()}</p>
+                        </div>
+                    `).join('');
+                    log(`Found ${publishedArticles.length} published articles`, 'success');
+                }
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error loading articles: ${error.message}</div>`;
+                log(`Error loading articles: ${error.message}`, 'error');
+            }
+        }
+
+        async function createTestArticle() {
+            log('Creating test article...', 'warning');
+            
+            try {
+                const storage = window.blogStorageManager || window.blogStorage;
+                if (!storage) {
+                    throw new Error('No storage available');
+                }
+
+                const testArticle = new Article({
+                    title: `Debug Test Article ${new Date().toLocaleString()}`,
+                    content: '<h2>Debug Test</h2><p>This article was created to test the system.</p>',
+                    category: 'Test',
+                    tags: ['debug', 'test'],
+                    author: 'Debug System',
+                    status: 'published'  // Make sure it's published!
+                });
+
+                const result = await storage.saveArticle(testArticle);
+                
+                if (result.success) {
+                    log('✅ Test article created successfully', 'success');
+                    // Refresh articles display
+                    setTimeout(loadArticles, 1000);
+                } else {
+                    log(`❌ Failed to create test article: ${result.error}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Error creating test article: ${error.message}`, 'error');
+            }
+        }
+
+        async function testBlogCards() {
+            const statusDiv = document.getElementById('blog-cards-status');
+            log('Testing blog cards system...', 'warning');
+            
+            let html = '<h4>🃏 Blog Cards Status</h4>';
+            
+            if (window.BlogCards) {
+                html += '<div class="success">✅ BlogCards class available</div>';
+            } else {
+                html += '<div class="error">❌ BlogCards class not found</div>';
+            }
+            
+            if (window.blogCards) {
+                html += '<div class="success">✅ blogCards instance exists</div>';
+                
+                // Try to refresh
+                try {
+                    await window.blogCards.refresh();
+                    html += '<div class="success">✅ blogCards.refresh() successful</div>';
+                } catch (error) {
+                    html += `<div class="error">❌ blogCards.refresh() failed: ${error.message}</div>`;
+                }
+            } else {
+                html += '<div class="warning">⚠️ blogCards instance not found</div>';
+                html += '<div class="info">💡 This might be why articles are not displaying</div>';
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+
+        async function forceFix() {
+            const statusDiv = document.getElementById('fix-status');
+            log('🚨 Force fixing everything...', 'warning');
+            
+            let html = '<h4>🔧 Force Fix Results</h4>';
+            
+            try {
+                // 1. Reinitialize storage manager
+                if (window.blogStorageManager) {
+                    await window.blogStorageManager.initialize();
+                    html += '<div class="success">✅ Storage manager reinitialized</div>';
+                }
+                
+                // 2. Recreate blog cards instance
+                const articlesGrid = document.querySelector('.articles-grid');
+                if (articlesGrid) {
+                    window.blogCards = new BlogCards();
+                    html += '<div class="success">✅ Blog cards recreated</div>';
+                } else {
+                    html += '<div class="warning">⚠️ No .articles-grid found on current page</div>';
+                }
+                
+                // 3. Force refresh
+                if (window.blogCards) {
+                    await window.blogCards.refresh();
+                    html += '<div class="success">✅ Blog cards refreshed</div>';
+                }
+                
+                html += '<div class="info">💡 Now check your main page to see if articles appear</div>';
+                
+            } catch (error) {
+                html += `<div class="error">❌ Force fix error: ${error.message}</div>`;
+            }
+            
+            statusDiv.innerHTML = html;
+            log('Force fix completed', 'info');
+        }
+
+        // Auto-run on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Debug page loaded', 'info');
+            
+            setTimeout(() => {
+                checkSystemStatus();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
