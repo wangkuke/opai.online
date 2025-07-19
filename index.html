@@ -1344,7 +1344,7 @@
     <script src="blog-storage-manager.js"></script>
     <script src="blog-cards.js"></script>
     <script src="demo-articles.js"></script>
-    <script src="fix-sidebar-i18n.js"></script>
+    <script src="sidebar-loader.js"></script>
 </head>
 
 <body>
@@ -1416,7 +1416,7 @@
                         <div class="articles-grid">
                             <!-- 动态生成的博客文章将在这里显示 -->
                         </div>
-                        <h2 class="section-title" id="video-download-section" data-i18n="section.models"><i
+                        <h2 class="section-title" id="models" data-i18n="section.models"><i
                                 class="fas fa-download"></i> AI Models</h2>
                         <div class="ai-model-grid">
                             <!-- AI大模型 1 -->
@@ -2186,23 +2186,21 @@
     </script>
 </body>
 <script>
-    // 使用sidebar-loader.js中的功能加载侧边栏
-    // 使用 fix-sidebar-i18n.js 处理侧边栏加载和翻译
-    // 该脚本会自动加载侧边栏并应用英文翻译
-    if (window.fixSidebarI18n) {
-        console.log('Using enhanced sidebar i18n fix');
-        // fixSidebarI18n 函数会在脚本内部自动调用
-    } else {
-        console.log('Sidebar i18n fix not available, using direct method');
-        fetch('sidebar.html')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('sidebar').outerHTML = html;
-                if (window.i18n) {
-                    window.i18n.updateSidebarTranslations && window.i18n.updateSidebarTranslations();
-                }
-            });
-    }
+    // 侧边栏将通过 sidebar-loader.js 自动加载
+    // 监听侧边栏加载完成事件
+    window.addEventListener('sidebarLoaded', function() {
+        console.log('✓ Sidebar loaded and ready');
+        
+        // 初始化博客卡片系统
+        if (window.BlogCards && !window.blogCardsInstance) {
+            try {
+                window.blogCardsInstance = new BlogCards();
+                console.log('✓ Blog cards initialized after sidebar load');
+            } catch (error) {
+                console.error('✗ Failed to initialize blog cards:', error);
+            }
+        }
+    });
 </script>
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleLogin()"></script>
 

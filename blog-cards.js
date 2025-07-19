@@ -4,9 +4,15 @@
  */
 
 class BlogCards {
-    constructor(containerSelector = '.articles-grid') {
+    constructor(containerSelector = '.articles-grid', options = {}) {
         this.container = document.querySelector(containerSelector);
         this.articles = [];
+        this.options = {
+            maxArticles: options.maxArticles || null, // null means no limit
+            showViewMore: options.showViewMore || false,
+            viewMoreUrl: options.viewMoreUrl || 'articles.html',
+            ...options
+        };
         this.init();
     }
 
@@ -50,11 +56,21 @@ class BlogCards {
             return;
         }
 
+        // Determine how many articles to show
+        const articlesToShow = this.options.maxArticles ? 
+            this.articles.slice(0, this.options.maxArticles) : 
+            this.articles;
+
         // Render article cards
-        this.articles.forEach(article => {
+        articlesToShow.forEach(article => {
             const cardElement = this.createCardElement(article);
             this.container.appendChild(cardElement);
         });
+
+        // Add "more" link to section title if needed
+        if (this.options.showViewMore && this.articles.length > articlesToShow.length) {
+            this.addMoreLinkToTitle();
+        }
     }
 
     createCardElement(article) {
@@ -109,29 +125,9 @@ class BlogCards {
     }
 
     renderEmptyState() {
-        const emptyState = document.createElement('div');
-        emptyState.className = 'empty-state';
-        emptyState.innerHTML = `
-            <div style="
-                grid-column: 1 / -1;
-                text-align: center;
-                padding: 60px 20px;
-                color: var(--gray);
-                background: var(--card-bg);
-                border-radius: 15px;
-                backdrop-filter: blur(5px);
-                border: 1px solid var(--glass-border);
-            ">
-                <i class="fas fa-newspaper" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
-                <h3 style="margin-bottom: 10px;" data-i18n="blog.no_articles">No articles available</h3>
-                <p style="margin-bottom: 20px;">Be the first to share your knowledge with the community!</p>
-                <a href="publish.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    <span data-i18n="blog.create_article">Create New Article</span>
-                </a>
-            </div>
-        `;
-        this.container.appendChild(emptyState);
+        // Leave the container completely empty when no articles exist
+        // This ensures the articles-grid area remains blank
+        console.log('No articles found - leaving articles grid empty');
     }
 
     navigateToArticle(articleId) {
@@ -193,6 +189,95 @@ class BlogCards {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    addMoreLinkToTitle() {
+        // Find the section title for Latest Articles
+        const sectionTitle = document.querySelector('.section-title');
+        if (!sectionTitle) return;
+
+        // Check if more link already exists
+        if (sectionTitle.querySelector('.more-link')) return;
+
+        // Create more link
+        const moreLink = document.createElement('a');
+        moreLink.href = this.options.viewMoreUrl;
+        moreLink.className = 'more-link';
+        moreLink.textContent = 'more';
+        moreLink.style.cssText = `
+            margin-left: auto;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: rgba(67, 97, 238, 0.1);
+        `;
+
+        // Add hover effect
+        moreLink.addEventListener('mouseenter', () => {
+            moreLink.style.background = 'var(--primary)';
+            moreLink.style.color = 'white';
+            moreLink.style.transform = 'translateY(-1px)';
+        });
+
+        moreLink.addEventListener('mouseleave', () => {
+            moreLink.style.background = 'rgba(67, 97, 238, 0.1)';
+            moreLink.style.color = 'var(--primary)';
+            moreLink.style.transform = 'translateY(0)';
+        });
+
+        // Add to section title
+        sectionTitle.appendChild(moreLink);
+    }
+
+    renderViewMoreButton() {
+        const viewMoreContainer = document.createElement('div');
+        viewMoreContainer.className = 'view-more-container';
+        viewMoreContainer.style.cssText = `
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+        `;
+        
+        const viewMoreBtn = document.createElement('a');
+        viewMoreBtn.href = this.options.viewMoreUrl;
+        viewMoreBtn.className = 'btn btn-primary view-more-btn';
+        viewMoreBtn.style.cssText = `
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        `;
+        
+        viewMoreBtn.innerHTML = `
+            <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
+            <span data-i18n="blog.view_more">查看更多文章</span>
+        `;
+        
+        // Add hover effect
+        viewMoreBtn.addEventListener('mouseenter', () => {
+            viewMoreBtn.style.transform = 'translateY(-2px)';
+            viewMoreBtn.style.boxShadow = '0 6px 20px rgba(67, 97, 238, 0.4)';
+            viewMoreBtn.style.background = 'var(--secondary)';
+        });
+        
+        viewMoreBtn.addEventListener('mouseleave', () => {
+            viewMoreBtn.style.transform = 'translateY(0)';
+            viewMoreBtn.style.boxShadow = '0 4px 15px rgba(67, 97, 238, 0.25)';
+            viewMoreBtn.style.background = 'var(--primary)';
+        });
+        
+        viewMoreContainer.appendChild(viewMoreBtn);
+        this.container.appendChild(viewMoreContainer);
     }
 
     // Public methods for external use
@@ -283,7 +368,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wait for storage to be ready
     const initializeBlogCards = () => {
         if (document.querySelector('.articles-grid')) {
-            window.blogCards = new BlogCards();
+            // Check if we're on the main page or articles page
+            const isMainPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+            const isArticlesPage = window.location.pathname.endsWith('articles.html');
+            
+            if (isMainPage) {
+                // On main page: show only 4 articles with "View More" button
+                window.blogCards = new BlogCards('.articles-grid', {
+                    maxArticles: 4,
+                    showViewMore: true,
+                    viewMoreUrl: 'articles.html'
+                });
+            } else if (isArticlesPage) {
+                // On articles page: show all articles
+                window.blogCards = new BlogCards('.articles-grid', {
+                    maxArticles: null,
+                    showViewMore: false
+                });
+            } else {
+                // Default behavior for other pages
+                window.blogCards = new BlogCards();
+            }
             console.log('Blog cards system initialized');
         }
     };
@@ -299,6 +404,14 @@ document.addEventListener('DOMContentLoaded', () => {
             initializeBlogCards();
         }
     }, 1500);
+    
+    // Additional fallback for ensuring articles are displayed
+    setTimeout(() => {
+        if (window.blogCards && window.blogCards.articles.length === 0) {
+            console.log('No articles loaded, attempting to refresh...');
+            window.blogCards.refresh();
+        }
+    }, 3000);
 });
 
 // Export for use in other modules

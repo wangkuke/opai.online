@@ -468,7 +468,16 @@
                     <button type="button" class="editor-btn" data-command="createLink" title="Insert Link">
                         <i class="fas fa-link"></i>
                     </button>
+                    <button type="button" class="editor-btn" data-command="insertImage" title="Insert Image">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button type="button" class="editor-btn" id="upload-image-btn" title="Upload Image">
+                        <i class="fas fa-upload"></i>
+                    </button>
                 </div>
+                
+                <!-- Hidden file input for image upload -->
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
                 <div 
                     id="content-editor" 
                     class="form-control" 
@@ -513,14 +522,79 @@
                 this.saveDraftBtn = document.getElementById('save-draft-btn');
                 this.successMessage = document.getElementById('success-message');
                 
+                // Edit mode properties
+                this.isEditMode = false;
+                this.editingArticleId = null;
+                this.originalArticle = null;
+                
                 this.init();
             }
 
-            init() {
+            async init() {
                 this.setupEventListeners();
                 this.setupRichTextEditor();
                 this.setupCharacterCounter();
                 this.setupPlaceholder();
+                
+                // Check if we're in edit mode
+                await this.checkEditMode();
+            }
+
+            async checkEditMode() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const editId = urlParams.get('edit');
+                
+                if (editId) {
+                    this.isEditMode = true;
+                    this.editingArticleId = editId;
+                    await this.loadArticleForEdit(editId);
+                }
+            }
+
+            async loadArticleForEdit(articleId) {
+                try {
+                    // Wait for storage to be ready
+                    const storage = window.blogStorageManager || window.blogStorage;
+                    await storage.waitForReady();
+                    
+                    // Load the article
+                    this.originalArticle = await storage.getArticle(articleId);
+                    
+                    if (!this.originalArticle) {
+                        alert('Article not found!');
+                        window.location.href = 'blog-admin.html';
+                        return;
+                    }
+                    
+                    // Populate form with article data
+                    this.populateForm();
+                    
+                    // Update page title and button text
+                    document.title = 'Edit Article - OPAI';
+                    document.querySelector('h1').textContent = 'Edit Article';
+                    this.publishBtn.innerHTML = '<i class="fas fa-save"></i><span>Update Article</span>';
+                    
+                } catch (error) {
+                    console.error('Error loading article for edit:', error);
+                    alert('Error loading article: ' + error.message);
+                    window.location.href = 'blog-admin.html';
+                }
+            }
+
+            populateForm() {
+                if (!this.originalArticle) return;
+                
+                // Populate form fields
+                this.titleInput.value = this.originalArticle.title;
+                this.categorySelect.value = this.originalArticle.category;
+                this.tagsInput.value = this.originalArticle.tags.join(', ');
+                this.contentEditor.innerHTML = this.originalArticle.content;
+                
+                // Update character counter
+                const titleCounter = document.getElementById('title-counter');
+                if (titleCounter) {
+                    titleCounter.textContent = `${this.titleInput.value.length}/200`;
+                }
             }
 
             setupEventListeners() {
@@ -553,6 +627,8 @@
             setupRichTextEditor() {
                 // Rich text editor toolbar
                 const toolbarButtons = document.querySelectorAll('.editor-btn');
+                const imageUpload = document.getElementById('image-upload');
+                const uploadImageBtn = document.getElementById('upload-image-btn');
                 
                 toolbarButtons.forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -564,6 +640,8 @@
                             if (url) {
                                 document.execCommand(command, false, url);
                             }
+                        } else if (command === 'insertImage') {
+                            this.insertImageFromUrl();
                         } else {
                             document.execCommand(command, false, null);
                         }
@@ -573,6 +651,20 @@
                     });
                 });
 
+                // Handle upload image button
+                uploadImageBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    imageUpload.click();
+                });
+
+                // Handle file upload
+                imageUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        this.insertImageFromFile(file);
+                    }
+                });
+
                 // Update toolbar state on selection change
                 this.contentEditor.addEventListener('mouseup', () => {
                     this.updateToolbarState();
@@ -580,6 +672,123 @@
 
                 this.contentEditor.addEventListener('keyup', () => {
                     this.updateToolbarState();
+                });
+
+                // Handle drag and drop for images
+                this.setupImageDragDrop();
+            }
+
+            insertImageFromUrl() {
+                const url = prompt('Enter image URL:');
+                if (url) {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    img.style.margin = '10px 0';
+                    img.alt = 'Inserted image';
+                    
+                    // Insert at cursor position
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(img);
+                        
+                        // Move cursor after image
+                        range.setStartAfter(img);
+                        range.setEndAfter(img);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        this.contentEditor.appendChild(img);
+                    }
+                    
+                    this.contentEditor.focus();
+                }
+            }
+
+            insertImageFromFile(file) {
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                // Check file size (limit to 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image file is too large. Please select an image smaller than 5MB.');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    img.style.margin = '10px 0';
+                    img.alt = file.name;
+                    
+                    // Insert at cursor position
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(img);
+                        
+                        // Move cursor after image
+                        range.setStartAfter(img);
+                        range.setEndAfter(img);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        this.contentEditor.appendChild(img);
+                    }
+                    
+                    this.contentEditor.focus();
+                };
+                
+                reader.readAsDataURL(file);
+                
+                // Clear the file input
+                document.getElementById('image-upload').value = '';
+            }
+
+            setupImageDragDrop() {
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+
+                // Highlight drop area
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, () => {
+                        this.contentEditor.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                        this.contentEditor.style.border = '2px dashed var(--primary)';
+                    });
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, () => {
+                        this.contentEditor.style.backgroundColor = '';
+                        this.contentEditor.style.border = '';
+                    });
+                });
+
+                // Handle dropped files
+                this.contentEditor.addEventListener('drop', (e) => {
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        Array.from(files).forEach(file => {
+                            if (file.type.startsWith('image/')) {
+                                this.insertImageFromFile(file);
+                            }
+                        });
+                    }
                 });
             }
 
@@ -711,24 +920,43 @@
 
                 try {
                     const formData = this.getFormData();
-                    const article = new Article({
-                        ...formData,
-                        status: 'published'
-                    });
+                    
+                    let article;
+                    if (this.isEditMode && this.originalArticle) {
+                        // Update existing article
+                        article = new Article({
+                            ...this.originalArticle,
+                            ...formData,
+                            id: this.originalArticle.id, // Keep original ID
+                            publishDate: this.originalArticle.publishDate, // Keep original publish date
+                            status: 'published'
+                        });
+                    } else {
+                        // Create new article
+                        article = new Article({
+                            ...formData,
+                            status: 'published'
+                        });
+                    }
 
                     // Use storage manager for unified storage access
                     const storage = window.blogStorageManager || window.blogStorage;
                     const result = await storage.saveArticle(article);
                     
                     if (result.success) {
-                        this.showSuccess(window.i18n ? window.i18n.t('blog.article_published') : 'Article published successfully!');
+                        const message = this.isEditMode ? 'Article updated successfully!' : 'Article published successfully!';
+                        this.showSuccess(window.i18n ? window.i18n.t('blog.article_published') : message);
                         
                         // Show storage type info
                         console.log('✓ Article saved to localStorage');
                         
-                        // Redirect to home page after 2 seconds
+                        // Redirect after 2 seconds
                         setTimeout(() => {
-                            window.location.href = 'index.html';
+                            if (this.isEditMode) {
+                                window.location.href = 'blog-admin.html';
+                            } else {
+                                window.location.href = 'index.html';
+                            }
                         }, 2000);
                     } else {
                         throw new Error(result.error);
@@ -751,6 +979,97 @@
 
                 try {
                     const formData = this.getFormData();
+                    
+                    let article;
+                    if (this.isEditMode && this.originalArticle) {
+                        // Update existing article as draft
+                        article = new Article({
+                            ...this.originalArticle,
+                            ...formData,
+                            id: this.originalArticle.id,
+                            publishDate: this.originalArticle.publishDate,
+                            status: 'draft'
+                        });
+                    } else {
+                        // Create new draft
+                        article = new Article({
+                            ...formData,
+                            status: 'draft'
+                        });
+                    }
+
+                    const storage = window.blogStorageManager || window.blogStorage;
+                    const result = await storage.saveArticle(article);
+                    
+                    if (result.success) {
+                        this.showSuccess(window.i18n ? window.i18n.t('blog.article_saved') : 'Draft saved successfully!');
+                        
+                        // Show storage type info
+                        console.log('✓ Draft saved to localStorage');
+                        
+                        // Update edit mode if this was a new article
+                        if (!this.isEditMode) {
+                            this.isEditMode = true;
+                            this.editingArticleId = article.id;
+                            this.originalArticle = article;
+                            
+                            // Update URL to reflect edit mode
+                            const newUrl = `${window.location.pathname}?edit=${article.id}`;
+                            window.history.replaceState({}, '', newUrl);
+                        }
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    console.error('Error saving draft:', error);
+                    alert('Error saving draft: ' + error.message);
+                } finally {
+                    this.setLoading(this.saveDraftBtn, false);
+                }
+            }
+
+            async autoSave() {
+                // Only auto-save if there's content and we're in edit mode
+                if (this.isEditMode && this.titleInput.value.trim()) {
+                    try {
+                        await this.saveDraft();
+                        console.log('Auto-saved draft');
+                    } catch (error) {
+                        console.error('Auto-save failed:', error);
+                    }
+                }
+            }
+
+            showSuccess(message) {
+                this.successMessage.querySelector('span').textContent = message;
+                this.successMessage.classList.add('show');
+                
+                setTimeout(() => {
+                    this.successMessage.classList.remove('show');
+                }, 3000);
+            }
+
+            setLoading(button, loading) {
+                if (loading) {
+                    button.classList.add('loading');
+                    button.disabled = true;
+                } else {
+                    button.classList.remove('loading');
+                    button.disabled = false;
+                }
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                new ArticlePublisher();
+                console.log('Article publisher initialized');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
                     const article = new Article({
                         ...formData,
                         status: 'draft'

@@ -127,18 +127,18 @@ function createDemoArticles() {
     return successCount;
 }
 
-// Auto-create demo articles if none exist
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        if (window.blogStorage) {
-            const existingArticles = window.blogStorage.getArticles();
-            if (existingArticles.length === 0) {
-                console.log('No articles found, creating demo articles...');
-                createDemoArticles();
-            }
-        }
-    }, 2000);
-});
+// Auto-create demo articles if none exist - DISABLED
+// document.addEventListener('DOMContentLoaded', () => {
+//     setTimeout(() => {
+//         if (window.blogStorage) {
+//             const existingArticles = window.blogStorage.getArticles();
+//             if (existingArticles.length === 0) {
+//                 console.log('No articles found, creating demo articles...');
+//                 createDemoArticles();
+//             }
+//         }
+//     }, 2000);
+// });
 
 // Export for manual use
 window.createDemoArticles = createDemoArticles;
