@@ -93,6 +93,15 @@
             <button class="btn-success" onclick="createDemoArticles()">➕ Create Demo Articles</button>
         </div>
 
+        <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 5px;">
+            <h4>🔧 Main Page Fix</h4>
+            <button class="btn-warning" onclick="fixMainPageDisplay()">🔧 Fix Main Page Articles</button>
+            <button class="btn-primary" onclick="generateFixScript()">📋 Generate Fix Script</button>
+            <p style="font-size: 0.9em; margin-top: 10px; color: #856404;">
+                Use these tools if articles are not showing on the main page after deployment.
+            </p>
+        </div>
+
         <div style="margin: 20px 0; padding: 15px; background: #e7f3ff; border-radius: 5px;">
             <h4>📦 Data Export/Import</h4>
             <button class="btn-success" onclick="exportArticles()">📤 Export Articles</button>
@@ -408,6 +417,123 @@
                 // Clear file input
                 fileInput.value = '';
             };
+        }
+
+        async function fixMainPageDisplay() {
+            log('🔧 Attempting to fix main page display...', 'info');
+            
+            try {
+                await window.blogStorageManager.waitForReady();
+                const storage = window.blogStorageManager.getStorage();
+                
+                // Check if we have articles
+                const articles = storage.getArticles({ status: 'published' });
+                if (articles.length === 0) {
+                    log('❌ No articles to display. Create some articles first!', 'danger');
+                    return;
+                }
+                
+                log(`✅ Found ${articles.length} articles to display`, 'success');
+                
+                // Create a script to inject into main page
+                const fixScript = `
+// Force initialize blog cards on main page
+console.log('🔧 Force fixing blog cards...');
+
+(async () => {
+    try {
+        // Wait for storage to be ready
+        await window.blogStorageManager.waitForReady();
+        const storage = window.blogStorageManager.getStorage();
+        const articles = storage.getArticles({ status: 'published' });
+        
+        console.log('✅ Found', articles.length, 'published articles');
+        
+        if (articles.length === 0) {
+            console.log('❌ No published articles found');
+            return;
+        }
+        
+        // Check for articles grid
+        const articlesGrid = document.querySelector('.articles-grid');
+        if (!articlesGrid) {
+            console.log('❌ Articles grid not found');
+            return;
+        }
+        
+        console.log('✅ Articles grid found');
+        
+        // Clear existing BlogCards
+        if (window.blogCards) {
+            delete window.blogCards;
+        }
+        
+        // Create new BlogCards instance
+        window.blogCards = new BlogCards('.articles-grid', {
+            maxArticles: 4,
+            showViewMore: true,
+            viewMoreUrl: 'articles.html'
+        });
+        
+        console.log('✅ BlogCards instance created');
+        
+        // Wait and check result
+        setTimeout(() => {
+            if (window.blogCards && window.blogCards.articles.length > 0) {
+                console.log('🎉 Success! Articles should now be visible');
+            } else {
+                console.log('⚠️ Trying manual refresh...');
+                if (window.blogCards) {
+                    window.blogCards.refresh();
+                }
+            }
+        }, 1000);
+        
+    } catch (error) {
+        console.error('❌ Fix failed:', error);
+    }
+})();
+                `;
+                
+                // Copy script to clipboard
+                navigator.clipboard.writeText(fixScript).then(() => {
+                    log('✅ Fix script copied to clipboard!', 'success');
+                    log('💡 Go to main page, open F12 console, paste and press Enter', 'info');
+                }).catch(() => {
+                    log('📋 Copy this script and run it in main page console:', 'info');
+                    console.log(fixScript);
+                });
+                
+            } catch (error) {
+                log(`❌ Fix attempt failed: ${error.message}`, 'danger');
+            }
+        }
+
+        function generateFixScript() {
+            const fixScript = `// Quick fix for main page articles display
+(async () => {
+    await window.blogStorageManager.waitForReady();
+    const storage = window.blogStorageManager.getStorage();
+    const articles = storage.getArticles({ status: 'published' });
+    console.log('Found', articles.length, 'articles');
+    
+    if (articles.length > 0) {
+        window.blogCards = new BlogCards('.articles-grid', {
+            maxArticles: 4,
+            showViewMore: true,
+            viewMoreUrl: 'articles.html'
+        });
+        console.log('BlogCards recreated');
+    }
+})();`;
+            
+            navigator.clipboard.writeText(fixScript).then(() => {
+                log('✅ Quick fix script copied to clipboard!', 'success');
+                log('💡 Paste this in main page console to fix articles display', 'info');
+            }).catch(() => {
+                log('📋 Quick fix script:', 'info');
+                console.log(fixScript);
+            });
         }
 
         // Initialize when page loads

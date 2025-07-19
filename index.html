@@ -1345,6 +1345,37 @@
     <script src="blog-cards.js"></script>
     <script src="demo-articles.js"></script>
     <script src="sidebar-loader.js"></script>
+    
+    <!-- 强制初始化博客卡片 -->
+    <script>
+        // 额外的初始化保障
+        window.addEventListener('load', () => {
+            console.log('Window loaded, checking blog cards...');
+            
+            setTimeout(() => {
+                if (!window.blogCards) {
+                    console.log('BlogCards not initialized, forcing initialization...');
+                    const articlesGrid = document.querySelector('.articles-grid');
+                    if (articlesGrid) {
+                        window.blogCards = new BlogCards('.articles-grid', {
+                            maxArticles: 4,
+                            showViewMore: true,
+                            viewMoreUrl: 'articles.html'
+                        });
+                        console.log('BlogCards force-initialized');
+                    }
+                }
+            }, 2000);
+            
+            // 最终检查
+            setTimeout(() => {
+                if (window.blogCards && window.blogCards.articles.length === 0) {
+                    console.log('Final check: refreshing blog cards...');
+                    window.blogCards.refresh();
+                }
+            }, 4000);
+        });
+    </script>
 </head>
 
 <body>

@@ -365,53 +365,98 @@ class BlogCards {
 
 // Auto-initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing blog cards...');
+    
     // Wait for storage to be ready
     const initializeBlogCards = () => {
-        if (document.querySelector('.articles-grid')) {
-            // Check if we're on the main page or articles page
-            const isMainPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
-            const isArticlesPage = window.location.pathname.endsWith('articles.html');
-            
-            if (isMainPage) {
-                // On main page: show only 4 articles with "View More" button
-                window.blogCards = new BlogCards('.articles-grid', {
-                    maxArticles: 4,
-                    showViewMore: true,
-                    viewMoreUrl: 'articles.html'
-                });
-            } else if (isArticlesPage) {
-                // On articles page: show all articles
-                window.blogCards = new BlogCards('.articles-grid', {
-                    maxArticles: null,
-                    showViewMore: false
-                });
-            } else {
-                // Default behavior for other pages
-                window.blogCards = new BlogCards();
-            }
-            console.log('Blog cards system initialized');
+        const articlesGrid = document.querySelector('.articles-grid');
+        if (!articlesGrid) {
+            console.log('Articles grid not found');
+            return;
+        }
+
+        console.log('Articles grid found, creating BlogCards instance...');
+        
+        // Check if we're on the main page or articles page
+        const isMainPage = window.location.pathname.endsWith('index.html') || 
+                          window.location.pathname === '/' || 
+                          window.location.pathname.endsWith('/');
+        const isArticlesPage = window.location.pathname.endsWith('articles.html');
+        
+        console.log('Page detection:', { isMainPage, isArticlesPage, pathname: window.location.pathname });
+        
+        if (isMainPage) {
+            // On main page: show only 4 articles with "View More" button
+            window.blogCards = new BlogCards('.articles-grid', {
+                maxArticles: 4,
+                showViewMore: true,
+                viewMoreUrl: 'articles.html'
+            });
+            console.log('Main page blog cards initialized');
+        } else if (isArticlesPage) {
+            // On articles page: show all articles
+            window.blogCards = new BlogCards('.articles-grid', {
+                maxArticles: null,
+                showViewMore: false
+            });
+            console.log('Articles page blog cards initialized');
+        } else {
+            // Default behavior for other pages
+            window.blogCards = new BlogCards();
+            console.log('Default blog cards initialized');
         }
     };
 
-    // Listen for storage ready event
+    // Multiple initialization strategies to ensure it works
+    
+    // Strategy 1: Listen for storage ready event
     window.addEventListener('blogStorageReady', () => {
+        console.log('Storage ready event received');
         setTimeout(initializeBlogCards, 100);
     });
 
-    // Fallback: initialize after delay if storage is already ready
-    setTimeout(() => {
+    // Strategy 2: Check periodically if storage is ready
+    let initAttempts = 0;
+    const checkAndInit = () => {
+        initAttempts++;
+        console.log(`Init attempt ${initAttempts}`);
+        
         if ((window.blogStorageManager && window.blogStorageManager.isReady()) || window.blogStorage) {
+            console.log('Storage is ready, initializing...');
+            initializeBlogCards();
+        } else if (initAttempts < 10) {
+            console.log('Storage not ready, retrying...');
+            setTimeout(checkAndInit, 500);
+        } else {
+            console.log('Max init attempts reached, forcing initialization...');
             initializeBlogCards();
         }
-    }, 1500);
+    };
     
-    // Additional fallback for ensuring articles are displayed
+    // Start checking after a short delay
+    setTimeout(checkAndInit, 500);
+    
+    // Strategy 3: Force refresh if no articles loaded after some time
     setTimeout(() => {
-        if (window.blogCards && window.blogCards.articles.length === 0) {
-            console.log('No articles loaded, attempting to refresh...');
-            window.blogCards.refresh();
+        if (window.blogCards) {
+            console.log('Checking if articles loaded...', window.blogCards.articles.length);
+            if (window.blogCards.articles.length === 0) {
+                console.log('No articles loaded, attempting to refresh...');
+                window.blogCards.refresh();
+            }
+        } else {
+            console.log('BlogCards not initialized, trying again...');
+            initializeBlogCards();
         }
     }, 3000);
+    
+    // Strategy 4: Additional check after longer delay
+    setTimeout(() => {
+        if (window.blogCards) {
+            console.log('Final check - articles count:', window.blogCards.articles.length);
+            window.blogCards.refresh();
+        }
+    }, 5000);
 });
 
 // Export for use in other modules
