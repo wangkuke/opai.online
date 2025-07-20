@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>青云梯 VPN - 稳定翻墙软件 | 秒开YouTube观看高清视频</title>
+    <meta name="title" content="青云梯 VPN - 稳定翻墙软件 | 专为中国用户设计">
+    <meta name="description" content="青云梯是一款稳定可靠的VPN翻墙软件，专为中国用户设计，提供高速稳定的连接服务，秒开YouTube观看高清视频，支持多设备使用。">
+    <meta name="keywords" content="青云梯, VPN, 翻墙软件, YouTube, 稳定VPN, 高速VPN, 中国VPN, 科学上网, 梯子, 代理">
+    <meta name="author" content="AI Tools Explorer">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="zh-CN">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="https://ivt01.qytaff.cc/register?aff=8H8Ohx1c">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-62035219DR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-62035219DR');
+    </script>
+    
+    <style>
+        /* 复制自savetube.html的全部样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .logo i { font-size: 2.5rem; color: var(--success); margin-bottom: 10px; }
+        .logo h1 { font-size: 1.3rem; font-weight: 700; }
+        .category-section { margin-bottom: 25px; padding: 0 15px; }
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .category-title i { margin-right: 10px; font-size: 1.2rem; }
+        .category-list { list-style: none; padding: 0 5px; }
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 5px; height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+        .category-list li:hover { background: rgba(255,255,255,0.1); }
+        .category-list li:hover::before { background: var(--success); }
+        .category-list li.active { background: rgba(114,9,183,0.3); }
+        .category-list li.active::before { background: var(--accent); }
+        .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nav-links { display: flex; list-style: none; gap: 25px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--primary); }
+        .user-actions { display: flex; align-items: center; gap: 15px; }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+        .btn i { margin-right: 8px; }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: var(--secondary);
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .user-profile:hover { background: rgba(255,255,255,0.85); }
+        .user-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+        }
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245,247,251,0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+        .qingyunti-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .qingyunti-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+            background: #eee;
+        }
+        .qingyunti-img img:error {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        .qingyunti-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .qingyunti-info h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .qingyunti-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+        .qingyunti-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+        .qingyunti-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
+        }
+        .qingyunti-btn:hover {
+            background: var(--secondary);
+        }
+        .qingyunti-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .qingyunti-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        @media (max-width: 992px) {
+            .app-layout { grid-template-columns: 1fr; grid-template-areas: "header" "content"; }
+            .sidebar { display: none; }
+        }
+        @media (max-width: 768px) {
+            .main-section { padding: 18px 6px; }
+        }
+        @media (max-width: 700px) {
+            .qingyunti-card {
+                flex-direction: column;
+                padding: 18px 8px;
+                gap: 18px;
+            }
+            .qingyunti-img img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        /* 相关推荐区域样式 */
+        .related-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            margin-top: 40px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+        .section-title i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
+        }
+        .article-image {
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .article-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        .article-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+        .article-content {
+            padding: 20px;
+        }
+        .article-title {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-excerpt {
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3;
+        }
+        .article-overlay i {
+            color: white;
+            font-size: 2rem;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+        .article-card:hover .article-overlay i {
+            transform: translateX(0);
+        }
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        .read-time, .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .read-time i, .article-date i {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+        }
+        @media (max-width: 768px) {
+            .related-section {
+                padding: 0 20px;
+                margin-top: 30px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 18px;
+            }
+            .article-image {
+                height: 140px;
+            }
+            .article-content {
+                padding: 16px;
+            }
+            .article-title {
+                font-size: 1rem;
+            }
+            .article-excerpt {
+                font-size: 0.9rem;
+            }
+            .article-meta {
+                margin-top: 12px;
+                padding-top: 12px;
+                font-size: 0.8rem;
+            }
+            .article-overlay i {
+                font-size: 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .related-section {
+                padding: 0 15px;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .article-image {
+                height: 120px;
+            }
+            .article-category {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+            .article-category i {
+                font-size: 0.7rem;
+            }
+            .article-content {
+                padding: 14px;
+            }
+            .article-title {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+            .article-excerpt {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+            .article-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                font-size: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .article-overlay i {
+                font-size: 1.2rem;
+            }
+        }
+        #qrcode-popup {
+            position: absolute;
+            z-index: 9999;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 12px 12px 8px 12px;
+            min-width: 120px;
+            min-height: 120px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            top: 100%;
+            left: 0;
+            margin-top: 10px;
+        }
+        #qrcode-popup canvas {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <div id="sidebar"></div>
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="#" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
+            </ul>
+            <div class="user-actions">
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> 发布文章
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">AI</div>
+                    <span>OPAI探索者</span>
+                </div>
+            </div>
+        </header>
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- 青云梯卡片 -->
+            <div class="qingyunti-card">
+                <div class="qingyunti-img">
+                    <img src="src/qingyunti.png" alt="青云梯 - 稳定VPN翻墙软件" />
+                </div>
+                <div class="qingyunti-info">
+                    <h1 data-i18n="qingyunti.title">青云梯 VPN</h1>
+                    <p data-i18n="qingyunti.description">稳定可靠的翻墙软件，专为中国用户设计，提供高速稳定的VPN连接服务，秒开YouTube观看高清视频</p>
+                    <div class="qingyunti-btns">
+                        <a href="https://ivt01.qytaff.cc/register?aff=8H8Ohx1c" target="_blank" class="btn qingyunti-btn" data-i18n="qingyunti.visit">访问官网</a>
+                        <a href="https://ivt01.qytaff.cc/register?aff=8H8Ohx1c" target="_blank" class="btn qingyunti-btn-outline" id="mobileViewBtn" data-i18n="qingyunti.mobile">手机版</a>
+                        <div id="qrcode-popup" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 主内容区 -->
+            <section class="main-section">
+                <h2 data-i18n="qingyunti.section.official"><i class="fas fa-shield-alt"></i> 青云梯 官方网站</h2>
+                <p data-i18n="qingyunti.official.desc">青云梯是一款专为中国用户设计的稳定VPN服务，提供高速、安全、可靠的翻墙解决方案。支持多设备使用，让您轻松访问YouTube、Google、Facebook等海外网站，享受无限制的网络体验。</p>
+                <p style="color:var(--gray);font-size:0.98rem;" data-i18n="qingyunti.official.feature">服务特色：稳定连接、高速访问、多设备支持、智能路由、安全加密、24/7客服、简单易用、价格实惠。</p>
+                
+                <h2 data-i18n="qingyunti.section.about"><i class="fas fa-info-circle"></i> 关于青云梯</h2>
+                <p data-i18n="qingyunti.about.1">青云梯致力于为中国用户提供最稳定、最快速的VPN翻墙服务。我们的服务器遍布全球，采用先进的加密技术，确保您的网络连接既快速又安全。无论是观看YouTube高清视频、访问Google搜索，还是使用Facebook社交，青云梯都能为您提供流畅的体验。</p>
+                <p style="color:var(--gray);font-size:0.98rem;" data-i18n="qingyunti.about.2">青云梯支持Windows、Mac、iOS、Android等多种设备，一个账户可以同时在多个设备上使用，满足您的各种上网需求。</p>
+                
+                <h2 data-i18n="qingyunti.section.feature"><i class="fas fa-star"></i> 核心功能与特色</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.1">稳定连接：99.9%在线率，24小时不间断服务</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.2">高速访问：秒开YouTube，流畅观看4K高清视频</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.3">多设备支持：一账户多平台，支持Windows/Mac/iOS/Android</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.4">智能路由：自动选择最优线路，确保最佳连接体验</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.5">安全加密：军用级加密技术，保护您的隐私数据</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.6">24/7客服：专业技术支持，随时解决您的问题</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.7">简单易用：一键连接，无需复杂配置</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-check-circle" style="color: var(--success); margin-right: 12px;"></i>
+                        <span data-i18n="qingyunti.feature.8">价格实惠：性价比超高，多种套餐可选</span>
+                    </li>
+                </ul>
+                
+                <h2 data-i18n="qingyunti.section.usage"><i class="fas fa-rocket"></i> 青云梯 使用方法</h2>
+                <ol style="margin: 20px 0 20px 20px;">
+                    <li data-i18n="qingyunti.usage.1">访问青云梯官网，点击注册按钮创建您的账户</li>
+                    <li data-i18n="qingyunti.usage.2">选择适合您的套餐计划，完成付款流程</li>
+                    <li data-i18n="qingyunti.usage.3">根据您的设备类型，下载对应的客户端软件</li>
+                    <li data-i18n="qingyunti.usage.4">使用注册的账户信息登录客户端</li>
+                    <li data-i18n="qingyunti.usage.5">选择合适的服务器节点，点击连接即可开始使用</li>
+                </ol>
+                
+                <h2 data-i18n="qingyunti.section.faq"><i class="fas fa-question-circle"></i> 常见问题 (FAQ)</h2>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="qingyunti.faq.q1">青云梯的价格如何？</h3>
+                    <p data-i18n="qingyunti.faq.a1">青云梯提供多种套餐选择，价格实惠，性价比极高。具体价格请访问官网查看最新优惠信息。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="qingyunti.faq.q2">支持哪些设备和系统？</h3>
+                    <p data-i18n="qingyunti.faq.a2">青云梯支持Windows、Mac、iOS、Android等主流操作系统，一个账户可以在多个设备上同时使用。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="qingyunti.faq.q3">连接速度如何？</h3>
+                    <p data-i18n="qingyunti.faq.a3">青云梯采用高速服务器和智能路由技术，可以秒开YouTube，流畅观看4K高清视频，速度表现优异。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="qingyunti.faq.q4">安全性如何保障？</h3>
+                    <p data-i18n="qingyunti.faq.a4">青云梯采用军用级加密技术，严格保护用户隐私数据，确保您的网络活动安全可靠。</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;" data-i18n="qingyunti.faq.q5">如果遇到问题怎么办？</h3>
+                    <p data-i18n="qingyunti.faq.a5">青云梯提供24/7专业客服支持，您可以随时联系客服团队获得技术帮助和问题解决方案。</p>
+                </div>
+                
+                <h2 data-i18n="qingyunti.section.link"><i class="fas fa-link"></i> 官方网站访问</h2>
+                <p><strong data-i18n="qingyunti.link.label">官方网站：</strong> <a href="https://ivt01.qytaff.cc/register?aff=8H8Ohx1c" target="_blank" style="color: var(--primary); text-decoration: none;">https://ivt01.qytaff.cc/register?aff=8H8Ohx1c</a></p>
+                <p data-i18n="qingyunti.link.desc">访问青云梯官网，注册账户即可开始使用稳定的VPN翻墙服务。</p>
+            </section>
+            
+            <!-- 相关推荐区域 -->
+            <section class="related-section">
+                <h2 class="section-title"><i class="fas fa-network-wired"></i> 相关网络工具</h2>
+                <div class="articles-grid" id="network-tools-grid">
+                    <!-- 这里将通过JavaScript动态加载相关网络工具内容 -->
+                </div>
+            </section>
+        </main>
+        
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+        <script src="sidebar-loader.js"></script>
+        <script src="i18n-loader.js"></script>
+        <script>
+        // 二维码功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileViewBtn = document.getElementById('mobileViewBtn');
+            const qrcodePopup = document.getElementById('qrcode-popup');
+            let qrcode = null;
+
+            if (mobileViewBtn && qrcodePopup) {
+                mobileViewBtn.addEventListener('mouseenter', function() {
+                    if (!qrcode) {
+                        qrcode = new QRCode(qrcodePopup, {
+                            text: "https://ivt01.qytaff.cc/register?aff=8H8Ohx1c",
+                            width: 100,
+                            height: 100,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.M
+                        });
+                    }
+                    qrcodePopup.style.display = 'flex';
+                });
+
+                mobileViewBtn.addEventListener('mouseleave', function() {
+                    setTimeout(() => {
+                        if (!qrcodePopup.matches(':hover')) {
+                            qrcodePopup.style.display = 'none';
+                        }
+                    }, 100);
+                });
+
+                qrcodePopup.addEventListener('mouseleave', function() {
+                    qrcodePopup.style.display = 'none';
+                });
+            }
+            
+            // 加载相关网络工具推荐
+            loadNetworkToolsSection();
+            
+            // 图片加载错误处理
+            const productImg = document.querySelector('.qingyunti-img img');
+            if (productImg) {
+                productImg.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const placeholder = document.createElement('div');
+                    placeholder.style.cssText = `
+                        width: 180px; height: 180px; border-radius: 14px;
+                        background: linear-gradient(135deg, var(--primary), var(--accent));
+                        display: flex; align-items: center; justify-content: center;
+                        color: white; font-size: 2rem; font-weight: bold;
+                        box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+                    `;
+                    placeholder.innerHTML = '<i class="fas fa-shield-alt"></i>';
+                    this.parentNode.appendChild(placeholder);
+                });
+            }
+        });
+        
+        // 加载相关网络工具推荐内容
+        async function loadNetworkToolsSection() {
+            try {
+                const response = await fetch('index.html');
+                const html = await response.text();
+                
+                // 创建临时DOM元素来解析HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // 查找网络工具相关区域
+                const networkToolsSection = doc.querySelector('#network-tools-section') || doc.querySelector('#video-download-section');
+                if (networkToolsSection) {
+                    const articlesGrid = networkToolsSection.nextElementSibling;
+                    if (articlesGrid && articlesGrid.classList.contains('articles-grid')) {
+                        const targetGrid = document.getElementById('network-tools-grid');
+                        
+                        // 复制相关工具卡片，但排除当前页面（青云梯）
+                        const articles = articlesGrid.querySelectorAll('.article-card');
+                        let addedCount = 0;
+                        articles.forEach(article => {
+                            // 检查是否是青云梯卡片，如果是则跳过
+                            const title = article.querySelector('.card-title, .article-title');
+                            if (title && (title.textContent.includes('青云梯') || title.textContent.includes('QingYunTi'))) {
+                                return; // 跳过青云梯卡片
+                            }
+                            
+                            // 只添加前6个相关工具
+                            if (addedCount >= 6) return;
+                            
+                            // 克隆卡片并添加到目标区域
+                            const clonedArticle = article.cloneNode(true);
+                            
+                            // 添加动画效果
+                            clonedArticle.style.opacity = '0';
+                            clonedArticle.style.transform = 'translateY(20px)';
+                            clonedArticle.style.transition = 'all 0.6s ease';
+                            
+                            targetGrid.appendChild(clonedArticle);
+                            addedCount++;
+                            
+                            // 延迟显示动画
+                            setTimeout(() => {
+                                clonedArticle.style.opacity = '1';
+                                clonedArticle.style.transform = 'translateY(0)';
+                            }, 100 * addedCount);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('加载网络工具推荐失败:', error);
+                // 如果加载失败，显示备用内容
+                renderFallbackNetworkTools();
+            }
+        }
+        
+        // 备用网络工具推荐内容
+        function renderFallbackNetworkTools() {
+            const container = document.getElementById('network-tools-grid');
+            const fallbackCards = [
+                {
+                    title: "SaveTube 视频下载器",
+                    description: "免费的YouTube视频下载工具",
+                    category: "视频工具",
+                    link: "savetube.html"
+                },
+                {
+                    title: "GreenVideo 下载器", 
+                    description: "支持多平台的视频下载服务",
+                    category: "视频工具",
+                    link: "greenvideo.html"
+                },
+                {
+                    title: "网络代理工具",
+                    description: "更多网络访问解决方案",
+                    category: "网络工具",
+                    link: "#"
+                }
+            ];
+            
+            fallbackCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'article-card';
+                cardElement.innerHTML = `
+                    <div class="article-image" style="background: linear-gradient(135deg, var(--primary), var(--accent));">
+                        <div class="article-category">${card.category}</div>
+                        <div class="article-overlay">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">${card.title}</h3>
+                        <p class="article-excerpt">${card.description}</p>
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => {
+                    if (card.link !== '#') {
+                        window.open(card.link, '_blank');
+                    }
+                });
+                
+                // 添加动画效果
+                cardElement.style.opacity = '0';
+                cardElement.style.transform = 'translateY(20px)';
+                cardElement.style.transition = 'all 0.6s ease';
+                
+                container.appendChild(cardElement);
+                
+                // 延迟显示动画
+                setTimeout(() => {
+                    cardElement.style.opacity = '1';
+                    cardElement.style.transform = 'translateY(0)';
+                }, 100 * (index + 1));
+            });
+        }
+        </script>
+    </div>
+</body>
+</html>
