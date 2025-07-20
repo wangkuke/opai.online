@@ -16,6 +16,8 @@ function createDemoArticles() {
                 <h2>Introduction</h2>
                 <p>Welcome to the new OPAI blog system! This platform allows you to share your knowledge and insights about AI tools and technologies.</p>
                 
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=400&fit=crop" alt="AI Technology" style="width: 100%; max-width: 600px; height: auto; border-radius: 10px; margin: 20px 0;">
+                
                 <h3>Features</h3>
                 <ul>
                     <li><strong>Rich Text Editor</strong> - Create beautifully formatted articles</li>
@@ -41,6 +43,8 @@ function createDemoArticles() {
             content: `
                 <h2>The Future of AI-Powered Content Creation</h2>
                 <p>As we move into 2025, AI tools are revolutionizing how we create content. Here are the top 5 tools you should know about:</p>
+                
+                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop" alt="AI Content Creation" style="width: 100%; max-width: 600px; height: auto; border-radius: 10px; margin: 20px 0;">
                 
                 <h3>1. GPT-4 and Beyond</h3>
                 <p>The latest language models continue to push the boundaries of what's possible in text generation and editing.</p>
@@ -69,6 +73,8 @@ function createDemoArticles() {
             content: `
                 <h2>Leveraging AI for Better Code</h2>
                 <p>ChatGPT has become an invaluable tool for developers. Here's how to use it effectively:</p>
+                
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop" alt="Programming with AI" style="width: 100%; max-width: 600px; height: auto; border-radius: 10px; margin: 20px 0;">
                 
                 <h3>Code Generation</h3>
                 <p>Ask ChatGPT to generate boilerplate code, functions, or even entire classes:</p>

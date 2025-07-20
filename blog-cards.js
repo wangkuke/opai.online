@@ -87,8 +87,12 @@ class BlogCards {
         // Get author initials
         const authorInitials = this.getAuthorInitials(article.author);
 
+        // Extract first image from article content
+        const firstImage = this.extractFirstImage(article.content);
+
         card.innerHTML = `
             <div class="article-image">
+                ${firstImage ? `<img src="${this.escapeHtml(firstImage)}" alt="${this.escapeHtml(article.title)}" style="width: 100%; height: 100%; object-fit: cover;">` : ''}
                 <div class="article-overlay">
                     <i class="fas fa-arrow-right"></i>
                 </div>
@@ -122,6 +126,29 @@ class BlogCards {
         });
 
         return card;
+    }
+
+    // 新增方法：从文章内容中提取第一张图片
+    extractFirstImage(content) {
+        if (!content) return null;
+        
+        // 匹配img标签的src属性
+        const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*>/i;
+        const match = content.match(imgRegex);
+        
+        if (match && match[1]) {
+            return match[1];
+        }
+        
+        // 如果没有找到img标签，尝试匹配其他图片格式
+        const urlRegex = /https?:\/\/[^\s<>"']+\.(jpg|jpeg|png|gif|webp|svg)(\?[^\s<>"']*)?/i;
+        const urlMatch = content.match(urlRegex);
+        
+        if (urlMatch) {
+            return urlMatch[0];
+        }
+        
+        return null;
     }
 
     renderEmptyState() {
