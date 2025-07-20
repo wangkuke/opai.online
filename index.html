@@ -1346,12 +1346,15 @@
     <!-- 引入全局语言切换器 -->
     <script src="language-switcher.js"></script>
 
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    
     <!-- 博客系统脚本 -->
-    <script src="blog-models.js?v=2"></script>
-    <script src="blog-storage.js?v=2"></script>
-    <script src="blog-storage-manager.js?v=2"></script>
-    <script src="blog-cards.js?v=2"></script>
-    <script src="demo-articles.js?v=2"></script>
+    <script src="blog-models.js"></script>
+    <script src="error-handler.js"></script>
+    <script src="supabase-storage.js"></script>
+    <script src="blog-cards.js"></script>
     <script src="sidebar-loader.js"></script>
     
     <!-- 强制初始化博客卡片 -->
@@ -1360,20 +1363,58 @@
         window.addEventListener('load', () => {
             console.log('Window loaded, checking blog cards...');
             
-            setTimeout(() => {
-                if (!window.blogCards) {
-                    console.log('BlogCards not initialized, forcing initialization...');
-                    const articlesGrid = document.querySelector('.articles-grid');
-                    if (articlesGrid) {
-                        window.blogCards = new BlogCards('.articles-grid', {
-                            maxArticles: 4,
-                            showViewMore: true,
-                            viewMoreUrl: 'articles.html'
-                        });
-                        console.log('BlogCards force-initialized');
-                    }
+            // 等待存储系统初始化
+            const initBlogCards = () => {
+                const articlesGrid = document.querySelector('.articles-grid');
+                if (!articlesGrid) {
+                    console.log('Articles grid not found');
+                    return;
                 }
-            }, 2000);
+
+                console.log('Articles grid found, initializing blog cards...');
+                
+                // 检查是否已经初始化
+                if (window.blogCards) {
+                    console.log('BlogCards already initialized, refreshing...');
+                    window.blogCards.refresh();
+                    return;
+                }
+
+                // 创建新的博客卡片实例
+                try {
+                    window.blogCards = new BlogCards('.articles-grid', {
+                        maxArticles: 4,
+                        showViewMore: true,
+                        viewMoreUrl: 'articles.html'
+                    });
+                    console.log('BlogCards initialized successfully');
+                } catch (error) {
+                    console.error('Failed to initialize BlogCards:', error);
+                }
+            };
+
+            // 多次尝试初始化
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            const tryInit = () => {
+                attempts++;
+                console.log(`Init attempt ${attempts}/${maxAttempts}`);
+                
+                if ((window.blogStorageManager && window.blogStorageManager.isReady()) || window.blogStorage) {
+                    console.log('Storage is ready, initializing blog cards...');
+                    initBlogCards();
+                } else if (attempts < maxAttempts) {
+                    console.log('Storage not ready, retrying...');
+                    setTimeout(tryInit, 500);
+                } else {
+                    console.log('Max attempts reached, forcing initialization...');
+                    initBlogCards();
+                }
+            };
+            
+            // 开始尝试初始化
+            setTimeout(tryInit, 1000);
             
             // 最终检查
             setTimeout(() => {
@@ -1381,7 +1422,7 @@
                     console.log('Final check: refreshing blog cards...');
                     window.blogCards.refresh();
                 }
-            }, 4000);
+            }, 5000);
         });
     </script>
 </head>
@@ -1454,6 +1495,16 @@
                             Articles</h2>
                         <div class="articles-grid">
                             <!-- 动态生成的博客文章将在这里显示 -->
+                        </div>
+                        <!-- 临时测试按钮 - 可以删除 -->
+                        <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(67, 97, 238, 0.1); border-radius: 10px;">
+                            <p style="margin-bottom: 10px; color: #666;">测试图片提取功能</p>
+                            <button onclick="createDemoArticles()" style="background: #4361ee; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                                创建演示文章
+                            </button>
+                            <button onclick="window.blogCards && window.blogCards.refresh()" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; margin-left: 10px;">
+                                刷新文章
+                            </button>
                         </div>
                         <h2 class="section-title" id="models" data-i18n="section.models"><i
                                 class="fas fa-download"></i> AI Models</h2>
@@ -2230,14 +2281,36 @@
     window.addEventListener('sidebarLoaded', function() {
         console.log('✓ Sidebar loaded and ready');
         
-        // 初始化博客卡片系统
-        if (window.BlogCards && !window.blogCardsInstance) {
-            try {
-                window.blogCardsInstance = new BlogCards();
-                console.log('✓ Blog cards initialized after sidebar load');
-            } catch (error) {
-                console.error('✗ Failed to initialize blog cards:', error);
-            }
+        // 检查博客卡片是否已经初始化
+        if (window.blogCards) {
+            console.log('✓ Blog cards already initialized, refreshing...');
+            window.blogCards.refresh();
+        } else {
+            console.log('✓ Blog cards not initialized yet, will be initialized by main script');
+        }
+    });
+
+    // 监听存储准备就绪事件
+    window.addEventListener('blogStorageReady', function() {
+        console.log('✓ Blog storage ready event received');
+        
+        // 如果博客卡片还没有初始化，尝试初始化
+        if (!window.blogCards) {
+            setTimeout(() => {
+                const articlesGrid = document.querySelector('.articles-grid');
+                if (articlesGrid) {
+                    try {
+                        window.blogCards = new BlogCards('.articles-grid', {
+                            maxArticles: 4,
+                            showViewMore: true,
+                            viewMoreUrl: 'articles.html'
+                        });
+                        console.log('✓ Blog cards initialized after storage ready');
+                    } catch (error) {
+                        console.error('✗ Failed to initialize blog cards after storage ready:', error);
+                    }
+                }
+            }, 500);
         }
     });
 </script>

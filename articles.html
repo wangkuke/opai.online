@@ -559,23 +559,20 @@
     <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
     <script src="blog-models.js"></script>
-    <script src="blog-storage.js"></script>
     <script src="error-handler.js"></script>
     <script src="supabase-storage.js"></script>
-    <script src="hybrid-storage-manager.js"></script>
-    <script src="blog-storage-manager.js"></script>
     <script src="blog-cards.js"></script>
 
     <script>
         /**
-         * Articles Page Handler - 支持云端数据和实时更新
+         * Articles Page Handler - 纯 Supabase 云端数据
          */
         class ArticlesPage {
             constructor() {
                 this.searchInput = document.getElementById('search-input');
                 this.filterButtons = document.querySelectorAll('.filter-btn');
                 this.articlesGrid = document.querySelector('.articles-grid');
-                this.hybridStorage = null;
+                this.supabaseStorage = null;
                 this.currentCategory = 'all';
                 this.currentSearch = '';
                 this.searchTimeout = null;
@@ -591,63 +588,19 @@
                 await this.initializeStorage();
                 await this.loadArticles();
                 await this.setupRealtimeSubscription();
-                console.log('Articles page initialized with cloud support');
+                console.log('Articles page initialized with Supabase');
             }
 
             async initializeStorage() {
                 try {
-                    // Wait for hybrid storage to be ready
-                    this.hybridStorage = await this.waitForHybridStorage();
-                    console.log('✅ 混合存储已就绪');
+                    // 直接使用 SupabaseStorage
+                    this.supabaseStorage = new SupabaseStorage();
+                    await this.supabaseStorage.initialize();
+                    console.log('✅ Supabase 存储已就绪');
                 } catch (error) {
-                    console.error('❌ 存储初始化失败:', error);
-                    // 尝试使用备用存储
-                    this.hybridStorage = await this.waitForFallbackStorage();
+                    console.error('❌ Supabase 存储初始化失败:', error);
+                    throw error;
                 }
-            }
-
-            waitForHybridStorage() {
-                return new Promise((resolve, reject) => {
-                    let attempts = 0;
-                    const maxAttempts = 50; // 5秒超时
-                    
-                    const checkStorage = () => {
-                        attempts++;
-                        
-                        if (window.HybridStorageManager) {
-                            // 创建混合存储管理器实例
-                            const hybridManager = new HybridStorageManager();
-                            hybridManager.initialize().then(() => {
-                                resolve(hybridManager);
-                            }).catch(reject);
-                            return;
-                        }
-                        
-                        if (attempts >= maxAttempts) {
-                            reject(new Error('混合存储初始化超时'));
-                            return;
-                        }
-                        
-                        setTimeout(checkStorage, 100);
-                    };
-                    
-                    checkStorage();
-                });
-            }
-
-            waitForFallbackStorage() {
-                return new Promise((resolve) => {
-                    const checkStorage = () => {
-                        if (window.blogStorageManager && window.blogStorageManager.isReady()) {
-                            resolve(window.blogStorageManager);
-                        } else if (window.blogStorage) {
-                            resolve(window.blogStorage);
-                        } else {
-                            setTimeout(checkStorage, 100);
-                        }
-                    };
-                    checkStorage();
-                });
             }
 
             setupEventListeners() {
@@ -692,8 +645,8 @@
                     this.isLoading = true;
                     this.showLoading();
 
-                    if (!this.hybridStorage) {
-                        throw new Error('存储未初始化');
+                    if (!this.supabaseStorage) {
+                        throw new Error('Supabase 存储未初始化');
                     }
 
                     // 构建查询选项
@@ -713,8 +666,8 @@
                         options.search = this.currentSearch;
                     }
 
-                    // 从混合存储获取文章
-                    const articles = await this.hybridStorage.getArticles(options);
+                    // 从 Supabase 获取文章
+                    const articles = await this.supabaseStorage.getArticles(options);
                     
                     this.displayArticles(articles);
                     
@@ -858,12 +811,12 @@
              */
             async setupRealtimeSubscription() {
                 try {
-                    if (!this.hybridStorage || !this.hybridStorage.supabaseStorage) {
+                    if (!this.supabaseStorage) {
                         console.log('Supabase 存储不可用，跳过实时订阅');
                         return;
                     }
 
-                    const supabaseClient = this.hybridStorage.supabaseStorage.publicClient;
+                    const supabaseClient = this.supabaseStorage.publicClient;
                     if (!supabaseClient) {
                         console.log('Supabase 客户端不可用，跳过实时订阅');
                         return;

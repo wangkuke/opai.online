@@ -79,6 +79,7 @@
     <script src="language-switcher.js"></script>
     <!-- 引入侧边栏国际化修复脚本 -->
     <script src="fix-sidebar-i18n.js"></script>
+    <script src="sidebar-loader.js"></script>
     <style>
         /* 继承 higgsfield.html 的样式 */
         * {
@@ -1106,16 +1107,6 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <script>
-        fetch('sidebar.html')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('sidebar').outerHTML = html;
-                if (window.i18n) {
-                    window.i18n.updateSidebarTranslations();
-                }
-            });
-    </script>
     <script>
         // Kiro QR code popup interaction
         (function () {
