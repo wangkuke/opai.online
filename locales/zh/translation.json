@@ -185,5 +185,7 @@
   "veo3.usecases.entertainment": "娱乐与叙事",
   "veo3.usecases.research": "研究与开发",
   "kiro.title": "Kiro - 终极AI编程助手",
-  "kiro.description": "Kiro 是一款AI智能编程助手，支持代码生成、调试、自动补全等多种功能，助力开发者高效编程。"
+  "kiro.description": "Kiro 是一款AI智能编程助手，支持代码生成、调试、自动补全等多种功能，助力开发者高效编程。",
+  "model.veo3": "Veo 3",
+  "model.veo3.desc": "Veo 3是一款最新的AI视频生成工具，支持音画同步，自动添加音效、对白和环境音。"
 } 
