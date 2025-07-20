@@ -587,17 +587,6 @@
     </div>
 
     <script>
-        // Sidebar async load
-        fetch('sidebar.html')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('sidebar').outerHTML = html;
-                if (window.i18n) {
-                    window.i18n.updateSidebarTranslations();
-                }
-            });
-    </script>
-    <script>
         // QR Code functionality (placeholder)
         document.getElementById('veo3QrBtn').addEventListener('click', function (e) {
             e.preventDefault();
