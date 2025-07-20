@@ -5,26 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veo3 - Advanced AI Video Generation Platform | Veo3 AI Tools</title>
-    <meta name="description"
-        content="Veo3 is Google's advanced AI video generation platform that creates high-quality videos from text prompts. Discover Veo3's cutting-edge features, professional video output, and innovative AI technology. Experience the future of video creation with Veo3.">
-    <meta name="keywords"
-        content="veo3, Veo3 AI, AI video generation, Google AI, video creation, text to video, AI video platform, Veo3 official, Veo3 features, AI video tools, video generation AI, Google Veo3, professional video creation">
+    <title>VEO3 - AI Video Generation Platform | VEO3 Official & Features</title>
+    <meta name="description" content="VEO3 is the leading AI video generation platform by Google DeepMind. Discover VEO3's advanced features, text-to-video technology, and professional video creation tools. Try VEO3 for high-quality, creative video production.">
+    <meta name="keywords" content="VEO3, VEO3 AI, AI video generation, VEO3 platform, VEO3 features, text to video, Google DeepMind, AI video tools, VEO3 official, VEO3 video creation">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://deepmind.google/technologies/veo/">
-    <meta property="og:title" content="Veo3 - Advanced AI Video Generation Platform | Veo3 AI Tools">
-    <meta property="og:description"
-        content="Veo3 is Google's advanced AI video generation platform that creates high-quality videos from text prompts. Discover Veo3's cutting-edge features, professional video output, and innovative AI technology. Experience the future of video creation with Veo3.">
+    <meta property="og:title" content="VEO3 - AI Video Generation Platform | VEO3 Official" />
+    <meta property="og:description" content="VEO3 is the leading AI video generation platform. Discover VEO3's features and create professional videos with AI." />
     <meta property="og:image" content="src/veo3logo.png">
-    <meta property="og:site_name" content="Veo3">
+    <meta property="og:site_name" content="VEO3">
     <meta property="og:locale" content="en_US">
     <!-- Twitter Card -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://deepmind.google/technologies/veo/">
-    <meta property="twitter:title" content="Veo3 - Advanced AI Video Generation Platform | Veo3 AI Tools">
-    <meta property="twitter:description"
-        content="Veo3 is Google's advanced AI video generation platform that creates high-quality videos from text prompts. Discover Veo3's cutting-edge features, professional video output, and innovative AI technology. Experience the future of video creation with Veo3.">
+    <meta property="twitter:title" content="VEO3 - AI Video Generation Platform | VEO3 Official" />
+    <meta property="twitter:description" content="VEO3 is the leading AI video generation platform. Discover VEO3's features and create professional videos with AI." />
     <meta property="twitter:image" content="src/veo3logo.png">
     <link rel="canonical" href="https://deepmind.google/technologies/veo/">
     <link rel="icon" type="image/x-icon" href="src/veo3logo.png">
@@ -32,8 +28,8 @@
     <!-- 引入全局语言切换器 -->
     <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
-    <!-- 引入侧边栏国际化修复脚本 -->
-    <script src="fix-sidebar-i18n.js"></script>
+    <!-- 引入侧边栏加载器 -->
+    <script src="sidebar-loader.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -503,23 +499,18 @@
             <!-- Veo3 Card -->
             <div class="veo3-card">
                 <div class="veo3-img">
-                    <img src="src/veo3.png" alt="Veo3 AI Video Generation Platform Logo" />
+                    <img src="src/veo3.png" alt="VEO3 AI Video Generation Platform, VEO3 Official Logo" />
                 </div>
                 <div class="veo3-info">
-                    <h1 data-i18n="veo3.title">Veo3</h1>
-                    <p data-i18n="veo3.description">Veo3 is Google's most advanced AI video generation platform that
-                        creates high-quality, realistic videos from text prompts. Powered by cutting-edge machine
-                        learning technology, Veo3 enables creators to produce professional-grade videos with
-                        unprecedented ease and creativity.</p>
+                    <h1>VEO3 - AI Video Generation Platform</h1>
+                    <p>VEO3 is an advanced AI video generation platform developed by Google DeepMind. With VEO3, users can easily create high-quality videos from text prompts, leveraging state-of-the-art artificial intelligence technology. VEO3 empowers creators and businesses to produce professional, creative, and engaging video content efficiently.</p>
                     <div class="veo3-btns">
-                        <a href="https://deepmind.google/technologies/veo/" target="_blank" class="btn veo3-btn"
-                            data-i18n="veo3.visit">Visit Official Site</a>
-                        <a href="https://deepmind.google/technologies/veo/" target="_blank" class="btn veo3-btn-outline"
-                            id="veo3QrBtn" data-i18n="veo3.mobile">Try Veo3 Online</a>
+                        <a href="https://gemini.google/overview/video-generation/" target="_blank" class="btn veo3-btn">Visit Official Site</a>
+                        <a href="https://gemini.google/overview/video-generation/" target="_blank" class="btn veo3-btn-outline" id="veo3QrBtn">Try Veo3 Online</a>
                         <div class="qr-dropdown" id="veo3QrDropdown">
                             <div class="qr-img-box">
                                 <div id="veo3QrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
-                                <div class="qr-tip" data-i18n="veo3.qr.tip">Scan to try Veo3 on mobile</div>
+                                <div class="qr-tip">Scan to try Veo3 on mobile</div>
                             </div>
                         </div>
                     </div>
@@ -527,79 +518,68 @@
             </div>
             <!-- Main Content Section -->
             <section class="main-section">
-                <h2><i class="fas fa-video"></i> <span data-i18n="veo3.about.title">About Veo3</span></h2>
-                <p data-i18n="veo3.about.description">Veo3 represents the pinnacle of AI video generation technology,
-                    developed by Google DeepMind. This revolutionary platform transforms text descriptions into
-                    stunning, high-resolution videos with remarkable realism and creativity. Veo3 is widely used in
-                    content creation, entertainment, education, marketing, and research applications.</p>
-                <p style="color:var(--gray);font-size:0.98rem;" data-i18n="veo3.about.capabilities">Core capabilities:
-                    text-to-video generation, high-quality output, realistic motion, creative storytelling, multiple
-                    formats, and professional-grade results.</p>
-
-                <h2><i class="fas fa-star"></i> <span data-i18n="veo3.features.title">Key Features</span></h2>
+                <h2><i class="fas fa-video"></i> Why Choose VEO3 for AI Video Creation?</h2>
+                <p>VEO3 represents the pinnacle of AI video generation technology, developed by Google DeepMind. This revolutionary platform transforms text descriptions into stunning, high-resolution videos with remarkable realism and creativity. VEO3 is widely used in content creation, entertainment, education, marketing, and research applications.</p>
+                <p style="color:var(--gray);font-size:0.98rem;">Core capabilities: text-to-video generation, high-quality output, realistic motion, creative storytelling, multiple formats, and professional-grade results.</p>
+                <h2><i class="fas fa-star"></i> VEO3 Key Features</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-magic" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.textToVideo">Advanced Text-to-Video Generation</span>
+                        <span>Advanced Text-to-Video Generation</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-hd-video" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.highQuality">High-Resolution Video Output</span>
+                        <span>High-Resolution Video Output</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-running" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.realisticMotion">Realistic Motion and Physics</span>
+                        <span>Realistic Motion and Physics</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-palette" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.creativeControl">Creative Style Control</span>
+                        <span>Creative Style Control</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-film" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.multipleFormats">Multiple Video Formats</span>
+                        <span>Multiple Video Formats</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-bolt" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.features.fastProcessing">Fast Processing Speed</span>
+                        <span>Fast Processing Speed</span>
                     </li>
                 </ul>
-
-                <h2><i class="fas fa-cogs"></i> <span data-i18n="veo3.advantages.title">Technical Advantages</span></h2>
+                <h2><i class="fas fa-cogs"></i> VEO3 Technical Advantages</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-brain" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.advantages.ai">State-of-the-art AI Architecture</span>
+                        <span>State-of-the-art AI Architecture</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-eye" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.advantages.understanding">Advanced Scene Understanding</span>
+                        <span>Advanced Scene Understanding</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.advantages.safety">Built-in Safety Measures</span>
+                        <span>Built-in Safety Measures</span>
                     </li>
                 </ul>
-
-                <h2><i class="fas fa-lightbulb"></i> <span data-i18n="veo3.usecases.title">Use Cases</span></h2>
+                <h2><i class="fas fa-lightbulb"></i> VEO3 Use Cases</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-video" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.usecases.content">Content Creation & Marketing</span>
+                        <span>Content Creation & Marketing</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
-                        <i class="fas fa-graduation-cap"
-                            style="color: var(--success); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.usecases.education">Educational Materials</span>
+                        <i class="fas fa-graduation-cap" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Educational Materials</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
-                        <i class="fas fa-theater-masks"
-                            style="color: var(--success); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.usecases.entertainment">Entertainment & Storytelling</span>
+                        <i class="fas fa-theater-masks" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Entertainment & Storytelling</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
-                        <i class="fas fa-microscope"
-                            style="color: var(--success); margin-right: 12px; width: 20px;"></i>
-                        <span data-i18n="veo3.usecases.research">Research & Development</span>
+                        <i class="fas fa-microscope" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Research & Development</span>
                     </li>
                 </ul>
             </section>

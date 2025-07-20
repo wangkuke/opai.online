@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grok - Leading AI Model Platform | Grok AI Tools</title>
-    <meta name="description" content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
-    <meta name="keywords" content="Grok, Grok AI, Grok model, AI conversation, AI platform, AI tools, Grok official, Grok capabilities, Grok applications, Grok review, Grok features, Grok pricing, Grok OpenAI, Grok XAI, Grok Musk, AI model, AI assistant, AI content generation, AI reasoning, AI innovation, AI for creators, AI content platform">
+    <meta name="description"
+        content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
+    <meta name="keywords"
+        content="Grok, Grok AI, Grok model, AI conversation, AI platform, AI tools, Grok official, Grok capabilities, Grok applications, Grok review, Grok features, Grok pricing, Grok OpenAI, Grok XAI, Grok Musk, AI model, AI assistant, AI content generation, AI reasoning, AI innovation, AI for creators, AI content platform">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://grok.com/">
     <meta property="og:title" content="Grok - Leading AI Model Platform | Grok AI Tools">
-    <meta property="og:description" content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
+    <meta property="og:description"
+        content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
     <meta property="og:image" content="src/groklogo.png">
     <meta property="og:site_name" content="Grok">
     <meta property="og:locale" content="en_US">
@@ -18,7 +22,8 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://grok.com/">
     <meta property="twitter:title" content="Grok - Leading AI Model Platform | Grok AI Tools">
-    <meta property="twitter:description" content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
+    <meta property="twitter:description"
+        content="Grok is the leading AI model platform with advanced natural language understanding, conversational generation, and knowledge reasoning. Discover Grok's core features, technical advantages, and application scenarios. Experience the future of AI innovation.">
     <meta property="twitter:image" content="src/groklogo.png">
     <!-- Canonical URL -->
     <link rel="canonical" href="https://grok.com/">
@@ -59,11 +64,17 @@
     <!-- 引入全局语言切换器 -->
     <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
-    <!-- 引入侧边栏国际化修复脚本 -->
-    <script src="fix-sidebar-i18n.js"></script>
+    <!-- 引入侧边栏加载器 -->
+    <script src="sidebar-loader.js"></script>
     <style>
         /* 继承 higgsfield.html 的样式 */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
@@ -79,6 +90,7 @@
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             --transition: all 0.3s ease;
         }
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             background-attachment: fixed;
@@ -86,6 +98,7 @@
             line-height: 1.6;
             min-height: 100vh;
         }
+
         .app-layout {
             display: grid;
             grid-template-columns: 180px 1fr;
@@ -93,6 +106,7 @@
             grid-template-areas: "sidebar header" "sidebar content";
             min-height: 100vh;
         }
+
         .sidebar {
             grid-area: sidebar;
             background: var(--sidebar-bg);
@@ -103,14 +117,29 @@
             overflow-y: auto;
             border-right: 1px solid var(--glass-border);
         }
+
         .logo {
             padding: 25px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
         }
-        .logo i { font-size: 2.5rem; color: var(--success); margin-bottom: 10px; }
-        .logo h1 { font-size: 1.3rem; font-weight: 700; }
-        .category-section { margin-bottom: 25px; padding: 0 15px; }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .category-section {
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
         .category-title {
             padding: 12px 15px;
             font-size: 1.05rem;
@@ -122,8 +151,17 @@
             border-radius: 10px;
             margin-bottom: 15px;
         }
-        .category-title i { margin-right: 10px; font-size: 1.2rem; }
-        .category-list { list-style: none; padding: 0 5px; }
+
+        .category-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0 5px;
+        }
+
         .category-list li {
             padding: 12px 15px 12px 45px;
             transition: var(--transition);
@@ -136,18 +174,40 @@
             position: relative;
             overflow: hidden;
         }
+
         .category-list li::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 5px; height: 100%;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
             background: transparent;
             transition: var(--transition);
         }
-        .category-list li:hover { background: rgba(255,255,255,0.1); }
-        .category-list li:hover::before { background: var(--success); }
-        .category-list li.active { background: rgba(114,9,183,0.3); }
-        .category-list li.active::before { background: var(--accent); }
-        .category-list li i { position: absolute; left: 15px; font-size: 1rem; }
+
+        .category-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-list li:hover::before {
+            background: var(--success);
+        }
+
+        .category-list li.active {
+            background: rgba(114, 9, 183, 0.3);
+        }
+
+        .category-list li.active::before {
+            background: var(--accent);
+        }
+
+        .category-list li i {
+            position: absolute;
+            left: 15px;
+            font-size: 1rem;
+        }
+
         .header {
             grid-area: header;
             background: var(--header-bg);
@@ -155,14 +215,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
             backdrop-filter: blur(5px);
             border-bottom: 1px solid var(--glass-border);
         }
-        .nav-links { display: flex; list-style: none; gap: 25px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
@@ -172,17 +238,34 @@
             position: relative;
             transition: var(--transition);
         }
+
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 0; left: 0; width: 0; height: 3px;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
             background: var(--primary);
             transition: var(--transition);
             border-radius: 2px;
         }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .nav-links a.active { color: var(--primary); }
-        .user-actions { display: flex; align-items: center; gap: 15px; }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .btn {
             padding: 10px 22px;
             border-radius: 30px;
@@ -197,38 +280,57 @@
             color: white;
             box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
         }
-        .btn i { margin-right: 8px; }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
             background: var(--secondary);
         }
+
         .user-profile {
             display: flex;
             align-items: center;
             cursor: pointer;
             padding: 5px 15px 5px 5px;
             border-radius: 30px;
-            background: rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
         }
-        .user-profile:hover { background: rgba(255,255,255,0.85); }
-        .user-avatar {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; align-items: center; justify-content: center;
-            margin-right: 10px; overflow: hidden; color: white; font-weight: bold; font-size: 1.2rem;
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.85);
         }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
         .content {
             grid-area: content;
             padding: 30px;
-            background: rgba(245,247,251,0.85);
+            background: rgba(245, 247, 251, 0.85);
             backdrop-filter: blur(5px);
             overflow-y: auto;
             min-height: calc(100vh - 70px);
         }
+
         .main-section {
             max-width: 1100px;
             margin: 0 auto;
@@ -238,6 +340,7 @@
             padding: 40px 32px 32px 32px;
             margin-top: 30px;
         }
+
         .main-section h2 {
             font-size: 1.3rem;
             color: var(--secondary);
@@ -245,16 +348,19 @@
             display: flex;
             align-items: center;
         }
+
         .main-section h2 i {
             margin-right: 10px;
             color: var(--primary);
         }
+
         .main-section p {
             font-size: 1.05rem;
             color: var(--dark);
             margin-bottom: 18px;
             line-height: 1.8;
         }
+
         .grok-card {
             display: flex;
             align-items: center;
@@ -268,14 +374,16 @@
             margin-left: auto;
             margin-right: auto;
         }
+
         .grok-img img {
             width: 180px;
             height: 180px;
             object-fit: cover;
             border-radius: 14px;
-            box-shadow: 0 4px 18px rgba(67,97,238,0.10);
+            box-shadow: 0 4px 18px rgba(67, 97, 238, 0.10);
             background: #eee;
         }
+
         .grok-info {
             flex: 1;
             display: flex;
@@ -283,16 +391,19 @@
             justify-content: center;
             position: relative;
         }
+
         .grok-info p {
             font-size: 1.08rem;
             color: var(--dark);
             margin-bottom: 18px;
         }
+
         .grok-btns {
             display: flex;
             gap: 18px;
             position: relative;
         }
+
         .grok-btn {
             background: var(--primary);
             color: #fff;
@@ -304,9 +415,11 @@
             transition: background 0.2s;
             box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
         }
+
         .grok-btn:hover {
             background: var(--secondary);
         }
+
         .grok-btn-outline {
             background: transparent;
             color: var(--primary);
@@ -317,28 +430,42 @@
             text-decoration: none;
             transition: background 0.2s, color 0.2s;
         }
+
         .grok-btn-outline:hover {
             background: var(--primary);
             color: #fff;
         }
+
         @media (max-width: 992px) {
-            .app-layout { grid-template-columns: 1fr; grid-template-areas: "header" "content"; }
-            .sidebar { display: none; }
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "header" "content";
+            }
+
+            .sidebar {
+                display: none;
+            }
         }
+
         @media (max-width: 768px) {
-            .main-section { padding: 18px 6px; }
+            .main-section {
+                padding: 18px 6px;
+            }
         }
+
         @media (max-width: 700px) {
             .grok-card {
                 flex-direction: column;
                 padding: 18px 8px;
                 gap: 18px;
             }
+
             .grok-img img {
                 width: 120px;
                 height: 120px;
             }
         }
+
         /* 相关推荐区域样式 */
         .related-section {
             max-width: 1100px;
@@ -346,6 +473,7 @@
             padding: 0 30px;
             margin-top: 40px;
         }
+
         .section-title {
             font-size: 1.8rem;
             color: var(--primary);
@@ -354,16 +482,19 @@
             align-items: center;
             font-weight: 700;
         }
+
         .section-title i {
             margin-right: 12px;
             color: var(--accent);
         }
+
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
+
         .article-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -373,10 +504,12 @@
             cursor: pointer;
             border: 1px solid var(--glass-border);
         }
+
         .article-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
         }
+
         .article-image {
             height: 160px;
             position: relative;
@@ -385,6 +518,7 @@
             justify-content: center;
             overflow: hidden;
         }
+
         .article-image::before {
             content: '';
             position: absolute;
@@ -392,9 +526,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
             z-index: 1;
         }
+
         .article-category {
             position: absolute;
             top: 15px;
@@ -408,9 +543,11 @@
             z-index: 2;
             backdrop-filter: blur(10px);
         }
+
         .article-content {
             padding: 20px;
         }
+
         .article-title {
             font-size: 1.1rem;
             color: var(--dark);
@@ -422,6 +559,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .article-excerpt {
             font-size: 0.95rem;
             color: var(--gray);
@@ -431,6 +569,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .article-overlay {
             position: absolute;
             top: 0;
@@ -445,18 +584,22 @@
             transition: var(--transition);
             z-index: 3;
         }
+
         .article-overlay i {
             color: white;
             font-size: 2rem;
             transform: translateX(-10px);
             transition: var(--transition);
         }
+
         .article-card:hover .article-overlay {
             opacity: 1;
         }
+
         .article-card:hover .article-overlay i {
             transform: translateX(0);
         }
+
         .article-meta {
             display: flex;
             justify-content: space-between;
@@ -467,84 +610,107 @@
             font-size: 0.85rem;
             color: var(--gray);
         }
-        .read-time, .article-date {
+
+        .read-time,
+        .article-date {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        .read-time i, .article-date i {
+
+        .read-time i,
+        .article-date i {
             font-size: 0.8rem;
             color: var(--primary);
         }
+
         @media (max-width: 1200px) {
             .articles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 20px;
             }
         }
+
         @media (max-width: 768px) {
             .related-section {
                 padding: 0 20px;
                 margin-top: 30px;
             }
+
             .section-title {
                 font-size: 1.5rem;
                 margin-bottom: 25px;
             }
+
             .articles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
                 gap: 18px;
             }
+
             .article-image {
                 height: 140px;
             }
+
             .article-content {
                 padding: 16px;
             }
+
             .article-title {
                 font-size: 1rem;
             }
+
             .article-excerpt {
                 font-size: 0.9rem;
             }
+
             .article-meta {
                 margin-top: 12px;
                 padding-top: 12px;
                 font-size: 0.8rem;
             }
+
             .article-overlay i {
                 font-size: 1.5rem;
             }
         }
+
         @media (max-width: 480px) {
             .related-section {
                 padding: 0 15px;
             }
+
             .articles-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
+
             .article-image {
                 height: 120px;
             }
+
             .article-category {
                 font-size: 0.8rem;
                 padding: 4px 10px;
             }
+
             .article-category i {
                 font-size: 0.7rem;
             }
+
             .article-content {
                 padding: 14px;
             }
+
             .article-title {
                 font-size: 0.95rem;
                 margin-bottom: 10px;
             }
+
             .article-excerpt {
                 font-size: 0.85rem;
                 -webkit-line-clamp: 2;
             }
+
             .article-meta {
                 margin-top: 10px;
                 padding-top: 10px;
@@ -553,10 +719,12 @@
                 align-items: flex-start;
                 gap: 5px;
             }
+
             .article-overlay i {
                 font-size: 1.2rem;
             }
         }
+
         .qr-dropdown {
             display: none;
             position: absolute;
@@ -564,39 +732,52 @@
             z-index: 100;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(31,38,135,0.15);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             padding: 18px 18px 10px 18px;
             min-width: 140px;
             text-align: center;
             border: 1px solid var(--glass-border);
             animation: fadeIn 0.2s;
         }
+
         .qr-img-box {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .qr-img-box img {
             margin-bottom: 8px;
             border-radius: 8px;
             background: #f8f9fa;
         }
+
         .qr-tip {
             font-size: 0.92rem;
             color: var(--gray);
         }
+
         @media (max-width: 700px) {
             .qr-dropdown {
                 /* 定位由JS动态设置 */
                 transform: none;
             }
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="app-layout">
         <div id="sidebar"></div>
@@ -620,14 +801,14 @@
                 </div>
                 <script>
                     // 确保下拉选择器显示正确的语言
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         const langSelect = document.getElementById('lang-select');
                         if (langSelect && window.languageSwitcher) {
                             langSelect.value = window.languageSwitcher.getCurrentLanguage();
                         }
                     });
                 </script>
-                
+
                 <!-- 添加语言切换器样式 -->
                 <style>
                     .lang-select {
@@ -641,7 +822,7 @@
                         cursor: pointer;
                         outline: none;
                         transition: border 0.2s, color 0.2s, box-shadow 0.2s;
-                        box-shadow: 0 2px 8px rgba(67,97,238,0.10);
+                        box-shadow: 0 2px 8px rgba(67, 97, 238, 0.10);
                         appearance: none;
                         -webkit-appearance: none;
                         -moz-appearance: none;
@@ -651,18 +832,22 @@
                         background-position: right 12px center;
                         background-size: 18px 18px;
                     }
-                    .lang-select:focus, .lang-select:hover {
+
+                    .lang-select:focus,
+                    .lang-select:hover {
                         border: 1.5px solid var(--secondary);
                         color: var(--secondary);
-                        box-shadow: 0 4px 16px rgba(67,97,238,0.18);
+                        box-shadow: 0 4px 16px rgba(67, 97, 238, 0.18);
                         background-color: #f3f6fd;
                     }
+
                     .lang-select option {
                         font-size: 1.05rem;
                         padding: 8px 0;
                         color: var(--primary);
                         background: #fff;
                     }
+
                     @media (prefers-color-scheme: dark) {
                         .lang-select {
                             background: #232946;
@@ -670,18 +855,21 @@
                             border: 1.5px solid #4cc9f0;
                             background-image: url('data:image/svg+xml;utf8,<svg fill="%234cc9f0" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
                         }
-                        .lang-select:focus, .lang-select:hover {
+
+                        .lang-select:focus,
+                        .lang-select:hover {
                             border: 1.5px solid #4895ef;
                             color: #4895ef;
                             background-color: #232946;
                         }
+
                         .lang-select option {
                             background: #232946;
                             color: #4cc9f0;
                         }
                     }
                 </style>
-                
+
                 <button class="btn" id="createPostBtn">
                     <i class="fas fa-plus"></i> Publish Article
                 </button>
@@ -700,10 +888,15 @@
                 </div>
                 <div class="grok-info">
                     <h1 data-i18n="grok.title">Grok</h1>
-                    <p data-i18n="grok.description">Grok is the cutting-edge AI model developed by the XAI team, featuring advanced natural language understanding, conversational generation, knowledge reasoning, and content creation capabilities. Grok is dedicated to delivering a smarter, more engaging, and innovative AI experience for users.</p>
+                    <p data-i18n="grok.description">Grok is the cutting-edge AI model developed by the XAI team,
+                        featuring advanced natural language understanding, conversational generation, knowledge
+                        reasoning, and content creation capabilities. Grok is dedicated to delivering a smarter, more
+                        engaging, and innovative AI experience for users.</p>
                     <div class="grok-btns">
-                        <a href="https://grok.com/" target="_blank" class="btn grok-btn" data-i18n="grok.visit">Visit Official Site</a>
-                        <a href="https://grok.com/" target="_blank" class="btn grok-btn-outline" id="grokQrBtn" data-i18n="grok.mobile">Try Grok Online</a>
+                        <a href="https://grok.com/" target="_blank" class="btn grok-btn" data-i18n="grok.visit">Visit
+                            Official Site</a>
+                        <a href="https://grok.com/" target="_blank" class="btn grok-btn-outline" id="grokQrBtn"
+                            data-i18n="grok.mobile">Try Grok Online</a>
                         <div class="qr-dropdown" id="grokQrDropdown">
                             <div class="qr-img-box">
                                 <div id="grokQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
@@ -716,36 +909,48 @@
             <!-- Main Content Section -->
             <section class="main-section">
                 <h2><i class="fas fa-robot"></i> About Grok</h2>
-                <p>Grok is an AI model developed by XAI (Elon Musk's AI company), designed for understanding complex problems, generating high-quality content, and intelligent conversation. Grok not only handles multi-turn conversations but also performs knowledge reasoning, fact retrieval, code generation, and more. It is widely used in content creation, intelligent assistants, education, research, and other fields.</p>
-                <p style="color:var(--gray);font-size:0.98rem;">Core capabilities include: natural language understanding, multi-turn conversation, knowledge reasoning, content generation, code assistance, and more.</p>
+                <p>Grok is an AI model developed by XAI (Elon Musk's AI company), designed for understanding complex
+                    problems, generating high-quality content, and intelligent conversation. Grok not only handles
+                    multi-turn conversations but also performs knowledge reasoning, fact retrieval, code generation, and
+                    more. It is widely used in content creation, intelligent assistants, education, research, and other
+                    fields.</p>
+                <p style="color:var(--gray);font-size:0.98rem;">Core capabilities include: natural language
+                    understanding, multi-turn conversation, knowledge reasoning, content generation, code assistance,
+                    and more.</p>
                 <h2><i class="fas fa-star"></i> Key Features</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-brain" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>Natural Language Understanding: Accurately understands user intent and supports intelligent responses in complex contexts.</span>
+                        <span>Natural Language Understanding: Accurately understands user intent and supports
+                            intelligent responses in complex contexts.</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-comments" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>Multi-turn Conversation: Maintains context memory for smooth and natural ongoing conversations.</span>
+                        <span>Multi-turn Conversation: Maintains context memory for smooth and natural ongoing
+                            conversations.</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-lightbulb" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>Knowledge Reasoning: Integrates real-time information and knowledge bases to provide authoritative and accurate answers.</span>
+                        <span>Knowledge Reasoning: Integrates real-time information and knowledge bases to provide
+                            authoritative and accurate answers.</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-pen-nib" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>Content Generation: One-click generation of high-quality text, code, and creative content to boost productivity.</span>
+                        <span>Content Generation: One-click generation of high-quality text, code, and creative content
+                            to boost productivity.</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-cogs" style="color: var(--success); margin-right: 12px;"></i>
-                        <span>Multi-scenario Application: Suitable for education, research, office, entertainment, and more.</span>
+                        <span>Multi-scenario Application: Suitable for education, research, office, entertainment, and
+                            more.</span>
                     </li>
                 </ul>
                 <h2><i class="fas fa-rocket"></i> Technical Advantages</h2>
                 <ul style="list-style: none; padding: 0; margin: 20px 0;">
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-microchip" style="color: var(--accent); margin-right: 12px;"></i>
-                        <span>Based on the latest AI model architecture, supporting high concurrency and low-latency intelligent services.</span>
+                        <span>Based on the latest AI model architecture, supporting high concurrency and low-latency
+                            intelligent services.</span>
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-user-shield" style="color: var(--accent); margin-right: 12px;"></i>
@@ -753,28 +958,35 @@
                     </li>
                     <li style="padding: 8px 0; display: flex; align-items: center;">
                         <i class="fas fa-cogs" style="color: var(--accent); margin-right: 12px;"></i>
-                        <span>Multimodal capabilities: Supports processing of text, code, images, and more data types.</span>
+                        <span>Multimodal capabilities: Supports processing of text, code, images, and more data
+                            types.</span>
                     </li>
                 </ul>
                 <h2><i class="fas fa-link"></i> Official Website</h2>
-                <p><strong>Official Website:</strong> <a href="https://grok.com/" target="_blank" style="color: var(--primary); text-decoration: none;">https://grok.com/</a></p>
+                <p><strong>Official Website:</strong> <a href="https://grok.com/" target="_blank"
+                        style="color: var(--primary); text-decoration: none;">https://grok.com/</a></p>
                 <p>Visit the Grok official website to experience the most advanced AI model capabilities.</p>
                 <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions (FAQ)</h2>
                 <div style="margin: 20px 0;">
                     <h3 style="color: var(--primary); margin-bottom: 10px;">What AI capabilities does Grok support?</h3>
-                    <p>Grok supports natural language understanding, multi-turn conversation, knowledge reasoning, content generation, code assistance, and more, suitable for various application scenarios.</p>
+                    <p>Grok supports natural language understanding, multi-turn conversation, knowledge reasoning,
+                        content generation, code assistance, and more, suitable for various application scenarios.</p>
                 </div>
                 <div style="margin: 20px 0;">
                     <h3 style="color: var(--primary); margin-bottom: 10px;">Who is Grok suitable for?</h3>
-                    <p>Grok is suitable for content creators, developers, enterprise users, educators, researchers, and anyone who needs an AI assistant or content generation.</p>
+                    <p>Grok is suitable for content creators, developers, enterprise users, educators, researchers, and
+                        anyone who needs an AI assistant or content generation.</p>
                 </div>
                 <div style="margin: 20px 0;">
                     <h3 style="color: var(--primary); margin-bottom: 10px;">Is Grok free?</h3>
-                    <p>Grok offers some free features, while advanced capabilities and enterprise services require a paid subscription. Please refer to the official website for details.</p>
+                    <p>Grok offers some free features, while advanced capabilities and enterprise services require a
+                        paid subscription. Please refer to the official website for details.</p>
                 </div>
                 <div style="margin: 20px 0;">
-                    <h3 style="color: var(--primary); margin-bottom: 10px;">How is Grok different from other AI models?</h3>
-                    <p>Grok, developed by the XAI team, emphasizes real-time information integration, a humorous style, and innovative capabilities, making it ideal for users seeking efficiency and creativity.</p>
+                    <h3 style="color: var(--primary); margin-bottom: 10px;">How is Grok different from other AI models?
+                    </h3>
+                    <p>Grok, developed by the XAI team, emphasizes real-time information integration, a humorous style,
+                        and innovative capabilities, making it ideal for users seeking efficiency and creativity.</p>
                 </div>
             </section>
             <!-- Related Articles Section -->
@@ -785,58 +997,58 @@
         </main>
     </div>
     <script>
-    // Related articles section logic reused from higgsfield.html
-    const homepageCards = [
-      {
-        title: "MidJourney V6 Review: A New Height of Creativity",
-        category: "AI Image Tools",
-        bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-        excerpt: "Explore the powerful features of the latest MidJourney version, see how it transforms digital art creation, and learn how to use prompt engineering for the best results.",
-        icon: "fas fa-paint-brush"
-      },
-      {
-        title: "Runway Gen-2: The Revolution from Text to Video",
-        category: "AI Video Tools",
-        bg: "linear-gradient(135deg, #f72585, #b5179e)",
-        excerpt: "In-depth analysis of Runway Gen-2's core technology, showing how to generate high-quality video content from simple text prompts and its prospects in the film industry.",
-        icon: "fas fa-film"
-      },
-      {
-        title: "DALL·E 3 vs Adobe Firefly: A Comparative Review",
-        category: "AI Image Tools",
-        bg: "linear-gradient(135deg, #7209b7, #560bad)",
-        excerpt: "A head-to-head comparison of two AI image generation giants: Who excels in creative control? Which is better for professional designers? This article compares features, quality, and use cases.",
-        icon: "fas fa-magic"
-      },
-      {
-        title: "Pika Labs: A New Choice for Text-to-Video Generation",
-        category: "AI Video Tools",
-        bg: "linear-gradient(135deg, #3a0ca3, #4361ee)",
-        excerpt: "Pika Labs stands out in the AI video generation field with its unique technical approach. This article tests its generation quality, style control, and practical application effects in detail.",
-        icon: "fas fa-video"
-      },
-      {
-        title: "Stable Diffusion XL: The New Standard for Image Generation",
-        category: "AI Image Tools",
-        bg: "linear-gradient(135deg, #06ffa5, #00d4ff)",
-        excerpt: "Stable Diffusion XL brings unprecedented image quality and detail. This article deeply analyzes its technical breakthroughs and practical application results.",
-        icon: "fas fa-image"
-      },
-      {
-        title: "Sora: OpenAI's Video Generation Revolution",
-        category: "AI Video Tools",
-        bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
-        excerpt: "OpenAI's Sora model redefines the possibilities of AI video generation. Explore its technical principles and future development directions.",
-        icon: "fas fa-rocket"
-      }
-    ];
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-    function renderRelated() {
-      const cards = shuffle(homepageCards).slice(0, 3);
-      const container = document.querySelector('.articles-grid');
-      container.innerHTML = cards.map((card, index) => `
+        // Related articles section logic reused from higgsfield.html
+        const homepageCards = [
+            {
+                title: "MidJourney V6 Review: A New Height of Creativity",
+                category: "AI Image Tools",
+                bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
+                excerpt: "Explore the powerful features of the latest MidJourney version, see how it transforms digital art creation, and learn how to use prompt engineering for the best results.",
+                icon: "fas fa-paint-brush"
+            },
+            {
+                title: "Runway Gen-2: The Revolution from Text to Video",
+                category: "AI Video Tools",
+                bg: "linear-gradient(135deg, #f72585, #b5179e)",
+                excerpt: "In-depth analysis of Runway Gen-2's core technology, showing how to generate high-quality video content from simple text prompts and its prospects in the film industry.",
+                icon: "fas fa-film"
+            },
+            {
+                title: "DALL·E 3 vs Adobe Firefly: A Comparative Review",
+                category: "AI Image Tools",
+                bg: "linear-gradient(135deg, #7209b7, #560bad)",
+                excerpt: "A head-to-head comparison of two AI image generation giants: Who excels in creative control? Which is better for professional designers? This article compares features, quality, and use cases.",
+                icon: "fas fa-magic"
+            },
+            {
+                title: "Pika Labs: A New Choice for Text-to-Video Generation",
+                category: "AI Video Tools",
+                bg: "linear-gradient(135deg, #3a0ca3, #4361ee)",
+                excerpt: "Pika Labs stands out in the AI video generation field with its unique technical approach. This article tests its generation quality, style control, and practical application effects in detail.",
+                icon: "fas fa-video"
+            },
+            {
+                title: "Stable Diffusion XL: The New Standard for Image Generation",
+                category: "AI Image Tools",
+                bg: "linear-gradient(135deg, #06ffa5, #00d4ff)",
+                excerpt: "Stable Diffusion XL brings unprecedented image quality and detail. This article deeply analyzes its technical breakthroughs and practical application results.",
+                icon: "fas fa-image"
+            },
+            {
+                title: "Sora: OpenAI's Video Generation Revolution",
+                category: "AI Video Tools",
+                bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
+                excerpt: "OpenAI's Sora model redefines the possibilities of AI video generation. Explore its technical principles and future development directions.",
+                icon: "fas fa-rocket"
+            }
+        ];
+        function shuffle(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+        function renderRelated() {
+            const cards = shuffle(homepageCards).slice(0, 3);
+            const container = document.querySelector('.articles-grid');
+            container.innerHTML = cards.map((card, index) => `
         <article class="article-card" style="animation-delay: ${index * 0.1}s;">
           <div class="article-image" style="background: ${card.bg};">
             <div class="article-category">
@@ -863,86 +1075,87 @@
           </div>
         </article>
       `).join('');
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      renderRelated();
-    });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            renderRelated();
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
-fetch('sidebar.html')
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById('sidebar').outerHTML = html;
-    if (window.i18n) {
-      window.i18n.updateSidebarTranslations();
-    }
-  });
-</script>
-<script>
-// Grok QR code popup interaction
-(function(){
-    var btn = document.getElementById('grokQrBtn');
-    var dropdown = document.getElementById('grokQrDropdown');
-    var qrBox = document.getElementById('grokQrBox');
-    var qrCreated = false;
-    function createQr() {
-        if (!qrCreated) {
-            new QRCode(qrBox, {
-                text: 'https://grok.com/',
-                width: 120,
-                height: 120,
-                colorDark: '#212529',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar').outerHTML = html;
+                if (window.i18n) {
+                    window.i18n.updateSidebarTranslations();
+                }
             });
-            qrCreated = true;
-        }
-    }
-    function showDropdown() {
-        createQr();
-        // Position QR code popup
-        var btnRect = btn.getBoundingClientRect();
-        var parentRect = btn.parentElement.getBoundingClientRect();
-        dropdown.style.position = 'absolute';
-        dropdown.style.left = (btnRect.left - parentRect.left + btnRect.width/2 - dropdown.offsetWidth/2) + 'px';
-        dropdown.style.top = (btnRect.bottom - parentRect.top + 8) + 'px';
-        dropdown.style.display = 'block';
-    }
-    function hideDropdown() {
-        dropdown.style.display = 'none';
-    }
-    var isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
-    if (isMobile) {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            if (dropdown.style.display === 'block') {
-                hideDropdown();
+    </script>
+    <script>
+        // Grok QR code popup interaction
+        (function () {
+            var btn = document.getElementById('grokQrBtn');
+            var dropdown = document.getElementById('grokQrDropdown');
+            var qrBox = document.getElementById('grokQrBox');
+            var qrCreated = false;
+            function createQr() {
+                if (!qrCreated) {
+                    new QRCode(qrBox, {
+                        text: 'https://grok.com/',
+                        width: 120,
+                        height: 120,
+                        colorDark: '#212529',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrCreated = true;
+                }
+            }
+            function showDropdown() {
+                createQr();
+                // Position QR code popup
+                var btnRect = btn.getBoundingClientRect();
+                var parentRect = btn.parentElement.getBoundingClientRect();
+                dropdown.style.position = 'absolute';
+                dropdown.style.left = (btnRect.left - parentRect.left + btnRect.width / 2 - dropdown.offsetWidth / 2) + 'px';
+                dropdown.style.top = (btnRect.bottom - parentRect.top + 8) + 'px';
+                dropdown.style.display = 'block';
+            }
+            function hideDropdown() {
+                dropdown.style.display = 'none';
+            }
+            var isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+            if (isMobile) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (dropdown.style.display === 'block') {
+                        hideDropdown();
+                    } else {
+                        showDropdown();
+                    }
+                });
+                document.addEventListener('click', function (e) {
+                    if (!dropdown.contains(e.target) && e.target !== btn) {
+                        hideDropdown();
+                    }
+                });
             } else {
-                showDropdown();
+                btn.addEventListener('mouseenter', function () {
+                    showDropdown();
+                });
+                btn.addEventListener('mouseleave', function () {
+                    setTimeout(function () { hideDropdown(); }, 100);
+                });
+                dropdown.addEventListener('mouseenter', function () {
+                    showDropdown();
+                });
+                dropdown.addEventListener('mouseleave', function () {
+                    hideDropdown();
+                });
             }
-        });
-        document.addEventListener('click', function(e) {
-            if (!dropdown.contains(e.target) && e.target !== btn) {
-                hideDropdown();
-            }
-        });
-    } else {
-        btn.addEventListener('mouseenter', function() {
-            showDropdown();
-        });
-        btn.addEventListener('mouseleave', function() {
-            setTimeout(function(){ hideDropdown(); }, 100);
-        });
-        dropdown.addEventListener('mouseenter', function() {
-            showDropdown();
-        });
-        dropdown.addEventListener('mouseleave', function() {
-            hideDropdown();
-        });
-    }
-})();
-</script>
+        })();
+    </script>
 </body>
-</html> 
+
+</html>
