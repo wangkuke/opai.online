@@ -18,6 +18,17 @@
     <!-- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> -->
     <!-- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-62035219DR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-62035219DR');
+    </script>
+    
     <style>
         /* 复制自greenvideo.html的全部样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -568,8 +579,8 @@
                     <img src="src/savetube.png" alt="SaveTube - 免费视频下载工具" />
                 </div>
                 <div class="jimengai-info">
-                    <h1 data-i18n="savetube.title">SaveTube 视频下载</h1>
-                    <p data-i18n="savetube.description">SaveTube是一款支持YouTube、Instagram、Twitter等多平台的免费视频下载工具，支持YouTube Shorts、MP3、4K下载，完全免费，无广告，无水印。</p>
+                    <h1 data-i18n="savetube.title">SaveTube 视频下载器</h1>
+                    <p data-i18n="savetube.description">SaveTube是一款支持YouTube、Instagram、Twitter等多平台的免费视频下载工具，国内用户需要梯子访问</p>
                     <div class="jimengai-btns">
                         <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn" data-i18n="savetube.visit">访问官网</a>
                         <a href="https://yt.savetube.me/" target="_blank" class="btn jimeng-btn-outline" id="mobileViewBtn" data-i18n="savetube.mobile">手机版</a>
@@ -622,6 +633,7 @@
                 </ul>
                 <h2 data-i18n="savetube.section.link"><i class="fas fa-link"></i> 官方网站访问</h2>
                 <p><strong data-i18n="savetube.link.label">官方网站：</strong> <a href="https://yt.savetube.me/" target="_blank" style="color: var(--primary); text-decoration: none;">https://yt.savetube.me/</a></p>
+                <p><strong data-i18n="qingyunti.link.label">安全梯子：</strong> <a href="https://ivt01.qytaff.cc/register?aff=8H8Ohx1c" target="_blank" style="color: var(--primary); text-decoration: none;">https://ivt01.qytaff.cc/register?aff=8H8Ohx1c</a></p>
                 <p data-i18n="savetube.link.desc">访问SaveTube官网，体验极速、免费的多平台视频下载服务。</p>
                 <h2 data-i18n="savetube.section.usage"><i class="fas fa-rocket"></i> SaveTube 使用方法</h2>
                 <ol style="margin: 20px 0 20px 20px;">
@@ -650,144 +662,173 @@
             <!-- 相关推荐区域 -->
             <section class="related-section">
                 <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关视频工具</h2>
-                <div class="articles-grid"></div>
+                <div class="articles-grid" id="video-download-grid">
+                    <!-- 这里将通过JavaScript动态加载主页的Video Download区域内容 -->
+                </div>
             </section>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
         <script>
-        // 相关工具卡片数据可复用greenvideo.html逻辑
-        const homepageCards = [
-          {
-            title: "YouTube视频下载器 - 免费无水印下载工具",
-            category: "视频下载工具",
-            bg: "linear-gradient(135deg, #ff0000, #cc0000)",
-            excerpt: "专业的YouTube视频下载工具，支持高清视频下载，无水印，快速安全。支持多种格式和质量选择。",
-            icon: "fas fa-youtube"
-          },
-          {
-            title: "B站视频下载器 - 哔哩哔哩视频下载",
-            category: "视频下载工具",
-            bg: "linear-gradient(135deg, #00a1d6, #0080ff)",
-            excerpt: "专为B站用户设计的视频下载工具，支持高清视频下载，批量下载功能，简单易用。",
-            icon: "fas fa-play-circle"
-          },
-          {
-            title: "抖音视频下载器 - 无水印视频下载",
-            category: "视频下载工具",
-            bg: "linear-gradient(135deg, #000000, #333333)",
-            excerpt: "抖音视频专用下载工具，支持无水印下载，高清画质，快速下载，安全可靠。",
-            icon: "fas fa-music"
-          }
-        ];
-        function shuffle(arr) {
-          return arr.sort(() => Math.random() - 0.5);
-        }
-        function renderRelated() {
-          const cards = shuffle(homepageCards).slice(0, 3);
-          const container = document.querySelector('.related-section .articles-grid');
-          container.style.opacity = '0';
-          container.style.transform = 'translateY(20px)';
-          container.innerHTML = cards.map((card, index) => `
-            <article class="article-card" style="animation-delay: ${index * 0.1}s;">
-              <div class="article-image" style="background: ${card.bg};">
-                <div class="article-category">
-                  <i class="${card.icon}"></i>
-                  ${card.category}
-                </div>
-                <div class="article-overlay">
-                  <i class="fas fa-arrow-right"></i>
-                </div>
-              </div>
-              <div class="article-content">
-                <h3 class="article-title">${card.title}</h3>
-                <p class="article-excerpt">${card.excerpt}</p>
-                <div class="article-meta">
-                  <span class="read-time">
-                    <i class="fas fa-clock"></i>
-                    5分钟阅读
-                  </span>
-                  <span class="article-date">
-                    <i class="fas fa-calendar"></i>
-                    2024
-                  </span>
-                </div>
-              </div>
-            </article>
-          `).join('');
-          setTimeout(() => {
-            container.style.transition = 'all 0.6s ease';
-            container.style.opacity = '1';
-            container.style.transform = 'translateY(0)';
-          }, 100);
-          const articleCards = container.querySelectorAll('.article-card');
-          articleCards.forEach(card => {
-            card.addEventListener('click', function() {
-              this.style.transform = 'scale(0.95)';
-              setTimeout(() => {
-                this.style.transform = 'scale(1)';
-              }, 150);
-            });
-          });
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-          renderRelated();
-          const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-          };
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-              }
-            });
-          }, observerOptions);
-          document.querySelectorAll('.article-card').forEach(card => {
-            observer.observe(card);
-          });
-        });
-        // 二维码弹窗逻辑
-        const mobileBtn = document.getElementById('mobileViewBtn');
-        const qrPopup = document.getElementById('qrcode-popup');
-        let qrCreated = false;
-        mobileBtn.addEventListener('mouseenter', function(e) {
-          if (!qrCreated) {
-            qrPopup.innerHTML = '';
-            new QRCode(qrPopup, {
-              text: 'https://yt.savetube.me/',
-              width: 120,
-              height: 120,
-              colorDark: '#222',
-              colorLight: '#fff',
-              correctLevel: QRCode.CorrectLevel.H
-            });
-            qrCreated = true;
-          }
-          const btnRect = this.getBoundingClientRect();
-          const containerRect = this.parentElement.getBoundingClientRect();
-          qrPopup.style.position = 'absolute';
-          qrPopup.style.left = (btnRect.left - containerRect.left) + 'px';
-          qrPopup.style.top = (btnRect.bottom - containerRect.top + 10) + 'px';
-          qrPopup.style.display = 'block';
-        });
-        mobileBtn.addEventListener('mouseleave', function() {
-          qrPopup.style.display = 'none';
-        });
-        qrPopup.addEventListener('mouseenter', function() {
-          qrPopup.style.display = 'block';
-        });
-        qrPopup.addEventListener('mouseleave', function() {
-          qrPopup.style.display = 'none';
-        });
-        fetch('sidebar.html')
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById('sidebar').outerHTML = html;
-            if (window.i18n) {
-              window.i18n.updateSidebarTranslations();
+        // 加载主页的Video Download区域内容
+        async function loadVideoDownloadSection() {
+            try {
+                const response = await fetch('index.html');
+                const html = await response.text();
+                
+                // 创建临时DOM元素来解析HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // 查找Video Download区域
+                const videoDownloadSection = doc.querySelector('#video-download-section');
+                if (videoDownloadSection) {
+                    const articlesGrid = videoDownloadSection.nextElementSibling;
+                    if (articlesGrid && articlesGrid.classList.contains('articles-grid')) {
+                        const targetGrid = document.getElementById('video-download-grid');
+                        
+                        // 复制所有文章卡片，但排除当前页面（SaveTube）
+                        const articles = articlesGrid.querySelectorAll('.article-card');
+                        articles.forEach(article => {
+                            // 检查是否是SaveTube卡片，如果是则跳过
+                            const title = article.querySelector('.card-title');
+                            if (title && title.textContent.includes('SaveTube')) {
+                                return; // 跳过SaveTube卡片
+                            }
+                            
+                            // 克隆卡片并添加到目标区域
+                            const clonedArticle = article.cloneNode(true);
+                            
+                            // 添加动画效果
+                            clonedArticle.style.opacity = '0';
+                            clonedArticle.style.transform = 'translateY(20px)';
+                            clonedArticle.style.transition = 'all 0.6s ease';
+                            
+                            targetGrid.appendChild(clonedArticle);
+                            
+                            // 延迟显示动画
+                            setTimeout(() => {
+                                clonedArticle.style.opacity = '1';
+                                clonedArticle.style.transform = 'translateY(0)';
+                            }, 100);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('加载Video Download区域失败:', error);
+                // 如果加载失败，显示备用内容
+                renderFallbackContent();
             }
-          });
+        }
+        
+        // 备用内容渲染函数
+        function renderFallbackContent() {
+            const container = document.getElementById('video-download-grid');
+            const fallbackCards = [
+                {
+                    title: "GreenVideo Video Download",
+                    description: "Free download of YouTube, Bilibili, Douyin videos",
+                    bg: "linear-gradient(135deg, #4895ef, #4cc9f0)",
+                    icon: "fas fa-download",
+                    url: "greenvideo.html"
+                },
+                {
+                    title: "TiQu.cc",
+                    description: "Free video download tool, supports TikTok, Facebook, Twitter, etc.",
+                    bg: "linear-gradient(135deg, #b5179e, #f72585)",
+                    icon: "fas fa-download",
+                    url: "tiqu.html"
+                },
+                {
+                    title: "Savefrom",
+                    description: "YouTube to MP4 Converter",
+                    bg: "linear-gradient(135deg, #ff0000, #4361ee)",
+                    icon: "fas fa-download",
+                    url: "savefrom.html"
+                }
+            ];
+            
+            container.innerHTML = fallbackCards.map((card, index) => `
+                <article class="article-card" style="animation-delay: ${index * 0.1}s;" onclick="window.location.href='${card.url}'">
+                    <div class="article-image" style="background: ${card.bg};">
+                        <div class="article-category">
+                            <i class="${card.icon}"></i>
+                            视频下载工具
+                        </div>
+                        <div class="article-overlay">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">${card.title}</h3>
+                        <p class="article-excerpt">${card.description}</p>
+                        <div class="article-meta">
+                            <span class="read-time">
+                                <i class="fas fa-clock"></i>
+                                5分钟阅读
+                            </span>
+                            <span class="article-date">
+                                <i class="fas fa-calendar"></i>
+                                2024
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载Video Download区域
+            loadVideoDownloadSection();
+            
+            // 二维码弹窗逻辑
+            const mobileBtn = document.getElementById('mobileViewBtn');
+            const qrPopup = document.getElementById('qrcode-popup');
+            let qrCreated = false;
+            
+            mobileBtn.addEventListener('mouseenter', function(e) {
+                if (!qrCreated) {
+                    qrPopup.innerHTML = '';
+                    new QRCode(qrPopup, {
+                        text: 'https://yt.savetube.me/',
+                        width: 120,
+                        height: 120,
+                        colorDark: '#222',
+                        colorLight: '#fff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrCreated = true;
+                }
+                const btnRect = this.getBoundingClientRect();
+                const containerRect = this.parentElement.getBoundingClientRect();
+                qrPopup.style.position = 'absolute';
+                qrPopup.style.left = (btnRect.left - containerRect.left) + 'px';
+                qrPopup.style.top = (btnRect.bottom - containerRect.top + 10) + 'px';
+                qrPopup.style.display = 'block';
+            });
+            
+            mobileBtn.addEventListener('mouseleave', function() {
+                qrPopup.style.display = 'none';
+            });
+            
+            qrPopup.addEventListener('mouseenter', function() {
+                qrPopup.style.display = 'block';
+            });
+            
+            qrPopup.addEventListener('mouseleave', function() {
+                qrPopup.style.display = 'none';
+            });
+            
+            // 加载侧边栏
+            fetch('sidebar.html')
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('sidebar').outerHTML = html;
+                    if (window.i18n) {
+                        window.i18n.updateSidebarTranslations();
+                    }
+                });
+        });
     </script>
     </div>
 </body>

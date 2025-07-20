@@ -499,8 +499,19 @@
     <!-- Scripts -->
     <script src="blog-models.js"></script>
     <script src="blog-storage.js"></script>
-    <script src="blog-storage-manager.js"></script>    <scrip
-t>
+    <script src="blog-storage-manager.js"></script>
+    
+    <script>
+        // 立即执行的调试代码
+        console.log('=== 页面脚本开始执行 ===');
+        console.log('当前 URL:', window.location.href);
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
+        console.log('URL 参数中的 editId:', editId);
+        console.log('=== 页面脚本执行完毕 ===');
+    </script>
+    
+    <script>
         /**
          * 文章发布表单处理器
          */
@@ -527,17 +538,22 @@ t>
                 this.setupEventListeners();
                 this.setupRichTextEditor();
                 this.setupCharacterCounter();
-                this.setupPlaceholder();
                 
-                // 检查是否为编辑模式
+                // 先检查是否为编辑模式
                 await this.checkEditMode();
+                
+                // 在编辑模式检查完成后再设置占位符
+                this.setupPlaceholder();
             }
 
             async checkEditMode() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const editId = urlParams.get('edit');
                 
+                console.log('检查编辑模式, editId:', editId);
+                
                 if (editId) {
+                    console.log('进入编辑模式, 文章ID:', editId);
                     this.isEditMode = true;
                     this.editingArticleId = editId;
                     await this.loadArticleForEdit(editId);
@@ -546,26 +562,57 @@ t>
 
             async loadArticleForEdit(articleId) {
                 try {
+                    console.log('开始加载文章进行编辑, ID:', articleId);
+                    
                     // 等待存储准备就绪
                     const storage = window.blogStorageManager || window.blogStorage;
-                    await storage.waitForReady();
+                    console.log('存储对象:', storage);
                     
-                    // 加载文章
+                    if (!storage) {
+                        throw new Error('存储系统未初始化');
+                    }
+                    
+                    // 直接调用存储的 getArticle 方法，不使用 waitForReady
+                    console.log('直接调用 getArticle 方法');
                     this.originalArticle = await storage.getArticle(articleId);
+                    console.log('加载的文章:', this.originalArticle);
                     
                     if (!this.originalArticle) {
+                        console.error('文章未找到, ID:', articleId);
+                        
+                        // 调试：检查所有存储的文章
+                        const allArticles = storage.getArticles({});
+                        console.log('所有存储的文章:', allArticles);
+                        console.log('存储的文章ID列表:', allArticles.map(a => a.id));
+                        
                         alert('文章未找到！');
                         window.location.href = 'blog-admin.html';
                         return;
                     }
                     
+                    // 详细检查文章内容
+                    console.log('=== 文章内容详细检查 ===');
+                    console.log('文章ID:', this.originalArticle.id);
+                    console.log('文章标题:', this.originalArticle.title);
+                    console.log('文章内容类型:', typeof this.originalArticle.content);
+                    console.log('文章内容长度:', this.originalArticle.content ? this.originalArticle.content.length : 0);
+                    console.log('文章内容是否为空:', !this.originalArticle.content || this.originalArticle.content.trim() === '');
+                    console.log('文章内容前100个字符:', this.originalArticle.content ? this.originalArticle.content.substring(0, 100) : 'N/A');
+                    console.log('文章分类:', this.originalArticle.category);
+                    console.log('文章标签:', this.originalArticle.tags);
+                    console.log('文章状态:', this.originalArticle.status);
+                    console.log('=== 文章内容检查完成 ===');
+                    
                     // 用文章数据填充表单
+                    console.log('开始填充表单');
                     this.populateForm();
                     
                     // 更新页面标题和按钮文本
                     document.title = '编辑文章 - OPAI';
                     document.querySelector('h1').textContent = '编辑文章';
                     this.publishBtn.innerHTML = '<i class="fas fa-save"></i><span>更新文章</span>';
+                    
+                    console.log('编辑模式设置完成');
                     
                 } catch (error) {
                     console.error('加载编辑文章时出错:', error);
@@ -577,17 +624,35 @@ t>
             populateForm() {
                 if (!this.originalArticle) return;
                 
+                console.log('开始填充表单...');
+                console.log('文章标题:', this.originalArticle.title);
+                console.log('文章内容:', this.originalArticle.content);
+                console.log('文章分类:', this.originalArticle.category);
+                console.log('文章标签:', this.originalArticle.tags);
+                
                 // 填充表单字段
-                this.titleInput.value = this.originalArticle.title;
-                this.categorySelect.value = this.originalArticle.category;
-                this.tagsInput.value = this.originalArticle.tags.join(', ');
-                this.contentEditor.innerHTML = this.originalArticle.content;
+                this.titleInput.value = this.originalArticle.title || '';
+                this.categorySelect.value = this.originalArticle.category || 'General';
+                this.tagsInput.value = (this.originalArticle.tags && Array.isArray(this.originalArticle.tags)) 
+                    ? this.originalArticle.tags.join(', ') 
+                    : '';
+                
+                // 确保内容正确加载
+                if (this.originalArticle.content && this.originalArticle.content.trim() !== '') {
+                    console.log('设置文章内容到编辑器');
+                    this.contentEditor.innerHTML = this.originalArticle.content;
+                } else {
+                    console.log('文章内容为空，清空编辑器');
+                    this.contentEditor.innerHTML = '';
+                }
                 
                 // 更新字符计数器
                 const titleCounter = document.getElementById('title-counter');
                 if (titleCounter) {
                     titleCounter.textContent = `${this.titleInput.value.length}/200`;
                 }
+                
+                console.log('表单填充完成');
             }
 
             setupEventListeners() {
@@ -825,19 +890,21 @@ t>
                 const placeholder = this.contentEditor.dataset.placeholder;
                 
                 this.contentEditor.addEventListener('focus', () => {
-                    if (this.contentEditor.textContent.trim() === '') {
+                    // 在编辑模式下不显示占位符
+                    if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
                         this.contentEditor.innerHTML = '';
                     }
                 });
 
                 this.contentEditor.addEventListener('blur', () => {
-                    if (this.contentEditor.textContent.trim() === '') {
+                    // 在编辑模式下不显示占位符
+                    if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
                         this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
                     }
                 });
 
-                // 设置初始占位符
-                if (this.contentEditor.textContent.trim() === '') {
+                // 设置初始占位符 - 只在非编辑模式下显示
+                if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
                     this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
                 }
             }
@@ -1054,7 +1121,18 @@ t>
         }
 
         // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 立即检查 URL 参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get('edit');
+            console.log('页面加载时检查 URL 参数, editId:', editId);
+            console.log('完整 URL:', window.location.href);
+            
+            // 等待存储系统初始化
+            if (window.blogStorageManager) {
+                await window.blogStorageManager.initialize();
+            }
+            
             setTimeout(() => {
                 new ArticlePublisher();
                 console.log('文章发布器已初始化');
