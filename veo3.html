@@ -1,0 +1,654 @@
+<!--  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEO3 - AI Video Generation Platform | VEO3 Official & Features</title>
+    <meta name="description" content="VEO3 is the leading AI video generation platform by Google DeepMind. Discover VEO3's advanced features, text-to-video technology, and professional video creation tools. Try VEO3 for high-quality, creative video production.">
+    <meta name="keywords" content="VEO3, VEO3 AI, AI video generation, VEO3 platform, VEO3 features, text to video, Google DeepMind, AI video tools, VEO3 official, VEO3 video creation">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deepmind.google/technologies/veo/">
+    <meta property="og:title" content="VEO3 - AI Video Generation Platform | VEO3 Official" />
+    <meta property="og:description" content="VEO3 is the leading AI video generation platform. Discover VEO3's features and create professional videos with AI." />
+    <meta property="og:image" content="src/veo3logo.png">
+    <meta property="og:site_name" content="VEO3">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://deepmind.google/technologies/veo/">
+    <meta property="twitter:title" content="VEO3 - AI Video Generation Platform | VEO3 Official" />
+    <meta property="twitter:description" content="VEO3 is the leading AI video generation platform. Discover VEO3's features and create professional videos with AI." />
+    <meta property="twitter:image" content="src/veo3logo.png">
+    <link rel="canonical" href="https://deepmind.google/technologies/veo/">
+    <link rel="icon" type="image/x-icon" href="src/veo3logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
+    <script src="language-switcher.js"></script>
+    <!-- <script src="sidebar-loader.js"></script> -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Veo3",
+      "url": "https://deepmind.google/technologies/veo/",
+      "description": "Veo3 is Google's advanced AI video generation platform that creates high-quality videos from text prompts with cutting-edge AI technology.",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Google DeepMind",
+        "url": "https://deepmind.google/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "src/veo3logo.png"
+        }
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Veo3 AI Features",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "High-Quality Video Generation", "description": "Professional-grade video output powered by Veo3 AI."},
+          {"@type": "ListItem", "position": 2, "name": "Text-to-Video Creation", "description": "Advanced text prompt to video conversion by Veo3."},
+          {"@type": "ListItem", "position": 3, "name": "AI-Powered Editing", "description": "Intelligent video editing and enhancement with Veo3."},
+          {"@type": "ListItem", "position": 4, "name": "Multiple Formats", "description": "Various video formats and resolutions supported by Veo3."}
+        ]
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": "2024-12-01"
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+
+
+
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: var(--secondary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245, 247, 251, 0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .veo3-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .veo3-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(67, 97, 238, 0.10);
+            background: #eee;
+        }
+
+        .veo3-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .veo3-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+
+        .veo3-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+
+        .veo3-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
+        }
+
+        .veo3-btn:hover {
+            background: var(--secondary);
+        }
+
+        .veo3-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .veo3-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        @media (max-width: 992px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "header" "content";
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-section {
+                padding: 18px 6px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .veo3-card {
+                flex-direction: column;
+                padding: 18px 8px;
+                gap: 18px;
+            }
+
+            .veo3-img img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Language switcher styles */
+        .lang-select {
+            border: 1.5px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 22px;
+            padding: 7px 36px 7px 16px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: border 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.10);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%234361ee" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px 18px;
+        }
+
+        .lang-select:focus,
+        .lang-select:hover {
+            border: 1.5px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 4px 16px rgba(67, 97, 238, 0.18);
+            background-color: #f3f6fd;
+        }
+
+        .lang-select option {
+            font-size: 1.05rem;
+            padding: 8px 0;
+            color: var(--primary);
+            background: #fff;
+        }
+
+        .qr-dropdown {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            padding: 18px 18px 10px 18px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            animation: fadeIn 0.2s;
+        }
+
+        .qr-img-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-img-box img {
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .qr-tip {
+            font-size: 0.92rem;
+            color: var(--gray);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<bo dy>
+    <div class="app-layout">
+        <div id="sidebar"></div>
+        <!-- Top Navigation Bar -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
+                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="#" data-i18n="nav.community">Community</a></li>
+                <li><a href="#" data-i18n="nav.about">About</a></li>
+            </ul>
+            <div class="user-actions">
+                <!-- 手动添加下拉形式语言切换器 -->
+                <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
+                    <select id="lang-select" class="lang-select" onchange="languageSwitcher.switchLanguage(this.value)">
+                        <option value="en" selected>English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+                <script>
+                    // 确保下拉选择器显示正确的语言
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const langSelect = document.getElementById('lang-select');
+                        if (langSelect && window.languageSwitcher) {
+                            langSelect.value = window.languageSwitcher.getCurrentLanguage();
+                        }
+                    });
+                </script>
+
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> <span data-i18n="nav.publish">Publish Article</span>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">V3</div>
+                    <span data-i18n="veo3.user">Veo3 Explorer</span>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="content">
+            <!-- Veo3 Card -->
+            <div class="veo3-card">
+                <div class="veo3-img">
+                    <img src="src/veo3.png" alt="VEO3 AI Video Generation Platform, VEO3 Official Logo" />
+                </div>
+                <div class="veo3-info">
+                    <h1>VEO3 - AI Video Generation Platform</h1>
+                    <p>VEO3 is an advanced AI video generation platform developed by Google DeepMind. With VEO3, users can easily create high-quality videos from text prompts, leveraging state-of-the-art artificial intelligence technology. VEO3 empowers creators and businesses to produce professional, creative, and engaging video content efficiently.</p>
+                    <div class="veo3-btns">
+                        <a href="https://gemini.google/overview/video-generation/" target="_blank" class="btn veo3-btn">Visit Official Site</a>
+                        <a href="https://gemini.google/overview/video-generation/" target="_blank" class="btn veo3-btn-outline" id="veo3QrBtn">Try Veo3 Online</a>
+                        <div class="qr-dropdown" id="veo3QrDropdown">
+                            <div class="qr-img-box">
+                                <div id="veo3QrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
+                                <div class="qr-tip">Scan to try Veo3 on mobile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Section -->
+            <section class="main-section">
+                <h2><i class="fas fa-video"></i> Why Choose VEO3 for AI Video Creation?</h2>
+                <p>VEO3 represents the pinnacle of AI video generation technology, developed by Google DeepMind. This revolutionary platform transforms text descriptions into stunning, high-resolution videos with remarkable realism and creativity. VEO3 is widely used in content creation, entertainment, education, marketing, and research applications.</p>
+                <p style="color:var(--gray);font-size:0.98rem;">Core capabilities: text-to-video generation, high-quality output, realistic motion, creative storytelling, multiple formats, and professional-grade results.</p>
+                <h2><i class="fas fa-star"></i> VEO3 Key Features</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-magic" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>Advanced Text-to-Video Generation</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-hd-video" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>High-Resolution Video Output</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-running" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>Realistic Motion and Physics</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-palette" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>Creative Style Control</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-film" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>Multiple Video Formats</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-bolt" style="color: var(--primary); margin-right: 12px; width: 20px;"></i>
+                        <span>Fast Processing Speed</span>
+                    </li>
+                </ul>
+                <h2><i class="fas fa-cogs"></i> VEO3 Technical Advantages</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-brain" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
+                        <span>State-of-the-art AI Architecture</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-eye" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
+                        <span>Advanced Scene Understanding</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 12px; width: 20px;"></i>
+                        <span>Built-in Safety Measures</span>
+                    </li>
+                </ul>
+                <h2><i class="fas fa-lightbulb"></i> VEO3 Use Cases</h2>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-video" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Content Creation & Marketing</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-graduation-cap" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Educational Materials</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-theater-masks" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Entertainment & Storytelling</span>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; align-items: center;">
+                        <i class="fas fa-microscope" style="color: var(--success); margin-right: 12px; width: 20px;"></i>
+                        <span>Research & Development</span>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script>
+        // 二维码弹窗功能，参考tiqu/青云梯实现
+        document.addEventListener('DOMContentLoaded', function () {
+            const qrBtn = document.getElementById('veo3QrBtn');
+            const qrDropdown = document.getElementById('veo3QrDropdown');
+            const qrBox = document.getElementById('veo3QrBox');
+            let qrCreated = false;
+
+            qrBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!qrCreated) {
+                    qrBox.innerHTML = '';
+                    new QRCode(qrBox, {
+                        text: 'https://gemini.google/overview/video-generation/',
+                        width: 120,
+                        height: 120,
+                        colorDark: '#222',
+                        colorLight: '#fff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrCreated = true;
+                }
+                // 定位弹窗到按钮正下方
+                const btnRect = this.getBoundingClientRect();
+                const parentRect = this.parentElement.getBoundingClientRect();
+                qrDropdown.style.position = 'absolute';
+                qrDropdown.style.left = (btnRect.left - parentRect.left) + 'px';
+                qrDropdown.style.top = (btnRect.bottom - parentRect.top + 10) + 'px';
+                qrDropdown.style.display = 'block';
+            });
+            // 鼠标移出弹窗或按钮时关闭
+            qrBtn.addEventListener('mouseleave', function () {
+                setTimeout(() => {
+                    if (!qrDropdown.matches(':hover')) {
+                        qrDropdown.style.display = 'none';
+                    }
+                }, 100);
+            });
+            qrDropdown.addEventListener('mouseenter', function () {
+                qrDropdown.style.display = 'block';
+            });
+            qrDropdown.addEventListener('mouseleave', function () {
+                qrDropdown.style.display = 'none';
+            });
+            // 点击页面其他区域关闭弹窗
+            document.addEventListener('click', function (e) {
+                if (!qrDropdown.contains(e.target) && !qrBtn.contains(e.target)) {
+                    qrDropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script>
+        // Sidebar async load（与cici.html一致）
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar').outerHTML = html;
+                if (window.i18n) {
+                    window.i18n.updateSidebarTranslations();
+                }
+            });
+    </script>
+    </body>
+
+</html>
