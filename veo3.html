@@ -28,8 +28,7 @@
     <!-- 引入全局语言切换器 -->
     <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
-    <!-- 引入侧边栏加载器 -->
-    <script src="sidebar-loader.js"></script>
+    <!-- <script src="sidebar-loader.js"></script> -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -586,30 +585,69 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
-        // QR Code functionality (placeholder)
-        document.getElementById('veo3QrBtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            const dropdown = document.getElementById('veo3QrDropdown');
-            if (dropdown.style.display === 'block') {
-                dropdown.style.display = 'none';
-            } else {
-                dropdown.style.display = 'block';
-                // Position dropdown relative to button
-                const rect = this.getBoundingClientRect();
-                dropdown.style.top = (rect.bottom + 10) + 'px';
-                dropdown.style.left = rect.left + 'px';
-            }
-        });
+        // 二维码弹窗功能，参考tiqu/青云梯实现
+        document.addEventListener('DOMContentLoaded', function () {
+            const qrBtn = document.getElementById('veo3QrBtn');
+            const qrDropdown = document.getElementById('veo3QrDropdown');
+            const qrBox = document.getElementById('veo3QrBox');
+            let qrCreated = false;
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (e) {
-            const dropdown = document.getElementById('veo3QrDropdown');
-            const btn = document.getElementById('veo3QrBtn');
-            if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-                dropdown.style.display = 'none';
-            }
+            qrBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!qrCreated) {
+                    qrBox.innerHTML = '';
+                    new QRCode(qrBox, {
+                        text: 'https://gemini.google/overview/video-generation/',
+                        width: 120,
+                        height: 120,
+                        colorDark: '#222',
+                        colorLight: '#fff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrCreated = true;
+                }
+                // 定位弹窗到按钮正下方
+                const btnRect = this.getBoundingClientRect();
+                const parentRect = this.parentElement.getBoundingClientRect();
+                qrDropdown.style.position = 'absolute';
+                qrDropdown.style.left = (btnRect.left - parentRect.left) + 'px';
+                qrDropdown.style.top = (btnRect.bottom - parentRect.top + 10) + 'px';
+                qrDropdown.style.display = 'block';
+            });
+            // 鼠标移出弹窗或按钮时关闭
+            qrBtn.addEventListener('mouseleave', function () {
+                setTimeout(() => {
+                    if (!qrDropdown.matches(':hover')) {
+                        qrDropdown.style.display = 'none';
+                    }
+                }, 100);
+            });
+            qrDropdown.addEventListener('mouseenter', function () {
+                qrDropdown.style.display = 'block';
+            });
+            qrDropdown.addEventListener('mouseleave', function () {
+                qrDropdown.style.display = 'none';
+            });
+            // 点击页面其他区域关闭弹窗
+            document.addEventListener('click', function (e) {
+                if (!qrDropdown.contains(e.target) && !qrBtn.contains(e.target)) {
+                    qrDropdown.style.display = 'none';
+                }
+            });
         });
+    </script>
+    <script>
+        // Sidebar async load（与cici.html一致）
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('sidebar').outerHTML = html;
+                if (window.i18n) {
+                    window.i18n.updateSidebarTranslations();
+                }
+            });
     </script>
     </body>
 

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="author" content="Trae AI">
+    <meta name="theme-color" content="#4361ee">
+    <title>Trae - Advanced AI Assistant Platform | Best AI Tool 2025</title>
+    <meta name="description"
+        content="Trae is an advanced AI assistant platform that revolutionizes business workflows with cutting-edge artificial intelligence, machine learning, and intelligent automation solutions for enterprises and developers.">
+    <meta name="keywords"
+        content="Trae, Trae AI, AI assistant, artificial intelligence platform, machine learning solutions, intelligent automation, AI tools, business AI, developer AI, enterprise AI, natural language processing, predictive analytics, AI integration, smart automation, AI workflow optimization">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.trae.ai/">
+    <meta property="og:title" content="Trae - Advanced AI Assistant Platform | Best AI Tool 2025">
+    <meta property="og:description"
+        content="Trae is an advanced AI assistant platform that revolutionizes business workflows with cutting-edge artificial intelligence, machine learning, and intelligent automation solutions for enterprises and developers.">
+    <meta property="og:image" content="src/trae.png">
+    <meta property="og:site_name" content="Trae AI">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Trae - Advanced AI Assistant Platform">
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.trae.ai/">
+    <meta property="twitter:title" content="Trae - Advanced AI Assistant Platform | Best AI Tool 2025">
+    <meta property="twitter:description"
+        content="Trae is an advanced AI assistant platform that revolutionizes business workflows with cutting-edge artificial intelligence, machine learning, and intelligent automation solutions for enterprises and developers.">
+    <meta property="twitter:image" content="src/trae.png">
+    <meta property="twitter:image:alt" content="Trae - Advanced AI Assistant Platform">
+    <meta property="twitter:creator" content="@TraeAI">
+    <meta property="twitter:site" content="@TraeAI">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.trae.ai/">
+    <!-- Additional SEO Meta Tags -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Trae AI">
+    <meta name="msapplication-TileColor" content="#4361ee">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Trae",
+      "alternateName": "Trae AI Assistant",
+      "url": "https://www.trae.ai/",
+      "description": "Trae is an advanced AI assistant platform that revolutionizes business workflows with cutting-edge artificial intelligence, machine learning, and intelligent automation solutions for enterprises and developers.",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Artificial Intelligence Platform",
+      "operatingSystem": "Web-based, Cross-platform",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "inLanguage": ["en-US", "zh-CN"],
+      "publisher": {
+        "@type": "Organization",
+        "name": "Trae AI",
+        "url": "https://www.trae.ai/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.trae.ai/src/trae.png",
+          "width": 180,
+          "height": 180
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "892",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "featureList": [
+        "Advanced AI assistance and intelligent automation",
+        "Natural language processing and understanding",
+        "Machine learning powered business insights",
+        "Predictive analytics and decision support",
+        "Seamless workflow integration capabilities",
+        "Real-time AI-powered process optimization",
+        "Enterprise-grade security and compliance",
+        "Multi-platform accessibility and support"
+      ],
+      "keywords": "Trae, AI assistant, artificial intelligence platform, machine learning solutions, intelligent automation, business AI, enterprise AI, natural language processing, predictive analytics, AI integration, smart automation, AI workflow optimization",
+      "datePublished": "2024-01-01",
+      "dateModified": "2025-01-21",
+      "softwareVersion": "2.0",
+      "releaseNotes": "Enhanced AI capabilities with improved natural language processing and advanced automation features"
+    }
+    </script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入全局语言切换器 -->
+    <script src="i18n-loader.js"></script>
+    <script src="language-switcher.js"></script>
+    <!-- 引入侧边栏加载器 -->
+    <script src="sidebar-loader.js"></script>
+    <style>
+        /* 继承 higgsfield.html 的样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .category-section {
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0 5px;
+        }
+
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .category-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-list li:hover::before {
+            background: var(--success);
+        }
+
+        .category-list li.active {
+            background: rgba(114, 9, 183, 0.3);
+        }
+
+        .category-list li.active::before {
+            background: var(--accent);
+        }
+
+        .category-list li i {
+            position: absolute;
+            left: 15px;
+            font-size: 1rem;
+        }
+
+        .header {
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+            background: var(--secondary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245, 247, 251, 0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
+        }
+
+        .main-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px 32px 32px;
+            margin-top: 30px;
+        }
+
+        .main-section h2 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 32px 0 12px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-section h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .main-section p {
+            font-size: 1.05rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .trae-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 36px;
+            gap: 36px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .trae-img img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(67, 97, 238, 0.10);
+            background: #eee;
+        }
+
+        .trae-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .trae-info p {
+            font-size: 1.08rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+        }
+
+        .trae-btns {
+            display: flex;
+            gap: 18px;
+            position: relative;
+        }
+
+        .trae-btn {
+            background: var(--primary);
+            color: #fff;
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.12);
+        }
+
+        .trae-btn:hover {
+            background: var(--secondary);
+        }
+
+        .trae-btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .trae-btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        @media (max-width: 992px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "header" "content";
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-section {
+                padding: 18px 6px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .trae-card {
+                flex-direction: column;
+                padding: 18px 8px;
+                gap: 18px;
+            }
+
+            .trae-img img {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .qr-dropdown {
+            display: none;
+            position: absolute;
+            /* 定位由JS动态设置 */
+            z-index: 100;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            padding: 18px 18px 10px 18px;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            animation: fadeIn 0.2s;
+        }
+
+        .qr-img-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-img-box img {
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .qr-tip {
+            font-size: 0.92rem;
+            color: var(--gray);
+        }
+
+        @media (max-width: 700px) {
+            .qr-dropdown {
+                /* 定位由JS动态设置 */
+                transform: none;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 语言切换器样式 */
+        .lang-select {
+            border: 1.5px solid var(--primary);
+            background: #fff;
+            color: var(--primary);
+            border-radius: 22px;
+            padding: 7px 36px 7px 16px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: border 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(67, 97, 238, 0.10);
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%234361ee" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px 18px;
+        }
+
+        .lang-select:focus,
+        .lang-select:hover {
+            border: 1.5px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: 0 4px 16px rgba(67, 97, 238, 0.18);
+            background-color: #f3f6fd;
+        }
+
+        .lang-select option {
+            font-size: 1.05rem;
+            padding: 8px 0;
+            color: var(--primary);
+            background: #fff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lang-select {
+                background: #232946;
+                color: #4cc9f0;
+                border: 1.5px solid #4cc9f0;
+                background-image: url('data:image/svg+xml;utf8,<svg fill="%234cc9f0" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            }
+
+            .lang-select:focus,
+            .lang-select:hover {
+                border: 1.5px solid #4895ef;
+                color: #4895ef;
+                background-color: #232946;
+            }
+
+            .lang-select option {
+                background: #232946;
+                color: #4cc9f0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <div id="sidebar"></div>
+        <!-- Top Navigation Bar -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
+                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
+                <li><a href="#" data-i18n="nav.community">Community</a></li>
+                <li><a href="#" data-i18n="nav.about">About</a></li>
+            </ul>
+            <div class="user-actions">
+                <!-- 添加下拉形式语言切换器 -->
+                <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
+                    <select id="lang-select" class="lang-select" onchange="languageSwitcher.switchLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+                <script>
+                    // 确保下拉选择器显示正确的语言
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const langSelect = document.getElementById('lang-select');
+                        if (langSelect && window.languageSwitcher) {
+                            langSelect.value = window.languageSwitcher.getCurrentLanguage();
+                        }
+                    });
+                </script>
+
+                <button class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> Publish Article
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">AI</div>
+                    <span>AI Explorer</span>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content Area -->
+        <main class="content">
+            <!-- Trae Card -->
+            <div class="trae-card">
+                <div class="trae-img">
+                    <img src="src/trae.png" alt="Trae - AI Assistant" />
+                </div>
+                <div class="trae-info">
+                    <h1 data-i18n="trae.title">Trae - Advanced AI Assistant</h1>
+                    <p data-i18n="trae.description">
+                        Trae是一个先进的AI助手平台，通过前沿的人工智能技术、机器学习算法和智能自动化功能，为企业和开发者提供全面的AI解决方案，助力业务流程优化和智能化转型。</p>
+                    <div class="trae-btns">
+                        <a href="https://www.trae.ai/" target="_blank" class="btn trae-btn"
+                            data-i18n="trae.visit">访问官网</a>
+                        <a href="https://www.trae.ai/" target="_blank" class="btn trae-btn-outline" id="traeQrBtn"
+                            data-i18n="trae.mobile">手机版</a>
+                        <div class="qr-dropdown" id="traeQrDropdown">
+                            <div class="qr-img-box">
+                                <div id="traeQrBox" style="width:120px;height:120px;margin-bottom:8px;"></div>
+                                <div class="qr-tip" data-i18n="trae.qr.tip">扫码体验Trae手机版</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Section -->
+            <section class="main-section">
+                <h2><i class="fas fa-robot"></i> About Trae - Advanced AI Assistant Platform</h2>
+                <p>Trae is a cutting-edge AI assistant platform that revolutionizes how businesses and developers
+                    interact with artificial intelligence. Built with state-of-the-art machine learning algorithms and
+                    an intuitive user interface, Trae delivers comprehensive AI solutions that streamline complex
+                    workflows, boost productivity, and accelerate digital transformation across industries. From
+                    automated decision-making to intelligent process optimization, Trae empowers organizations to
+                    harness the full potential of artificial intelligence.</p>
+
+                <h2><i class="fas fa-cogs"></i> Core Features & Advanced Capabilities</h2>
+                <p>Trae's powerful feature set includes advanced natural language processing for human-like
+                    interactions, intelligent workflow automation that adapts to your business processes, predictive
+                    analytics for data-driven insights, and seamless API integrations with existing systems. The
+                    platform supports real-time decision making, multi-language processing, custom model training, and
+                    enterprise-grade security protocols, making it the perfect solution for both technical developers
+                    and business users seeking AI-powered efficiency.</p>
+
+                <h2><i class="fas fa-users"></i> Designed for Modern Teams & Enterprises</h2>
+                <p>Whether you're a startup looking to scale efficiently or an enterprise seeking to modernize
+                    operations, Trae adapts to your unique requirements. The platform's intuitive dashboard makes
+                    sophisticated AI accessible to non-technical team members, while its comprehensive API suite and
+                    customization options provide developers with the flexibility needed for complex implementations.
+                    Trusted by leading companies worldwide, Trae scales seamlessly from small teams to enterprise
+                    deployments.</p>
+
+                <h2><i class="fas fa-rocket"></i> Transform Your Workflow with Trae</h2>
+                <p>Ready to experience the next generation of AI assistance? Trae's cloud-based platform offers instant
+                    deployment, comprehensive documentation, and 24/7 support to ensure your success. From automating
+                    routine tasks and enhancing customer interactions to building sophisticated AI applications, Trae
+                    provides the intelligent foundation your organization needs to thrive in an AI-first world. Start
+                    your transformation today and discover why thousands of users trust Trae for their AI needs.</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const traeQrBtn = document.getElementById('traeQrBtn');
+            const traeQrDropdown = document.getElementById('traeQrDropdown');
+            const traeQrBox = document.getElementById('traeQrBox');
+
+            // 生成Trae的QR码
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(document.createElement('canvas'), 'https://www.trae.ai/', {
+                    width: 120,
+                    height: 120,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }, function (error, canvas) {
+                    if (!error) {
+                        traeQrBox.appendChild(canvas);
+                    }
+                });
+            }
+
+            // QR码下拉菜单功能
+            if (traeQrBtn && traeQrDropdown) {
+                traeQrBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (traeQrDropdown.style.display === 'block') {
+                        traeQrDropdown.style.display = 'none';
+                    } else {
+                        // 计算位置
+                        const rect = traeQrBtn.getBoundingClientRect();
+                        const dropdownWidth = 140;
+
+                        traeQrDropdown.style.display = 'block';
+                        traeQrDropdown.style.position = 'absolute';
+                        traeQrDropdown.style.top = (rect.bottom + 10) + 'px';
+                        traeQrDropdown.style.left = Math.max(10, rect.left - dropdownWidth / 2 + rect.width / 2) + 'px';
+
+                        // 移动端调整
+                        if (window.innerWidth <= 700) {
+                            traeQrDropdown.style.left = Math.max(10, window.innerWidth - dropdownWidth - 10) + 'px';
+                        }
+                    }
+                });
+
+                // 点击其他地方关闭下拉菜单
+                document.addEventListener('click', function (e) {
+                    if (!traeQrBtn.contains(e.target) && !traeQrDropdown.contains(e.target)) {
+                        traeQrDropdown.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
