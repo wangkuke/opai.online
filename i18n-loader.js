@@ -65,7 +65,7 @@ class I18nLoader {
         // document.querySelectorAll('.lang-btn').forEach(btn => {
         //     btn.classList.remove('active');
         // });
-        // const activeBtn = document.querySelector(`.lang-btn[onclick*="${this.currentLanguage}"]`);
+        const activeBtn = document.querySelector(`.lang-btn[onclick*="${this.currentLanguage}"]`);
         if (activeBtn) activeBtn.classList.add('active');
         const langSelect = document.getElementById('lang-select');
         if (langSelect) langSelect.value = this.currentLanguage;

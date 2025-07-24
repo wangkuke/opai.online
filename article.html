@@ -619,7 +619,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
             z-index: 1;
         }
 
@@ -704,13 +704,15 @@
             color: var(--gray);
         }
 
-        .read-time, .article-date {
+        .read-time,
+        .article-date {
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .read-time i, .article-date i {
+        .read-time i,
+        .article-date i {
             font-size: 0.8rem;
             color: var(--primary);
         }
@@ -892,6 +894,9 @@
                 <li><a href="#" data-i18n="nav.about">关于</a></li>
             </ul>
             <div class="user-actions">
+                <a href="publish.html" class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> 发布文章
+                </a>
                 <div class="user-profile">
                     <div class="user-avatar">AI</div>
                     <span>OPAI探索者</span>
@@ -975,6 +980,11 @@
         document.addEventListener('DOMContentLoaded', async function () {
             console.log('文章详情页面加载完成');
 
+            // 检查依赖是否加载
+            console.log('SupabaseStorage available:', typeof window.SupabaseStorage !== 'undefined');
+            console.log('RetryHandler available:', typeof window.RetryHandler !== 'undefined');
+            console.log('ErrorHandler available:', typeof window.ErrorHandler !== 'undefined');
+
             // 从URL获取文章ID（支持多种格式）
             const articleId = URLParser.getArticleId();
 
@@ -985,8 +995,18 @@
 
             try {
                 // 初始化Supabase存储
-                const storage = new SupabaseStorage();
-                await storage.initialize();
+                const storage = window.SupabaseStorage;
+                if (!storage) {
+                    console.error('SupabaseStorage is not available');
+                    showError('SupabaseStorage is not available');
+                    return;
+                }
+
+                // 确保存储已初始化
+                if (!storage.isInitialized) {
+                    console.log('Initializing SupabaseStorage...');
+                    await storage.initialize();
+                }
 
                 // 获取文章
                 const article = await storage.getArticle(articleId);
@@ -1052,7 +1072,7 @@
 
             // 更新页面标题
             document.title = `${article.title} - OPAI`;
-            
+
             // 加载相关推荐
             loadRelatedArticles();
         }
