@@ -654,13 +654,24 @@
                 this.init();
             }
 
+            <!-- 在BlogAdmin类的init方法中添加调试日志 -->
             async init() {
                 console.log('Initializing Blog Admin...');
+                console.log('SupabaseStorage available:', !!window.supabaseStorage);
+                
                 // 确保 supabaseStorage 已初始化
                 if (window.supabaseStorage && !window.supabaseStorage.isInitialized) {
-                    await window.supabaseStorage.initialize();
+                    console.log('Initializing SupabaseStorage...');
+                    try {
+                        await window.supabaseStorage.initialize();
+                        console.log('SupabaseStorage initialized successfully');
+                    } catch (error) {
+                        console.error('Failed to initialize SupabaseStorage:', error);
+                    }
                 }
+                
                 await this.loadArticles();
+                console.log('Loaded articles count:', this.articles.length);
                 this.updateStats();
                 this.renderArticlesTable();
                 console.log('Blog Admin initialized');
