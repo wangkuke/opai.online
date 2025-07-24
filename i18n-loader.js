@@ -18,8 +18,8 @@ class I18nLoader {
     async loadTranslations() {
         try {
             const [enResponse, zhResponse] = await Promise.all([
-                fetch('/locales/en/translation.json'),
-                fetch('/locales/zh/translation.json')
+                fetch('locales/en/translation.json'),
+                fetch('locales/zh/translation.json')
             ]);
             this.translations.en = await enResponse.json();
             this.translations.zh = await zhResponse.json();
@@ -61,10 +61,11 @@ class I18nLoader {
 
     // 更新语言切换器按钮状态
     updateLanguageSwitcher() {
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-        const activeBtn = document.querySelector(`.lang-btn[onclick*="${this.currentLanguage}"]`);
+        // 移除旧代码
+        // document.querySelectorAll('.lang-btn').forEach(btn => {
+        //     btn.classList.remove('active');
+        // });
+        // const activeBtn = document.querySelector(`.lang-btn[onclick*="${this.currentLanguage}"]`);
         if (activeBtn) activeBtn.classList.add('active');
         const langSelect = document.getElementById('lang-select');
         if (langSelect) langSelect.value = this.currentLanguage;

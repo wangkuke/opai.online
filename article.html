@@ -496,7 +496,7 @@
             </header>
 
             <div class="article-content" id="article-content">
-                <div style="text-align: center; padding: 40px 0;">
+                <div id="loading-indicator" style="text-align: center; padding: 40px 0;">
                     <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
                     <p style="margin-top: 20px;">加载文章内容中...</p>
                 </div>
@@ -551,16 +551,39 @@
     </div>
 
     <script>
+        // URL解析工具类
+        class URLParser {
+            static getArticleId() {
+                // 优先从查询参数获取ID
+                const urlParams = new URLSearchParams(window.location.search);
+                const queryId = urlParams.get('id');
+                
+                if (queryId) {
+                    console.log('从查询参数获取文章ID:', queryId);
+                    return queryId;
+                }
+                
+                // 从hash获取ID（向后兼容）
+                const hash = window.location.hash;
+                if (hash && hash.length > 1) {
+                    const hashId = hash.substring(1); // 移除#号
+                    console.log('从hash获取文章ID:', hashId);
+                    return hashId;
+                }
+                
+                return null;
+            }
+        }
+
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('文章详情页面加载完成');
 
-            // 从URL获取文章ID
-            const urlParams = new URLSearchParams(window.location.search);
-            const articleId = urlParams.get('id');
+            // 从URL获取文章ID（支持多种格式）
+            const articleId = URLParser.getArticleId();
 
             if (!articleId) {
-                showError('未找到文章ID，请检查URL');
+                showError('未找到文章ID，请检查URL格式。支持格式：?id=articleId 或 #articleId');
                 return;
             }
 
@@ -573,7 +596,7 @@
                 const article = await storage.getArticle(articleId);
 
                 if (!article) {
-                    showError('未找到指定的文章');
+                    showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
                     return;
                 }
 
@@ -582,7 +605,7 @@
 
             } catch (error) {
                 console.error('加载文章失败:', error);
-                showError(`加载文章失败: ${error.message || '未知错误'}`);
+                showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
             }
 
             // 为社交分享按钮添加点击事件
@@ -636,14 +659,81 @@
         }
 
         // 显示错误信息
-        function showError(message) {
+        function showError(message, errorType = 'GENERAL') {
             const contentContainer = document.getElementById('article-content');
+            
+            let iconClass = 'fas fa-exclamation-circle';
+            let additionalActions = '';
+            
+            // 根据错误类型定制图标和操作
+            switch (errorType) {
+                case 'ARTICLE_NOT_FOUND':
+                    iconClass = 'fas fa-file-times';
+                    additionalActions = `
+                        <a href="articles.html" class="btn btn-success" style="margin-left: 15px;">
+                            <i class="fas fa-list"></i>
+                            浏览所有文章
+                        </a>
+                    `;
+                    break;
+                case 'NETWORK_ERROR':
+                    iconClass = 'fas fa-wifi';
+                    additionalActions = `
+                        <button onclick="checkConnection()" class="btn btn-warning" style="margin-left: 15px;">
+                            <i class="fas fa-network-wired"></i>
+                            检查连接
+                        </button>
+                    `;
+                    break;
+                default:
+                    break;
+            }
+            
             contentContainer.innerHTML = `
                 <div style="text-align: center; padding: 40px 0;">
-                    <i class="fas fa-exclamation-circle fa-3x" style="color: var(--error);"></i>
-                    <p style="margin-top: 20px; color: var(--error);">${message}</p>
+                    <i class="${iconClass} fa-3x" style="color: var(--error);"></i>
+                    <p style="margin-top: 20px; color: var(--error); font-size: 1.1rem;">${message}</p>
+                    <div style="margin-top: 30px;">
+                        <a href="blog-admin.html" class="btn btn-primary" style="margin-right: 15px;">
+                            <i class="fas fa-arrow-left"></i>
+                            返回博客管理
+                        </a>
+                        <button onclick="location.reload()" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i>
+                            重新加载
+                        </button>
+                        ${additionalActions}
+                    </div>
                 </div>
             `;
+        }
+        
+        // 检查网络连接
+        function checkConnection() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 检查中...';
+            button.disabled = true;
+            
+            // 简单的连接检查
+            fetch(window.location.origin + '/favicon.ico', { method: 'HEAD', cache: 'no-cache' })
+                .then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i> 连接正常';
+                    button.className = 'btn btn-success';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                })
+                .catch(() => {
+                    button.innerHTML = '<i class="fas fa-times"></i> 连接失败';
+                    button.className = 'btn btn-danger';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.className = 'btn btn-warning';
+                        button.disabled = false;
+                    }, 2000);
+                });
         }
 
         // 格式化日期

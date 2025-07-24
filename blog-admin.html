@@ -893,7 +893,7 @@
 
                 row.innerHTML = `
                     <td class="article-title-cell">
-                        <a href="article.html#${article.id}" class="article-title-link" target="_blank">
+                        <a href="article.html?id=${article.id}" class="article-title-link" target="_blank">
                             ${this.escapeHtml(article.title)}
                         </a>
                         <div class="article-excerpt">${this.escapeHtml(excerpt)}</div>
