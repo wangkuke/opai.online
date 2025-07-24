@@ -941,7 +941,7 @@
 
                 <!-- Related Articles -->
                 <section class="related-section">
-                    <h2 class="section-title"><i class="fas fa-thumbs-up"></i> Related Articles</h2>
+                    <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关推荐</h2>
                     <div class="articles-grid"></div>
                 </section>
             </div>
@@ -1046,87 +1046,7 @@
             });
 
             // 相关推荐区域逻辑，完全参考kiro.html
-            const homepageCards = [
-                {
-                    title: "Using Kiro for Infrastructure as Code",
-                    category: "DevOps Tools",
-                    bg: "linear-gradient(135deg, #4cc9f0, #4895ef)",
-                    excerpt: "Learn how to leverage Kiro's capabilities for managing infrastructure code, automating deployments, and implementing best practices for cloud resources.",
-                    icon: "fas fa-server"
-                },
-                {
-                    title: "Kiro vs GitHub Copilot: A Comparative Analysis",
-                    category: "AI Coding Tools",
-                    bg: "linear-gradient(135deg, #f72585, #b5179e)",
-                    excerpt: "An in-depth comparison of Kiro and GitHub Copilot, examining their code generation capabilities, integration features, and specialized use cases.",
-                    icon: "fas fa-code"
-                },
-                {
-                    title: "Enhancing Developer Productivity with Kiro Hooks",
-                    category: "Developer Tools",
-                    bg: "linear-gradient(135deg, #7209b7, #560bad)",
-                    excerpt: "Discover how to set up and use Kiro's Agent Hooks to automate repetitive tasks, streamline workflows, and boost your development efficiency.",
-                    icon: "fas fa-plug"
-                },
-                {
-                    title: "Building Complex Applications with Kiro Spec",
-                    category: "Software Development",
-                    bg: "linear-gradient(135deg, #3a0ca3, #4361ee)",
-                    excerpt: "A step-by-step guide to using Kiro's Spec feature for designing and implementing complex software features with structured development processes.",
-                    icon: "fas fa-project-diagram"
-                },
-                {
-                    title: "Debugging Made Easy with Kiro's AI Assistance",
-                    category: "Debugging Tools",
-                    bg: "linear-gradient(135deg, #06ffa5, #00d4ff)",
-                    excerpt: "Learn how Kiro can help identify and fix bugs in your code, analyze error patterns, and suggest optimal solutions for common programming issues.",
-                    icon: "fas fa-bug"
-                },
-                {
-                    title: "Kiro's CLI Automation for DevOps Workflows",
-                    category: "DevOps Tools",
-                    bg: "linear-gradient(135deg, #ff6b6b, #ee5a24)",
-                    excerpt: "Explore how Kiro can streamline your command-line operations, automate repetitive tasks, and enhance your DevOps workflows.",
-                    icon: "fas fa-terminal"
-                }
-            ];
-            function shuffle(arr) {
-                return arr.sort(() => Math.random() - 0.5);
-            }
-            function renderRelated() {
-                const cards = shuffle(homepageCards).slice(0, 3);
-                const container = document.querySelector('.related-section .articles-grid');
-                container.innerHTML = cards.map((card, index) => `
-                    <article class="article-card" style="animation-delay: ${index * 0.1}s;">
-                        <div class="article-image" style="background: ${card.bg};">
-                            <div class="article-category">
-                                <i class="${card.icon}"></i>
-                                ${card.category}
-                            </div>
-                            <div class="article-overlay">
-                                <i class="fas fa-arrow-right"></i>
-                            </div>
-                        </div>
-                        <div class="article-content">
-                            <h3 class="article-title">${card.title}</h3>
-                            <p class="article-excerpt">${card.excerpt}</p>
-                            <div class="article-meta">
-                                <span class="read-time">
-                                    <i class="fas fa-clock"></i>
-                                    5 min read
-                                </span>
-                                <span class="article-date">
-                                    <i class="fas fa-calendar"></i>
-                                    2024
-                                </span>
-                            </div>
-                        </div>
-                    </article>
-                `).join('');
-            }
-            document.addEventListener('DOMContentLoaded', function () {
-                renderRelated();
-            });
+            // 删除与相关推荐相关的JS代码（homepageCards、shuffle、renderRelated、DOMContentLoaded绑定）
         });
 
         // 填充文章内容
