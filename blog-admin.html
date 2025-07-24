@@ -629,8 +629,7 @@
 
     <!-- Scripts -->
     <script src="blog-models.js"></script>
-    <script src="blog-storage.js"></script>
-    <script src="blog-storage-manager.js"></script>
+    <script src="supabase-storage.js"></script>
 
     <script>
         /**
@@ -651,9 +650,14 @@
 
             async init() {
                 console.log('Initializing Blog Admin...');
+                // 确保 supabaseStorage 已初始化
+                if (window.supabaseStorage && !window.supabaseStorage.isInitialized) {
+                    await window.supabaseStorage.initialize();
+                }
                 await this.loadArticles();
                 this.updateStats();
                 this.renderArticlesTable();
+                console.log('Blog Admin initialized');
             }
 
             async loadArticles() {
@@ -674,10 +678,8 @@
             waitForStorage() {
                 return new Promise((resolve) => {
                     const checkStorage = () => {
-                        if (window.blogStorageManager && window.blogStorageManager.isReady()) {
-                            resolve(window.blogStorageManager);
-                        } else if (window.blogStorage) {
-                            resolve(window.blogStorage);
+                        if (window.supabaseStorage && window.supabaseStorage.isInitialized) {
+                            resolve(window.supabaseStorage);
                         } else {
                             setTimeout(checkStorage, 100);
                         }
