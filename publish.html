@@ -614,6 +614,30 @@
         const editId = urlParams.get('edit');
         console.log('URL 参数中的 editId:', editId);
         console.log('=== 页面脚本执行完毕 ===');
+    </script>
+    
+    <script>
+        /**
+         * 文章发布表单处理器
+         */
+        class ArticlePublisher {
+            constructor() {
+                this.form = document.getElementById('article-form');
+                this.titleInput = document.getElementById('article-title');
+                this.categorySelect = document.getElementById('article-category');
+                this.tagsInput = document.getElementById('article-tags');
+                this.contentEditor = document.getElementById('content-editor');
+                this.publishBtn = document.getElementById('publish-btn');
+                this.saveDraftBtn = document.getElementById('save-draft-btn');
+                this.successMessage = document.getElementById('success-message');
+                
+                // 编辑模式属性
+                this.isEditMode = false;
+                this.editingArticleId = null;
+                this.originalArticle = null;
+                
+                this.init();
+            }
 
             // 等待存储初始化完成的方法
             async waitForStorage() {
@@ -662,29 +686,17 @@
                     checkStorage();
                 });
             }
-    </script>
-    
-    <script>
-        /**
-         * 文章发布表单处理器
-         */
-        class ArticlePublisher {
-            constructor() {
-                this.form = document.getElementById('article-form');
-                this.titleInput = document.getElementById('article-title');
-                this.categorySelect = document.getElementById('article-category');
-                this.tagsInput = document.getElementById('article-tags');
-                this.contentEditor = document.getElementById('content-editor');
-                this.publishBtn = document.getElementById('publish-btn');
-                this.saveDraftBtn = document.getElementById('save-draft-btn');
-                this.successMessage = document.getElementById('success-message');
+
+            async init() {
+                this.setupEventListeners();
+                this.setupRichTextEditor();
+                this.setupCharacterCounter();
                 
-                // 编辑模式属性
-                this.isEditMode = false;
-                this.editingArticleId = null;
-                this.originalArticle = null;
+                // 先检查是否为编辑模式
+                await this.checkEditMode();
                 
-                this.init();
+                // 在编辑模式检查完成后再设置占位符
+                this.setupPlaceholder();
             }
 
             async init() {

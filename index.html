@@ -1342,7 +1342,7 @@
     <script src="https://unpkg.com/i18next@21.6.3/dist/umd/i18next.min.js"></script>
     <script src="https://unpkg.com/jquery-i18next@1.2.1/dist/umd/jquery-i18next.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/i18next-http-backend@2.2.0/i18nextHttpBackend.min.js"></script>
+    <!-- <script src="https://unpkg.com/i18next-http-backend@2.2.0/i18nextHttpBackend.min.js"></script> -->
     <!-- 引入全局语言切换器 -->
     <script src="language-switcher.js"></script>
 
@@ -2296,7 +2296,7 @@
                 lng: 'zh',
                 fallbackLng: 'zh',
                 debug: false,
-                resources: resources // 直接用内联资源
+                resources: resources // 直接用resources变量
             }, function (err, t) {
                 jqueryI18next.init(i18next, $, { useOptionsAttr: true });
                 $('[data-i18n]').localize();
