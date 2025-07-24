@@ -678,22 +678,36 @@
                         return;
                     }
 
-                    // 检查存储是否已初始化（尝试多种可能的属性名）
-                    const isInitialized = SupabaseStorage.isInitialized || SupabaseStorage.initialized || false;
-                    if (!isInitialized) {
-                        console.log('Waiting for SupabaseStorage initialization...');
-                        if (initializationAttempts < maxAttempts) {
-                            setTimeout(checkStorageAvailability, 200);
-                        } else {
-                            console.warn('SupabaseStorage not fully initialized after maximum attempts, proceeding anyway...');
-                            // 超时后强制尝试加载文章
-                            self.loadArticles();
-                        }
-                        return;
+                    // 检查存储是否已初始化
+                    if (!SupabaseStorage.isInitialized) {
+                        console.log('Initializing SupabaseStorage...');
+                        // 调用初始化方法
+                        SupabaseStorage.initialize()
+                            .then(success => {
+                                if (success) {
+                                    console.log('SupabaseStorage initialized successfully');
+                                    self.loadArticles();
+                                } else {
+                                    if (initializationAttempts < maxAttempts) {
+                                        setTimeout(checkStorageAvailability, 200);
+                                    } else {
+                                        console.error('Failed to initialize SupabaseStorage after maximum attempts');
+                                        self.showError('Failed to initialize SupabaseStorage');
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error initializing SupabaseStorage:', error);
+                                if (initializationAttempts < maxAttempts) {
+                                    setTimeout(checkStorageAvailability, 200);
+                                } else {
+                                    self.showError('Error initializing SupabaseStorage');
+                                }
+                            });
+                    } else {
+                        console.log('SupabaseStorage is already initialized, loading articles...');
+                        self.loadArticles();
                     }
-
-                    console.log('SupabaseStorage is ready, loading articles...');
-                    self.loadArticles();
                 };
 
                 // 启动检查
@@ -701,51 +715,62 @@
 
                 // 保留原有的1秒延迟，确保所有依赖加载完成
                 setTimeout(() => {
-                    // 检查 updateStatistics 方法是否存在
-                    if (typeof self.updateStatistics === 'function') {
-                        // 只有在文章加载后才更新统计信息
-                        if (self.articles && self.articles.length > 0) {
-                            self.updateStatistics();
-                        } else {
-                            console.log('No articles loaded yet, skipping statistics update');
-                        }
-                    } else {
-                        console.log('updateStatistics method not found, calling fallback update');
-                        self.updateStatsFallback();
-                    }
-                    console.log('Blog Admin initialized');
+                    console.log('Blog Admin initialization sequence completed');
                 }, 1000);
             }
 
-            // 添加一个临时的统计更新回退方法
-            updateStatsFallback() {
-                console.log('Updating statistics from fallback method');
-                // 这里只是为了演示，实际应该从数据库获取数据
-                document.getElementById('total-articles').textContent = '0';
-                document.getElementById('published-articles').textContent = '0';
-                document.getElementById('draft-articles').textContent = '0';
-                document.getElementById('recent-articles').textContent = '0';
+            // 显示错误信息的方法
+            showError(message) {
+                console.error('Error:', message);
+                // 创建一个简单的错误提示元素
+                const errorElement = document.createElement('div');
+                errorElement.className = 'error-message';
+                errorElement.style.position = 'fixed';
+                errorElement.style.top = '20px';
+                errorElement.style.left = '50%';
+                errorElement.style.transform = 'translateX(-50%)';
+                errorElement.style.backgroundColor = '#ff4d4f';
+                errorElement.style.color = 'white';
+                errorElement.style.padding = '10px 20px';
+                errorElement.style.borderRadius = '4px';
+                errorElement.style.zIndex = '1000';
+                errorElement.textContent = message;
+
+                document.body.appendChild(errorElement);
+
+                // 3秒后移除错误提示
+                setTimeout(() => {
+                    errorElement.remove();
+                }, 3000);
             }
 
             async loadArticles() {
                 try {
-                    // Wait for storage to be ready
+                    // 获取 SupabaseStorage 实例
                     const storage = window.SupabaseStorage;
                     if (!storage) {
                         console.error('SupabaseStorage is not available');
+                        this.showError('SupabaseStorage is not available');
                         return;
                     }
-                    
-                    // Load all articles (including drafts)
+
+                    // 确保存储已初始化
+                    if (!storage.isInitialized) {
+                        console.error('SupabaseStorage is not initialized');
+                        this.showError('SupabaseStorage is not initialized');
+                        return;
+                    }
+
+                    // 加载所有文章（包括草稿）
                     this.articles = await storage.getArticles({});
-                    
+
                     console.log(`Loaded ${this.articles.length} articles`);
                     this.renderArticles();
                     this.updateStatistics();
                 } catch (error) {
                     console.error('Error loading articles:', error);
                     this.articles = [];
-                    this.showError('Failed to load articles');
+                    this.showError('Failed to load articles: ' + (error.message || 'Unknown error'));
                 }
             }
 

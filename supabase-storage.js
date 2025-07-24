@@ -395,5 +395,5 @@ class SupabaseStorage {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { SupabaseStorage };
 } else {
-    window.SupabaseStorage = SupabaseStorage;
+    window.SupabaseStorage = new SupabaseStorage();
 }
