@@ -658,6 +658,9 @@
                 console.log('Initializing Blog Admin...');
                 console.log('SupabaseStorage available:', typeof SupabaseStorage !== 'undefined');
 
+                // 修复：保存 this 上下文引用
+                const self = this;
+
                 // 新增：等待SupabaseStorage可用
                 const checkStorageAvailability = () => {
                     if (typeof SupabaseStorage === 'undefined') {
@@ -666,7 +669,7 @@
                         return;
                     }
 
-                    // 检查存储是否已初始化
+                    // 检查存储是否已初始化 - 修复了之前的方法调用问题
                     if (!SupabaseStorage.isInitialized) {
                         console.log('Waiting for SupabaseStorage initialization...');
                         setTimeout(checkStorageAvailability, 200);
@@ -674,15 +677,15 @@
                     }
 
                     console.log('SupabaseStorage is ready, loading articles...');
-                    this.loadArticles();
+                    self.loadArticles();
                 };
 
                 // 启动检查
                 checkStorageAvailability();
 
-                // 保留原有的1秒延迟，确保所有依赖加载完成
+                // 保留原有的1秒延迟，确保所有依赖加载完成 - 修复 this 上下文问题
                 setTimeout(() => {
-                    this.updateStatistics();
+                    self.updateStatistics();
                     console.log('Blog Admin initialized');
                 }, 1000);
             }
