@@ -1077,6 +1077,86 @@
             loadRelatedArticles();
         }
 
+        // 加载相关推荐文章
+        async function loadRelatedArticles() {
+            try {
+                const storage = window.SupabaseStorage;
+                if (!storage || !storage.isInitialized) {
+                    console.log('SupabaseStorage not available for related articles');
+                    return;
+                }
+
+                // 获取相关文章（最新的3篇）
+                const relatedArticles = await storage.getArticles({
+                    limit: 3,
+                    status: 'published'
+                });
+
+                if (relatedArticles && relatedArticles.length > 0) {
+                    renderRelatedArticles(relatedArticles);
+                }
+            } catch (error) {
+                console.error('加载相关文章失败:', error);
+                // 不显示错误，只是静默失败
+            }
+        }
+
+        // 渲染相关推荐文章
+        function renderRelatedArticles(articles) {
+            const articlesGrid = document.querySelector('.related-articles .articles-grid');
+            if (!articlesGrid) return;
+
+            articlesGrid.innerHTML = '';
+
+            articles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-card';
+                articleCard.onclick = () => {
+                    window.location.href = `article.html?id=${article.id}`;
+                };
+
+                // 生成随机的图片背景色
+                const colors = ['#4361ee', '#7209b7', '#3f37c9', '#4cc9f0'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                articleCard.innerHTML = `
+                    <div class="article-image" style="background: linear-gradient(135deg, ${randomColor}, ${randomColor}aa);">
+                        <div class="article-category">
+                            <i class="fas fa-tag"></i>
+                            ${article.category}
+                        </div>
+                        <div class="article-overlay">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">${escapeHtml(article.title)}</h3>
+                        <p class="article-excerpt">${escapeHtml(article.excerpt || '暂无摘要')}</p>
+                        <div class="article-meta">
+                            <div class="article-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                ${formatDate(article.publishDate)}
+                            </div>
+                            <div class="read-time">
+                                <i class="fas fa-clock"></i>
+                                5分钟阅读
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                articlesGrid.appendChild(articleCard);
+            });
+        }
+
+        // HTML转义函数
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // 显示错误信息
         function showError(message, errorType = 'GENERAL') {
             const contentContainer = document.getElementById('article-content');
