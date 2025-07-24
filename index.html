@@ -2176,6 +2176,10 @@
         // 页面加载时自动设置下拉选中项
         $(function () {
             setLangSelect(i18next.language || 'en');
+            // 语言切换事件绑定放到这里，确保DOM已渲染
+            $('#lang-select').on('change', function () {
+                changeLang(this.value);
+            });
         });
 
         // i18next 多语言资源
