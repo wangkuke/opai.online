@@ -2292,14 +2292,11 @@
 
         // 初始化i18next
         i18next
-            .use(i18nextHttpBackend)
             .init({
                 lng: 'zh',
                 fallbackLng: 'zh',
                 debug: false,
-                backend: {
-                    loadPath: '/locales/{{lng}}/translation.json'
-                }
+                resources: resources // 直接用内联资源
             }, function (err, t) {
                 jqueryI18next.init(i18next, $, { useOptionsAttr: true });
                 $('[data-i18n]').localize();

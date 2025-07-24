@@ -616,7 +616,7 @@
         console.log('=== 页面脚本执行完毕 ===');
 
             // 等待存储初始化完成的方法
-            waitForStorage() {
+            async waitForStorage() {
                 return new Promise((resolve, reject) => {
                     const self = this;
                     let attempts = 0;
@@ -718,15 +718,16 @@
                     console.log('开始加载文章进行编辑, ID:', articleId);
                     
                     // 等待存储准备就绪
-                    const storage = window.blogStorageManager || window.blogStorage;
+                    console.log('等待存储初始化...');
+                    const storage = await this.waitForStorage();
                     console.log('存储对象:', storage);
                     
                     if (!storage) {
                         throw new Error('存储系统未初始化');
                     }
                     
-                    // 直接调用存储的 getArticle 方法，不使用 waitForReady
-                    console.log('直接调用 getArticle 方法');
+                    // 调用存储的 getArticle 方法
+                    console.log('调用 getArticle 方法');
                     this.originalArticle = await storage.getArticle(articleId);
                     console.log('加载的文章:', this.originalArticle);
                     
