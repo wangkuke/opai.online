@@ -479,6 +479,16 @@
             border-bottom-color: var(--primary);
         }
 
+        /* 添加图片样式 */
+        .article-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 25px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
         /* Error State */
         .error-container {
             text-align: center;
@@ -756,6 +766,11 @@
                     
                     <div id="article-body" class="article-body"></div>
                 </article>
+                <!-- 相关推荐区域 -->
+                <div class="related-section">
+                    <h3 class="section-title"><i class="fas fa-lightbulb"></i> 你可能也喜欢</h3>
+                    <div class="articles-grid"></div>
+                </div>
             </div>
         </main>
     </div>
@@ -826,7 +841,55 @@
             }
 
             async initializeStorage() {
-                try {
+// ... existing code ...
+        .article-body a:hover {
+            border-bottom-color: var(--primary);
+        }
+
+        /* 添加图片样式 */
+        .article-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 25px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Error State */
+// ... existing code ...// ... existing code ...
+        .article-body a:hover {
+            border-bottom-color: var(--primary);
+        }
+
+        /* 添加图片样式 */
+        .article-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 25px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Error State */
+// ... existing code ...// ... existing code ...
+        .article-body a:hover {
+            border-bottom-color: var(--primary);
+        }
+
+        /* 添加图片样式 */
+        .article-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 25px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Error State */
+// ... existing code ...                try {
                     // 直接初始化 SupabaseStorage
                     this.hybridStorage = new SupabaseStorage();
                     await this.hybridStorage.initialize();
@@ -1462,8 +1525,7 @@
         });
     </script>
 
-    <!-- 侧边栏加载脚本 -->
-    <script>
+        // 侧边栏动态加载脚本
         fetch('sidebar.html')
             .then(res => res.text())
             .then(html => {
@@ -1472,18 +1534,71 @@
                     window.i18n.updateSidebarTranslations();
                 }
             });
-    </script>
 
-    <!-- 修复 languageSwitcher 全局对象 -->
-    <script>
-        window.languageSwitcher = window.languageSwitcher || {};
-        window.languageSwitcher.getCurrentLanguage = window.languageSwitcher.getCurrentLanguage || function() {
-            return localStorage.getItem('lang') || 'en';
-        };
-        window.languageSwitcher.switchLanguage = window.languageSwitcher.switchLanguage || function(lang) {
-            localStorage.setItem('lang', lang);
-            location.reload(); // 或调用你的i18n逻辑
-        };
-    </script>
+        // 推荐文章渲染
+        document.addEventListener('DOMContentLoaded', function() {
+            // 推荐文章数据
+            const recommendedArticles = [
+                {
+                    title: "人工智能在内容创作中的应用与伦理考量",
+                    category: "AI技术",
+                    bg: "linear-gradient(135deg, #4361ee, #3f37c9)",
+                    excerpt: "探讨AI生成内容的现状、技术原理及潜在的伦理挑战与规范方向",
+                    icon: "fas fa-robot"
+                },
+                {
+                    title: "现代前端框架性能优化实践指南",
+                    category: "前端开发",
+                    bg: "linear-gradient(135deg, #4895ef, #4cc9f0)",
+                    excerpt: "深入分析React、Vue和Angular应用的性能瓶颈及优化策略",
+                    icon: "fas fa-code"
+                },
+                {
+                    title: "响应式设计中的图片优化技术",
+                    category: "Web设计",
+                    bg: "linear-gradient(135deg, #7209b7, #560bad)",
+                    excerpt: "详解不同设备下的图片加载策略、格式选择和性能优化技巧",
+                    icon: "fas fa-image"
+                }
+            ];
+
+            // 渲染推荐文章
+            function renderRecommendedArticles() {
+                const container = document.querySelector('.articles-grid');
+                if (!container) return;
+
+                container.innerHTML = recommendedArticles.map((article, index) => `
+                    <article class="article-card" style="animation-delay: ${index * 0.1}s;">
+                        <div class="article-image" style="background: ${article.bg};">
+                            <div class="article-category">
+                                <i class="${article.icon}"></i>
+                                ${article.category}
+                            </div>
+                            <div class="article-overlay">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="article-content">
+                            <h3 class="article-title">${article.title}</h3>
+                            <p class="article-excerpt">${article.excerpt}</p>
+                            <div class="article-meta">
+                                <span class="read-time">
+                                    <i class="fas fa-clock"></i>
+                                    5 min read
+                                </span>
+                                <span class="article-date">
+                                    <i class="fas fa-calendar"></i>
+                                    2024
+                                </span>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            }
+
+            // 执行渲染
+            renderRecommendedArticles();
+        });
+
 </body>
 </html>
