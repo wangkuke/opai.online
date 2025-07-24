@@ -667,7 +667,7 @@
                     }
 
                     // 检查存储是否已初始化
-                    if (!SupabaseStorage.isInitialized()) {
+                    if (!SupabaseStorage.isInitialized) {
                         console.log('Waiting for SupabaseStorage initialization...');
                         setTimeout(checkStorageAvailability, 200);
                         return;
