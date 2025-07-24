@@ -654,27 +654,37 @@
                 this.init();
             }
 
-            <!-- 在BlogAdmin类的init方法中添加调试日志 -->
             async init() {
                 console.log('Initializing Blog Admin...');
-                console.log('SupabaseStorage available:', !!window.supabaseStorage);
-                
-                // 确保 supabaseStorage 已初始化
-                if (window.supabaseStorage && !window.supabaseStorage.isInitialized) {
-                    console.log('Initializing SupabaseStorage...');
-                    try {
-                        await window.supabaseStorage.initialize();
-                        console.log('SupabaseStorage initialized successfully');
-                    } catch (error) {
-                        console.error('Failed to initialize SupabaseStorage:', error);
+                console.log('SupabaseStorage available:', typeof SupabaseStorage !== 'undefined');
+
+                // 新增：等待SupabaseStorage可用
+                const checkStorageAvailability = () => {
+                    if (typeof SupabaseStorage === 'undefined') {
+                        console.log('Waiting for SupabaseStorage...');
+                        setTimeout(checkStorageAvailability, 200);
+                        return;
                     }
-                }
-                
-                await this.loadArticles();
-                console.log('Loaded articles count:', this.articles.length);
-                this.updateStats();
-                this.renderArticlesTable();
-                console.log('Blog Admin initialized');
+
+                    // 检查存储是否已初始化
+                    if (!SupabaseStorage.isInitialized()) {
+                        console.log('Waiting for SupabaseStorage initialization...');
+                        setTimeout(checkStorageAvailability, 200);
+                        return;
+                    }
+
+                    console.log('SupabaseStorage is ready, loading articles...');
+                    this.loadArticles();
+                };
+
+                // 启动检查
+                checkStorageAvailability();
+
+                // 保留原有的1秒延迟，确保所有依赖加载完成
+                setTimeout(() => {
+                    this.updateStatistics();
+                    console.log('Blog Admin initialized');
+                }, 1000);
             }
 
             async loadArticles() {

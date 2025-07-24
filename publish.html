@@ -1081,7 +1081,8 @@
                     return;
                 }
 
-                this.setLoading(this.publishBtn, true);
+                this.publishBtn.disabled = true;
+                this.publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>发布中...</span>';
 
                 try {
                     const formData = this.getFormData();
@@ -1115,22 +1116,18 @@
                         // 显示存储类型信息
                         console.log('✓ 文章已保存到本地存储');
                         
-                        // 2秒后重定向
+                        // 1.5秒后重定向到 blog-admin.html
                         setTimeout(() => {
-                            if (this.isEditMode) {
-                                window.location.href = 'blog-admin.html';
-                            } else {
-                                window.location.href = 'index.html';
-                            }
-                        }, 2000);
+                            window.location.href = 'blog-admin.html';
+                        }, 1500);
                     } else {
                         throw new Error(result.error);
                     }
                 } catch (error) {
                     console.error('发布文章时出错:', error);
                     alert('发布文章出错: ' + error.message);
-                } finally {
-                    this.setLoading(this.publishBtn, false);
+                    this.publishBtn.disabled = false;
+                    this.publishBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>发布文章</span>';
                 }
             }
 
@@ -1140,58 +1137,21 @@
                     return;
                 }
 
-                this.setLoading(this.saveDraftBtn, true);
-
-                try {
-                    const formData = this.getFormData();
-                    
-                    let article;
-                    if (this.isEditMode && this.originalArticle) {
-                        // 将现有文章更新为草稿
-                        article = new Article({
-                            ...this.originalArticle,
-                            ...formData,
-                            id: this.originalArticle.id,
-                            publishDate: this.originalArticle.publishDate,
-                            status: 'draft'
-                        });
-                    } else {
-                        // 创建新草稿
-                        article = new Article({
-                            ...formData,
-                            status: 'draft'
-                        });
-                    }
-
-                    // 使用 SupabaseStorage 直接保存文章
-                    const storage = window.supabaseStorage;
-                    const result = await storage.saveArticle(article);
-                    
-                    if (result.success) {
+                this.saveDraftBtn.disabled = true;
+                this.saveDraftBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>保存中...</span>';
+                this.saveArticle(false)
+                    .then(() => {
                         this.showSuccess('草稿保存成功！');
-                        
-                        // 显示存储类型信息
-                        console.log('✓ 草稿已保存到本地存储');
-                        
-                        // 如果这是新文章，更新编辑模式
-                        if (!this.isEditMode) {
-                            this.isEditMode = true;
-                            this.editingArticleId = article.id;
-                            this.originalArticle = article;
-                            
-                            // 更新URL以反映编辑模式
-                            const newUrl = `${window.location.pathname}?edit=${article.id}`;
-                            window.history.replaceState({}, '', newUrl);
-                        }
-                    } else {
-                        throw new Error(result.error);
-                    }
-                } catch (error) {
-                    console.error('保存草稿时出错:', error);
-                    alert('保存草稿出错: ' + error.message);
-                } finally {
-                    this.setLoading(this.saveDraftBtn, false);
-                }
+                        setTimeout(() => {
+                            // 修改这里的跳转目标
+                            window.location.href = 'blog-admin.html';
+                        }, 1500);
+                    })
+                    .catch(error => {
+                        console.error('保存草稿失败:', error);
+                        this.saveDraftBtn.disabled = false;
+                        this.saveDraftBtn.innerHTML = '<i class="fas fa-save"></i><span>保存草稿</span>';
+                    });
             }
 
             async autoSave() {
