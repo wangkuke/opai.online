@@ -11,6 +11,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- 引入存储相关脚本 -->
+    <script src="blog-models.js"></script>
+    <script src="supabase-storage.js"></script>
+    <script src="error-handler.js"></script>
+    
     <!-- 引入全局语言切换器 -->
     <script src="i18n-loader.js"></script>
     <script src="language-switcher.js"></script>
@@ -822,13 +827,14 @@
 
             async initializeStorage() {
                 try {
-                    // Wait for hybrid storage to be ready
-                    this.hybridStorage = await this.waitForHybridStorage();
-                    console.log('✅ 混合存储已就绪');
+                    // 直接初始化 SupabaseStorage
+                    this.hybridStorage = new SupabaseStorage();
+                    await this.hybridStorage.initialize();
+                    console.log('✅ Supabase 存储已就绪');
                 } catch (error) {
                     console.error('❌ 存储初始化失败:', error);
-                    // 尝试使用备用存储
-                    this.hybridStorage = await this.waitForFallbackStorage();
+                    // 可以在这里添加其他备用存储逻辑
+                    throw error;
                 }
             }
 
