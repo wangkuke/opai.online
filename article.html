@@ -1,533 +1,540 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="article-title">Article - OPAI</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- 引入存储相关脚本 -->
-    <script src="blog-models.js"></script>
-    <script src="supabase-storage.js"></script>
-    <script src="error-handler.js"></script>
-    
-    <!-- 引入全局语言切换器 -->
-    <script src="i18n-loader.js"></script>
-    <script src="language-switcher.js"></script>
-    <!-- 引入侧边栏加载器 -->
-    <script src="sidebar-loader.js"></script>
-    
+    <title>文章详情 - OPAI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --dark-color: #212529;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --success-color: #06d6a0;
+            --danger-color: #ef476f;
+            --warning-color: #ffd166;
+            --radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #7209b7;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --border: #dee2e6;
-            --success: #4cc9f0;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --sidebar-bg: rgba(43, 45, 66, 0.9);
-            --header-bg: rgba(255, 255, 255, 0.95);
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            --transition: all 0.3s ease;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            color: var(--dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
             min-height: 100vh;
         }
 
-        /* App Layout */
-        .app-layout {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            grid-template-rows: 70px 1fr;
-            grid-template-areas: "sidebar header" "sidebar content";
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            grid-area: sidebar;
-            background: var(--sidebar-bg);
-            color: white;
-            backdrop-filter: blur(10px);
-            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
+        /* 侧边栏样式 */
+        #sidebar {
+            width: 280px;
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            height: 100vh;
             overflow-y: auto;
-            border-right: 1px solid var(--glass-border);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .logo {
-            padding: 25px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .logo i { 
-            font-size: 2.5rem; 
-            color: var(--success); 
-            margin-bottom: 10px; 
-        }
-
-        .logo h1 { 
-            font-size: 1.3rem; 
-            font-weight: 700; 
-        }
-
-        .category-section { 
-            margin-bottom: 25px; 
-            padding: 0 15px; 
-        }
-
-        .category-title {
-            padding: 12px 15px;
-            font-size: 1.05rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
             display: flex;
             align-items: center;
-            color: var(--success);
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            margin-bottom: 15px;
         }
 
-        .category-title i { 
-            margin-right: 10px; 
-            font-size: 1.2rem; 
+        .logo i {
+            margin-right: 10px;
         }
 
-        .category-list { 
-            list-style: none; 
-            padding: 0 5px; 
+        .nav-menu {
+            padding: 20px 0;
         }
 
-        .category-list li {
-            padding: 12px 15px 12px 45px;
-            transition: var(--transition);
+        .nav-item {
+            padding: 12px 20px;
             cursor: pointer;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            font-size: 0.95rem;
-            position: relative;
-            overflow: hidden;
+            color: var(--gray-color);
         }
 
-        .category-list li::before {
-            content: '';
-            position: absolute;
-            top: 0; 
-            left: 0; 
-            width: 5px; 
-            height: 100%;
-            background: transparent;
-            transition: var(--transition);
+        .nav-item:hover {
+            background-color: #f0f2f5;
+            color: var(--primary-color);
         }
 
-        .category-list li:hover { 
-            background: rgba(255,255,255,0.1); 
+        .nav-item.active {
+            background-color: rgba(58, 134, 255, 0.1);
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
         }
 
-        .category-list li:hover::before { 
-            background: var(--success); 
+        .nav-item i {
+            margin-right: 12px;
+            font-size: 1.1rem;
         }
 
-        .category-list li.active { 
-            background: rgba(114,9,183,0.3); 
-        }
-
-        .category-list li.active::before { 
-            background: var(--accent); 
-        }
-
-        .category-list li i { 
-            position: absolute; 
-            left: 15px; 
-            font-size: 1rem; 
-        }
-
-        @media (max-width: 992px) {
-            .app-layout { 
-                grid-template-columns: 1fr; 
-                grid-template-areas: "header" "content"; 
-            }
-            .sidebar { 
-                display: none; 
-            }
-        }
-
-        /* Header */
-        .header {
-            grid-area: header;
-            background: var(--header-bg);
-            padding: 0 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 600;
-            font-size: 1.05rem;
-            padding: 8px 0;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .nav-links a::after {
-            content: '';
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
             width: 100%;
-        }
-
-        .nav-links a.active {
-            color: var(--primary);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 22px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
-            background: var(--secondary);
-        }
-
-        .btn-secondary {
-            background: var(--light-gray);
-            color: var(--dark);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray);
-            color: white;
-            transform: translateY(-2px);
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            cursor: pointer;
-            padding: 5px 15px 5px 5px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
         }
 
-        .user-profile:hover {
-            background: rgba(255, 255, 255, 0.85);
-        }
-
-        .user-avatar {
+        .avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background-color: var(--primary-color);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 10px;
-            overflow: hidden;
-            color: white;
             font-weight: bold;
-            font-size: 1.2rem;
+            margin-right: 12px;
         }
 
-        /* Content */
-        .content {
-            grid-area: content;
-            padding: 30px;
-            background: rgba(245, 247, 251, 0.85);
-            backdrop-filter: blur(5px);
-            overflow-y: auto;
-            min-height: calc(100vh - 70px);
+        .user-info {
+            flex: 1;
         }
 
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        /* Article Content */
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray-color);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2a75e6;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: var(--gray-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        /* 文章容器 */
         .article-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 50px;
+            background-color: white;
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+            overflow: hidden;
             margin-bottom: 30px;
         }
 
         .article-header {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid var(--light-gray);
-        }
-
-        .article-category {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .article-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 20px;
-            line-height: 1.2;
+            padding: 30px;
+            border-bottom: 1px solid #eee;
         }
 
         .article-meta {
             display: flex;
             align-items: center;
-            gap: 30px;
-            color: var(--gray);
-            font-size: 1rem;
-        }
-
-        .article-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .author-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .article-date {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .article-tags {
-            display: flex;
+            margin-bottom: 15px;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 15px;
         }
 
-        .tag {
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary);
-            padding: 6px 14px;
+        .category {
+            background-color: rgba(58, 134, 255, 0.1);
+            color: var(--primary-color);
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
         }
 
-        /* Article Body */
-        .article-body {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--dark);
+        .category i {
+            margin-right: 6px;
+            font-size: 0.75rem;
         }
 
-        .article-body h1,
-        .article-body h2,
-        .article-body h3,
-        .article-body h4,
-        .article-body h5,
-        .article-body h6 {
-            margin: 30px 0 15px 0;
-            color: var(--dark);
+        .article-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .author-details {
+            flex: 1;
+        }
+
+        .author-name {
             font-weight: 600;
+            margin-bottom: 3px;
         }
 
-        .article-body h1 { font-size: 2rem; }
-        .article-body h2 { font-size: 1.7rem; }
-        .article-body h3 { font-size: 1.4rem; }
-        .article-body h4 { font-size: 1.2rem; }
+        .publish-date {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .publish-date i {
+            margin-right: 6px;
+            font-size: 0.75rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background-color: #f0f2f5;
+            color: var(--gray-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag i {
+            margin-right: 6px;
+            font-size: 0.75rem;
+        }
+
+        .article-body {
+            padding: 30px;
+            line-height: 1.8;
+        }
 
         .article-body p {
             margin-bottom: 20px;
         }
 
+        .article-body h2 {
+            font-size: 1.5rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .article-body h3 {
+            font-size: 1.25rem;
+            margin: 25px 0 15px;
+        }
+
         .article-body ul,
         .article-body ol {
-            margin: 20px 0;
-            padding-left: 30px;
+            margin-bottom: 20px;
+            padding-left: 25px;
         }
 
         .article-body li {
             margin-bottom: 8px;
         }
 
-        .article-body blockquote {
-            border-left: 4px solid var(--primary);
-            padding: 20px 25px;
-            margin: 25px 0;
-            background: rgba(67, 97, 238, 0.05);
-            border-radius: 0 10px 10px 0;
-            font-style: italic;
-        }
-
-        .article-body code {
-            background: var(--light-gray);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        .article-body pre {
-            background: var(--light-gray);
-            padding: 20px;
-            border-radius: 10px;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .article-body a {
-            color: var(--primary);
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: var(--transition);
-        }
-
-        .article-body a:hover {
-            border-bottom-color: var(--primary);
-        }
-
-        /* 添加图片样式 */
         .article-body img {
             max-width: 100%;
             height: auto;
+            border-radius: var(--radius);
+            margin: 20px 0;
             display: block;
-            margin: 25px auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Error State */
-        .error-container {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--gray);
+        .article-footer {
+            padding: 20px 30px;
+            background-color: #f9fafb;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .error-container i {
-            font-size: 4rem;
+        .social-share {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .share-btn:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .reading-time {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .reading-time i {
+            margin-right: 6px;
+        }
+
+        /* 推荐文章 */
+        .recommended-articles {
             margin-bottom: 30px;
-            opacity: 0.5;
         }
 
-        .error-container h2 {
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .article-card {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .article-category {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .article-category i {
+            margin-right: 6px;
+        }
+
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+
+        .article-overlay i {
+            color: white;
             font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--dark);
+            transform: scale(0.8);
+            transition: var(--transition);
         }
 
-        .error-container p {
+        .article-card:hover .article-overlay i {
+            transform: scale(1);
+        }
+
+        .article-content {
+            padding: 20px;
+        }
+
+        .article-card .article-title {
             font-size: 1.1rem;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+            line-height: 1.4;
         }
 
-        /* Loading State */
+        .article-excerpt {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        /* 加载状态 */
         .loading-container {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
         }
 
         .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid var(--light-gray);
-            border-top: 4px solid var(--primary);
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 30px;
+            margin-bottom: 20px;
         }
 
         @keyframes spin {
@@ -535,478 +542,306 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Network Status Indicator */
-        .network-status {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: var(--card-bg);
-            padding: 10px 15px;
-            border-radius: 25px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            display: flex;
+        .loading-text {
+            color: var(--gray-color);
+            font-size: 1rem;
+        }
+
+        /* 错误状态 */
+        .error-container {
+            display: none;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        .network-status.online {
-            color: var(--success);
-        }
-
-        .network-status.offline {
-            color: #dc3545;
-        }
-
-        .network-status.syncing {
-            color: var(--primary);
-        }
-
-        /* Loading Progress */
-        .loading-progress {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--light-gray);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: progressPulse 2s infinite;
-        }
-
-        @keyframes progressPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        #progress-text {
-            display: block;
+            justify-content: center;
+            height: 400px;
             text-align: center;
-            color: var(--gray);
-            font-size: 0.8rem;
+            padding: 0 20px;
         }
 
-        /* Language Selector Styles */
-        .lang-select {
-            border: 1.5px solid var(--primary);
-            background: #fff;
-            color: var(--primary);
-            border-radius: 22px;
-            padding: 7px 36px 7px 16px;
-            font-size: 1.08rem;
+        .error-icon {
+            font-size: 4rem;
+            color: var(--warning-color);
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
             font-weight: 600;
-            cursor: pointer;
-            outline: none;
-            transition: border 0.2s, color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(67,97,238,0.10);
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            position: relative;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%234361ee" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 18px 18px;
+            margin-bottom: 10px;
         }
 
-        .lang-select:focus, .lang-select:hover {
-            border: 1.5px solid var(--secondary);
-            color: var(--secondary);
-            box-shadow: 0 4px 16px rgba(67,97,238,0.18);
-            background-color: #f3f6fd;
+        .error-message {
+            color: var(--gray-color);
+            max-width: 400px;
+            margin-bottom: 20px;
         }
 
-        .lang-select option {
-            font-size: 1.05rem;
-            padding: 8px 0;
-            color: var(--primary);
-            background: #fff;
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
+        @media (max-width: 992px) {
+            #sidebar {
+                transform: translateX(-100%);
+                width: 250px;
             }
 
-            .article-container {
-                padding: 30px 25px;
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar-open #sidebar {
+                transform: translateX(0);
             }
 
             .article-title {
-                font-size: 2rem;
+                font-size: 1.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .article-header,
+            .article-body,
+            .article-footer {
+                padding: 20px;
             }
 
-            .article-meta {
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 15px;
             }
 
-            .header {
-                padding: 10px 15px;
+            .actions {
+                width: 100%;
+                justify-content: space-between;
             }
 
-            .nav-links {
-                display: none;
+            .btn {
+                flex: 1;
+                justify-content: center;
             }
 
-            .article-body {
-                font-size: 1rem;
+            .article-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="app-layout">
-        <div id="sidebar"></div>
-        
-        <!-- Header -->
-        <header class="header">
-            <ul class="nav-links">
-                <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-                <li><a href="#" data-i18n="nav.tools">AI Tools</a></li>
-                <li><a href="#" data-i18n="nav.tutorial">Tutorials</a></li>
-                <li><a href="#" data-i18n="nav.blog">Blog</a></li>
-                <li><a href="#" data-i18n="nav.community">Community</a></li>
-                <li><a href="#" data-i18n="nav.about">About</a></li>
-            </ul>
-            
-            <div class="user-actions">
-                <!-- 添加下拉形式语言切换器 -->
-                <div class="lang-switch" style="margin-right:20px; display: flex; align-items: center; gap: 8px;">
-                    <select id="lang-select" class="lang-select" onchange="languageSwitcher.switchLanguage(this.value)">
-                        <option value="en" selected>English</option>
-                        <option value="zh">中文</option>
-                    </select>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-blog"></i>
+                    <span>OPAI博客</span>
                 </div>
-                
-                <a href="index.html" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    <span data-i18n="blog.back_to_home">Back to Home</span>
-                </a>
-                
-                <div class="user-profile">
-                    <div class="user-avatar">AI</div>
-                    <span>AI Explorer</span>
-                </div>
+                <button class="sidebar-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="content">
-            <div class="container">
-                <!-- Network Status Indicator -->
-                <div id="network-status" class="network-status" style="display: none;">
-                    <i class="fas fa-wifi"></i>
-                    <span id="network-message">Checking connection...</span>
+            <nav class="nav-menu">
+                <div class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
                 </div>
-
-                <!-- Loading State -->
-                <div id="loading-container" class="loading-container">
-                    <div class="loading-spinner"></div>
-                    <p id="loading-message">Loading article...</p>
-                    <div id="loading-progress" class="loading-progress" style="display: none;">
-                        <div class="progress-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <small id="progress-text">Initializing...</small>
+                <div class="nav-item">
+                    <i class="fas fa-compass"></i>
+                    <span>发现</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span>收藏</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>历史</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">U</div>
+                    <div class="user-info">
+                        <div class="user-name">游客</div>
+                        <div class="user-role">未登录</div>
                     </div>
                 </div>
+            </div>
+        </aside>
 
-                <!-- Error State -->
-                <div id="error-container" class="error-container" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h2>Article Not Found</h2>
-                    <p>The article you're looking for doesn't exist or has been removed.</p>
-                    <a href="index.html" class="btn btn-secondary">
-                        <i class="fas fa-home"></i>
-                        <span data-i18n="blog.back_to_home">Back to Home</span>
-                    </a>
-                </div>
-
-                <!-- Article Content -->
-                <article id="article-container" class="article-container" style="display: none;">
-                    <header class="article-header">
-                        <div id="article-category" class="article-category"></div>
-                        <h1 id="article-title-display" class="article-title"></h1>
-                        <div class="article-meta">
-                            <div class="article-author">
-                                <div id="author-avatar" class="author-avatar"></div>
-                                <div>
-                                    <div><strong data-i18n="blog.author">Author</strong>: <span id="article-author"></span></div>
-                                </div>
-                            </div>
-                            <div class="article-date">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span><span data-i18n="blog.published_on">Published on</span> <span id="article-date"></span></span>
-                            </div>
-                        </div>
-                        <div id="article-tags" class="article-tags"></div>
-                    </header>
-                    
-                    <div id="article-body" class="article-body"></div>
-                </article>
-                <!-- 相关推荐区域 -->
-                <div class="related-section">
-                    <h3 class="section-title"><i class="fas fa-lightbulb"></i> 你可能也喜欢</h3>
-                    <div class="articles-grid"></div>
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="page-title" id="article-title-display">文章详情</h1>
+                <div class="actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-share-alt"></i> 分享
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-bookmark"></i> 收藏
+                    </button>
                 </div>
             </div>
+
+            <!-- 文章容器 -->
+            <article class="article-container" id="article-container">
+                <!-- 加载状态 -->
+                <div class="loading-container" id="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">加载文章中...</p>
+                </div>
+
+                <!-- 错误状态 -->
+                <div class="error-container" id="error-container">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <h2 class="error-title">文章未找到</h2>
+                    <p class="error-message">您查找的文章不存在或已被移除。</p>
+                    <button class="btn btn-primary">返回首页</button>
+                </div>
+
+                <!-- 文章内容 -->
+                <div class="article-content" style="display: none;">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            <span class="category" id="article-category">
+                                <i class="fas fa-folder"></i> 未分类
+                            </span>
+                        </div>
+                        <h1 class="article-title" id="article-title">文章标题</h1>
+                        <div class="author-info">
+                            <div class="avatar" id="author-avatar">A</div>
+                            <div class="author-details">
+                                <div class="author-name" id="article-author">作者</div>
+                                <div class="publish-date" id="article-date">
+                                    <i class="fas fa-calendar-alt"></i> 发布日期
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tags" id="article-tags"></div>
+                    </div>
+                    <div class="article-body" id="article-body"></div>
+                    <div class="article-footer">
+                        <div class="social-share">
+                            <div class="share-btn"><i class="fab fa-twitter"></i></div>
+                            <div class="share-btn"><i class="fab fa-facebook"></i></div>
+                            <div class="share-btn"><i class="fab fa-linkedin"></i></div>
+                            <div class="share-btn"><i class="fas fa-link"></i></div>
+                        </div>
+                        <div class="reading-time">
+                            <i class="fas fa-clock"></i> 阅读时间
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 推荐文章 -->
+            <section class="recommended-articles">
+                <h2 class="section-title">
+                    <i class="fas fa-fire"></i> 推荐阅读
+                </h2>
+                <div class="articles-grid"></div>
+            </section>
         </main>
     </div>
 
-    <!-- Scripts -->
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    
-    <script src="blog-models.js"></script>
-    <script src="error-handler.js"></script>
-    <script src="supabase-storage.js"></script>
     <script>
-        // 确保下拉选择器显示正确的语言
-        document.addEventListener('DOMContentLoaded', function() {
-            const langSelect = document.getElementById('lang-select');
-            if (langSelect && window.languageSwitcher) {
-                langSelect.value = window.languageSwitcher.getCurrentLanguage();
-            }
-        });
-
-        /**
-         * Article Detail Page Handler - 支持云端数据和文章分享
-         */
+        // 文章查看器类
         class ArticleViewer {
             constructor() {
-                this.articleId = null;
+                this.articleId = this.getArticleIdFromUrl();
                 this.article = null;
+                this.retryCount = 0;
+                this.maxRetries = 3;
                 this.hybridStorage = null;
                 this.loadingContainer = document.getElementById('loading-container');
                 this.errorContainer = document.getElementById('error-container');
-                this.articleContainer = document.getElementById('article-container');
-                this.retryCount = 0;
-                this.maxRetries = 3;
-                
-                this.init();
-            }
-
-            async init() {
-                // Get article ID from URL hash
-                this.articleId = this.getArticleIdFromUrl();
-                
-                if (!this.articleId) {
-                    this.showError('no-id');
-                    return;
-                }
-
-                // Initialize hybrid storage
-                await this.initializeStorage();
-                
-                // Load article
-                await this.loadArticle();
-                
-                // Setup event listeners
+                this.articleContainer = document.querySelector('.article-content');
                 this.setupEventListeners();
+                this.initializeStorage();
             }
 
             getArticleIdFromUrl() {
-                // Get article ID from hash (#article-id)
-                const hash = window.location.hash;
-                if (hash && hash.length > 1) {
-                    return hash.substring(1); // Remove the # symbol
-                }
-                
-                // Also check URL parameters as fallback
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get('id');
+                const pathParts = window.location.pathname.split('/');
+                return pathParts[pathParts.length - 1] || null;
             }
 
             async initializeStorage() {
-// ... existing code ...
-        .article-body a:hover {
-            border-bottom-color: var(--primary);
-        }
-
-        /* 添加图片样式 */
-        .article-body img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 25px auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Error State */
-// ... existing code ...// ... existing code ...
-        .article-body a:hover {
-            border-bottom-color: var(--primary);
-        }
-
-        /* 添加图片样式 */
-        .article-body img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 25px auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Error State */
-// ... existing code ...// ... existing code ...
-        .article-body a:hover {
-            border-bottom-color: var(--primary);
-        }
-
-        /* 添加图片样式 */
-        .article-body img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 25px auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Error State */
-// ... existing code ...                try {
-                    // 直接初始化 SupabaseStorage
-                    this.hybridStorage = new SupabaseStorage();
-                    await this.hybridStorage.initialize();
-                    console.log('✅ Supabase 存储已就绪');
-                } catch (error) {
-                    console.error('❌ 存储初始化失败:', error);
-                    // 可以在这里添加其他备用存储逻辑
-                    throw error;
-                }
-            }
-
-            async loadArticle() {
                 try {
-                    this.showLoading();
-
-                    if (!this.hybridStorage) {
-                        throw new Error('存储未初始化');
-                    }
-
-                    // Load article from hybrid storage
-                    this.article = await this.hybridStorage.getArticle(this.articleId);
-                    
-                    if (!this.article) {
-                        this.showError('not-found');
-                        return;
-                    }
-
-                    // 检查文章可见性
-                    if (!this.canViewArticle(this.article)) {
-                        this.showError('access-denied');
-                        return;
-                    }
-
-                    this.displayArticle();
-                    this.updatePageTitle();
-                    this.updateMetaTags();
-                    
-                    // 记录文章访问
-                    this.trackArticleView();
-                    
-                } catch (error) {
-                    console.error('加载文章失败:', error);
-                    this.handleLoadError(error);
-                }
-            }
-
-            async handleLoadError(error) {
-                this.retryCount++;
-                
-                if (this.retryCount <= this.maxRetries) {
-                    console.log(`重试加载文章 (${this.retryCount}/${this.maxRetries})...`);
-                    
-                    // 等待一段时间后重试
-                    setTimeout(() => {
+                    this.hybridStorage = await this.waitForHybridStorage();
+                    if (this.hybridStorage) {
                         this.loadArticle();
-                    }, 1000 * this.retryCount);
-                    
-                } else {
-                    // 达到最大重试次数，显示错误
-                    const errorType = this.determineErrorType(error);
-                    this.showError(errorType);
+                    } else {
+                        // 尝试使用备用存储
+                        try {
+                            const fallbackStorage = await this.waitForFallbackStorage();
+                            if (fallbackStorage) {
+                                this.hybridStorage = fallbackStorage;
+                                this.loadArticle();
+                            } else {
+                                this.showError('offline');
+                            }
+                        } catch (error) {
+                            this.showError('offline');
+                        }
+                    }
+                } catch (error) {
+                    // 尝试使用备用存储
+                    try {
+                        const fallbackStorage = await this.waitForFallbackStorage();
+                        if (fallbackStorage) {
+                            this.hybridStorage = fallbackStorage;
+                            this.loadArticle();
+                        } else {
+                            this.showError('offline');
+                        }
+                    } catch (error) {
+                        this.showError('offline');
+                    }
                 }
-            }
-
-            determineErrorType(error) {
-                if (!navigator.onLine) {
-                    return 'offline';
-                }
-                
-                if (error.message.includes('timeout') || error.message.includes('网络')) {
-                    return 'network';
-                }
-                
-                return 'unknown';
-            }
-
-            canViewArticle(article) {
-                // 检查文章可见性权限
-                if (article.visibility === 'private') {
-                    // 私有文章需要特殊权限（这里简化处理）
-                    return false;
-                }
-                
-                if (article.status !== 'published') {
-                    // 未发布的文章不能查看
-                    return false;
-                }
-                
-                return true;
             }
 
             waitForHybridStorage() {
                 return new Promise((resolve, reject) => {
                     let attempts = 0;
-                    const maxAttempts = 100; // 增加到10秒超时
+                    const maxAttempts = 100; // 10秒超时
                     const intervalMs = 100;
-                    
+
                     const checkStorage = () => {
                         attempts++;
-                        
-                        if (window.HybridStorageManager) {
-                            // 创建混合存储管理器实例
-                            const hybridManager = new HybridStorageManager();
-                            hybridManager.initialize().then(() => {
-                                resolve(hybridManager);
-                            }).catch(reject);
-                            return;
-                        }
-                        
-                        if (attempts >= maxAttempts) {
+
+                        if (window.hybridStorage && window.hybridStorage.isReady()) {
+                            resolve(window.hybridStorage);
+                        } else if (attempts >= maxAttempts) {
                             reject(new Error('混合存储初始化超时 (10秒)'));
-                            return;
+                        } else {
+                            setTimeout(checkStorage, intervalMs);
                         }
-                        
-                        setTimeout(checkStorage, intervalMs);
                     };
-                    
+
                     checkStorage();
                 });
             }
@@ -1016,10 +851,10 @@
                     let attempts = 0;
                     const maxAttempts = 50; // 添加5秒超时
                     const intervalMs = 100;
-                    
+
                     const checkStorage = () => {
                         attempts++;
-                        
+
                         if (window.blogStorageManager && window.blogStorageManager.isReady()) {
                             resolve(window.blogStorageManager);
                         } else if (window.blogStorage) {
@@ -1036,16 +871,17 @@
 
             setupEventListeners() {
                 // 监听网络状态变化
-                connectionMonitor.addListener((status, isOnline) => {
-                    this.handleNetworkChange(status, isOnline);
-                });
-                
+                if (window.connectionMonitor) {
+                    connectionMonitor.addListener((status, isOnline) => {
+                        this.handleNetworkChange(status, isOnline);
+                    });
+                }
+
                 // 监听存储同步事件
                 window.addEventListener('syncCompleted', (event) => {
-                    console.log('同步完成，检查文章更新...');
                     this.checkForUpdates();
                 });
-                
+
                 // 监听浏览器前进后退
                 window.addEventListener('popstate', () => {
                     this.handlePopState();
@@ -1055,7 +891,6 @@
             handleNetworkChange(status, isOnline) {
                 if (isOnline && !this.article) {
                     // 网络恢复且文章未加载，重试加载
-                    console.log('网络恢复，重试加载文章...');
                     this.retryCount = 0;
                     this.loadArticle();
                 }
@@ -1063,21 +898,20 @@
 
             async checkForUpdates() {
                 if (!this.article || !this.hybridStorage) return;
-                
+
                 try {
                     const updatedArticle = await this.hybridStorage.getArticle(this.articleId);
-                    
+
                     if (updatedArticle && 
                         new Date(updatedArticle.updatedAt) > new Date(this.article.updatedAt)) {
-                        
-                        console.log('检测到文章更新，刷新显示...');
+
                         this.article = updatedArticle;
                         this.displayArticle();
                         this.updatePageTitle();
                         this.updateMetaTags();
                     }
                 } catch (error) {
-                    console.error('检查文章更新失败:', error);
+                    // 错误处理保持简洁，不输出控制台日志
                 }
             }
 
@@ -1091,14 +925,14 @@
                         userAgent: navigator.userAgent,
                         referrer: document.referrer
                     };
-                    
+
                     // 触发文章查看事件
                     window.dispatchEvent(new CustomEvent('articleViewed', {
                         detail: viewData
                     }));
-                    
+
                 } catch (error) {
-                    console.error('记录文章访问失败:', error);
+                    // 错误处理保持简洁，不输出控制台日志
                 }
             }
 
@@ -1138,7 +972,7 @@
                 // Tags
                 const tagsContainer = document.getElementById('article-tags');
                 tagsContainer.innerHTML = '';
-                
+
                 if (this.article.tags && this.article.tags.length > 0) {
                     this.article.tags.forEach(tag => {
                         const tagElement = document.createElement('span');
@@ -1155,7 +989,7 @@
 
             getAuthorInitials(authorName) {
                 if (!authorName) return 'A';
-                
+
                 const names = authorName.trim().split(' ');
                 if (names.length === 1) {
                     return names[0].charAt(0).toUpperCase();
@@ -1169,27 +1003,26 @@
                     const date = new Date(dateString);
                     return date.toLocaleDateString(
                         window.i18n ? window.i18n.getCurrentLanguage() : 'en',
-                        { 
-                            year: 'numeric', 
-                            month: 'long', 
+                        {
+                            year: 'numeric',
+                            month: 'long',
                             day: 'numeric',
                             hour: '2-digit',
                             minute: '2-digit'
                         }
                     );
                 } catch (error) {
-                    console.error('Error formatting date:', error);
                     return 'Recently';
                 }
             }
 
             sanitizeContent(content) {
                 if (!content) return '';
-                
+
                 // Basic HTML sanitization - remove potentially dangerous tags
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = content;
-                
+
                 // Remove script tags and other potentially dangerous elements
                 const dangerousTags = ['script', 'iframe', 'object', 'embed', 'form'];
                 dangerousTags.forEach(tag => {
@@ -1215,7 +1048,7 @@
             updatePageTitle() {
                 if (this.article) {
                     document.title = `${this.article.title} - OPAI`;
-                    
+
                     // Update the title element as well
                     const titleElement = document.getElementById('article-title');
                     if (titleElement) {
@@ -1268,45 +1101,45 @@
                 this.loadingContainer.style.display = 'none';
                 this.errorContainer.style.display = 'block';
                 this.articleContainer.style.display = 'none';
-                
+
                 // 根据错误类型更新错误信息
                 const errorTitle = this.errorContainer.querySelector('h2');
                 const errorMessage = this.errorContainer.querySelector('p');
                 const errorIcon = this.errorContainer.querySelector('i');
-                
+
                 switch (errorType) {
                     case 'no-id':
-                        errorTitle.textContent = 'Invalid Article Link';
-                        errorMessage.textContent = 'The article link is invalid or incomplete.';
+                        errorTitle.textContent = '无效的文章链接';
+                        errorMessage.textContent = '文章链接无效或不完整。';
                         errorIcon.className = 'fas fa-link';
                         break;
-                        
+
                     case 'access-denied':
-                        errorTitle.textContent = 'Access Denied';
-                        errorMessage.textContent = 'You do not have permission to view this article.';
+                        errorTitle.textContent = '访问被拒绝';
+                        errorMessage.textContent = '您没有权限查看这篇文章。';
                         errorIcon.className = 'fas fa-lock';
                         break;
-                        
+
                     case 'offline':
-                        errorTitle.textContent = 'Offline Mode';
-                        errorMessage.textContent = 'You are offline and this article is not cached locally.';
+                        errorTitle.textContent = '离线模式';
+                        errorMessage.textContent = '您处于离线状态，且这篇文章未在本地缓存。';
                         errorIcon.className = 'fas fa-wifi';
                         break;
-                        
+
                     case 'network':
-                        errorTitle.textContent = 'Network Error';
-                        errorMessage.textContent = 'Unable to load the article due to network issues. Please try again.';
+                        errorTitle.textContent = '网络错误';
+                        errorMessage.textContent = '由于网络问题无法加载文章，请重试。';
                         errorIcon.className = 'fas fa-exclamation-triangle';
                         break;
-                        
+
                     case 'not-found':
                     default:
-                        errorTitle.textContent = 'Article Not Found';
-                        errorMessage.textContent = 'The article you\'re looking for doesn\'t exist or has been removed.';
+                        errorTitle.textContent = '文章未找到';
+                        errorMessage.textContent = '您查找的文章不存在或已被移除。';
                         errorIcon.className = 'fas fa-exclamation-triangle';
                         break;
                 }
-                
+
                 // Update page title for error
                 document.title = `${errorTitle.textContent} - OPAI`;
             }
@@ -1324,206 +1157,6 @@
                 }
             }
         }
-
-        // Initialize article viewer when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new ArticleViewer();
-        });
-    </script>
-</body>
-</html>
-                // Category
-                const categoryElement = document.getElementById('article-category');
-                categoryElement.textContent = this.article.category;
-
-                // Title
-                const titleElement = document.getElementById('article-title-display');
-                titleElement.textContent = this.article.title;
-
-                // Author
-                const authorElement = document.getElementById('article-author');
-                authorElement.textContent = this.article.author;
-
-                // Author avatar
-                const avatarElement = document.getElementById('author-avatar');
-                avatarElement.textContent = this.getAuthorInitials(this.article.author);
-
-                // Date
-                const dateElement = document.getElementById('article-date');
-                dateElement.textContent = this.formatDate(this.article.publishDate);
-
-                // Tags
-                const tagsContainer = document.getElementById('article-tags');
-                tagsContainer.innerHTML = '';
-                
-                if (this.article.tags && this.article.tags.length > 0) {
-                    this.article.tags.forEach(tag => {
-                        const tagElement = document.createElement('span');
-                        tagElement.className = 'tag';
-                        tagElement.textContent = `#${tag}`;
-                        tagsContainer.appendChild(tagElement);
-                    });
-                }
-
-                // Content
-                const bodyElement = document.getElementById('article-body');
-                bodyElement.innerHTML = this.sanitizeContent(this.article.content);
-            }
-
-            getAuthorInitials(authorName) {
-                if (!authorName) return 'A';
-                
-                const names = authorName.trim().split(' ');
-                if (names.length === 1) {
-                    return names[0].charAt(0).toUpperCase();
-                } else {
-                    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
-                }
-            }
-
-            formatDate(dateString) {
-                try {
-                    const date = new Date(dateString);
-                    return date.toLocaleDateString(
-                        window.i18n ? window.i18n.getCurrentLanguage() : 'en',
-                        { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }
-                    );
-                } catch (error) {
-                    console.error('Error formatting date:', error);
-                    return 'Recently';
-                }
-            }
-
-            sanitizeContent(content) {
-                if (!content) return '';
-                
-                // Basic HTML sanitization - remove potentially dangerous tags
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = content;
-                
-                // Remove script tags and other potentially dangerous elements
-                const dangerousTags = ['script', 'iframe', 'object', 'embed', 'form'];
-                dangerousTags.forEach(tag => {
-                    const elements = tempDiv.querySelectorAll(tag);
-                    elements.forEach(el => el.remove());
-                });
-
-                // Remove dangerous attributes
-                const allElements = tempDiv.querySelectorAll('*');
-                allElements.forEach(el => {
-                    // Remove event handlers
-                    const attributes = [...el.attributes];
-                    attributes.forEach(attr => {
-                        if (attr.name.startsWith('on')) {
-                            el.removeAttribute(attr.name);
-                        }
-                    });
-                });
-
-                return tempDiv.innerHTML;
-            }
-
-            updatePageTitle() {
-                if (this.article) {
-                    document.title = `${this.article.title} - OPAI`;
-                    
-                    // Update the title element as well
-                    const titleElement = document.getElementById('article-title');
-                    if (titleElement) {
-                        titleElement.textContent = `${this.article.title} - OPAI`;
-                    }
-                }
-            }
-
-            updateMetaTags() {
-                if (!this.article) return;
-
-                // Update or create meta description
-                let metaDescription = document.querySelector('meta[name="description"]');
-                if (!metaDescription) {
-                    metaDescription = document.createElement('meta');
-                    metaDescription.name = 'description';
-                    document.head.appendChild(metaDescription);
-                }
-                metaDescription.content = this.article.excerpt || this.article.title;
-
-                // Update or create Open Graph tags
-                this.updateOrCreateMetaTag('property', 'og:title', this.article.title);
-                this.updateOrCreateMetaTag('property', 'og:description', this.article.excerpt || this.article.title);
-                this.updateOrCreateMetaTag('property', 'og:type', 'article');
-                this.updateOrCreateMetaTag('property', 'og:url', window.location.href);
-
-                // Twitter Card tags
-                this.updateOrCreateMetaTag('name', 'twitter:title', this.article.title);
-                this.updateOrCreateMetaTag('name', 'twitter:description', this.article.excerpt || this.article.title);
-                this.updateOrCreateMetaTag('name', 'twitter:card', 'summary');
-            }
-
-            updateOrCreateMetaTag(attribute, value, content) {
-                let metaTag = document.querySelector(`meta[${attribute}="${value}"]`);
-                if (!metaTag) {
-                    metaTag = document.createElement('meta');
-                    metaTag.setAttribute(attribute, value);
-                    document.head.appendChild(metaTag);
-                }
-                metaTag.content = content;
-            }
-
-            showLoading() {
-                this.loadingContainer.style.display = 'block';
-                this.errorContainer.style.display = 'none';
-                this.articleContainer.style.display = 'none';
-            }
-
-            showError() {
-                this.loadingContainer.style.display = 'none';
-                this.errorContainer.style.display = 'block';
-                this.articleContainer.style.display = 'none';
-                
-                // Update page title for 404
-                document.title = 'Article Not Found - OPAI';
-            }
-
-            // Handle browser back/forward navigation
-            handlePopState() {
-                const newArticleId = this.getArticleIdFromUrl();
-                if (newArticleId !== this.articleId) {
-                    this.articleId = newArticleId;
-                    if (this.articleId) {
-                        this.loadArticle();
-                    } else {
-                        this.showError();
-                    }
-                }
-            }
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Wait for i18n and other dependencies to load
-            setTimeout(() => {
-                const viewer = new ArticleViewer();
-                
-                // Handle browser navigation
-                window.addEventListener('popstate', () => {
-                    viewer.handlePopState();
-                });
-                
-                console.log('Article viewer initialized');
-            }, 500);
-        });
-
-        // Handle hash changes (for single-page navigation)
-        window.addEventListener('hashchange', () => {
-            location.reload(); // Simple approach - reload page when hash changes
-        });
-    </script>
 
         // 侧边栏动态加载脚本
         fetch('sidebar.html')
@@ -1600,5 +1233,10 @@
             renderRecommendedArticles();
         });
 
+        // 初始化文章查看器
+        document.addEventListener('DOMContentLoaded', () => {
+            new ArticleViewer();
+        });
+    </script>
 </body>
 </html>
