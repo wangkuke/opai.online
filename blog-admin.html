@@ -656,7 +656,7 @@
 
             async init() {
                 console.log('Initializing Blog Admin...');
-                console.log('SupabaseStorage available:', typeof SupabaseStorage !== 'undefined');
+                console.log('SupabaseStorage available:', typeof window.SupabaseStorage !== 'undefined');
 
                 // 保存 this 上下文引用
                 const self = this;
@@ -667,22 +667,24 @@
                 const checkStorageAvailability = () => {
                     initializationAttempts++;
 
-                    if (typeof SupabaseStorage === 'undefined') {
-                        console.log('Waiting for SupabaseStorage...');
+                    if (typeof window.SupabaseStorage === 'undefined') {
+                        console.log('Waiting for SupabaseStorage instance...');
                         if (initializationAttempts < maxAttempts) {
                             setTimeout(checkStorageAvailability, 200);
                         } else {
-                            console.error('SupabaseStorage did not load after maximum attempts');
+                            console.error('SupabaseStorage instance did not load after maximum attempts');
                             self.showError('Failed to load SupabaseStorage');
                         }
                         return;
                     }
 
+                    const storage = window.SupabaseStorage;
+
                     // 检查存储是否已初始化
-                    if (!SupabaseStorage.isInitialized) {
+                    if (!storage.isInitialized) {
                         console.log('Initializing SupabaseStorage...');
-                        // 调用初始化方法
-                        SupabaseStorage.initialize()
+                        // 调用实例的初始化方法
+                        storage.initialize()
                             .then(success => {
                                 if (success) {
                                     console.log('SupabaseStorage initialized successfully');
