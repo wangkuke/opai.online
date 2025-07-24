@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建新文章 - OPAI</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border: #dee2e6;
+            --success: #4cc9f0;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 201, 240, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #3a9bc1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 201, 240, 0.4);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Article Form */
+        .article-form {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+        }
+
+        .form-control.error:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 300px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        /* Character Counter */
+        .char-counter {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .char-counter.warning {
+            color: var(--warning);
+        }
+
+        .char-counter.error {
+            color: var(--error);
+        }
+
+        /* Loading State */
+        .btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .article-form {
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Rich Text Editor Styles */
+        .editor-toolbar {
+            background: var(--light);
+            border: 2px solid var(--border);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+
+        .editor-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .editor-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        #content-editor {
+            border-radius: 0 0 12px 12px;
+            border-top: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        #content-editor:focus {
+            font-size: 0.95rem;
+        }
+
+        #content-editor p {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        #content-editor h1, #content-editor h2, #content-editor h3, 
+        #content-editor h4, #content-editor h5, #content-editor h6 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        #content-editor h1 { font-size: 1.4rem; }
+        #content-editor h2 { font-size: 1.3rem; }
+        #content-editor h3 { font-size: 1.2rem; }
+        #content-editor h4 { font-size: 1.1rem; }
+        #content-editor h5 { font-size: 1.05rem; }
+        #content-editor h6 { font-size: 1rem; }
+
+        #content-editor ul, #content-editor ol {
+            margin-bottom: 12px;
+            padding-left: 20px;
+        }
+
+        #content-editor li {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        #content-editor blockquote {
+            margin: 15px 0;
+            padding: 10px 15px;
+            border-left: 4px solid var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+            font-style: italic;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        #content-editor code {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        #content-editor pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        #content-editor pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        #content-editor img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #content-editor a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        #content-editor a:hover {
+            text-decoration: underline;
+        }
+
+        #content-editor strong {
+            font-weight: 600;
+        }
+
+        #content-editor em {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-robot"></i>
+                <span>OPAI</span>
+            </a>
+            
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>返回首页</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-title">
+            <h1>创建新文章</h1>
+            <p>与OPAI社区分享您的知识和见解</p>
+        </div>
+
+        <form class="article-form" id="article-form">
+            <div class="success-message" id="success-message">
+                <i class="fas fa-check-circle"></i>
+                <span>文章保存成功！</span>
+            </div>
+
+            <div class="form-group">
+                <label for="article-title">文章标题</label>
+                <input 
+                    type="text" 
+                    id="article-title" 
+                    class="form-control" 
+                    placeholder="请输入文章标题..."
+                    maxlength="200"
+                    required
+                >
+                <div class="char-counter" id="title-counter">0/200</div>
+                <div class="error-message" id="title-error">标题不能为空</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="article-category">分类</label>
+                    <select id="article-category" class="form-control">
+                        <option value="General">通用</option>
+                        <option value="Tutorial">教程</option>
+                        <option value="News">新闻</option>
+                        <option value="Review">评测</option>
+                        <option value="AI">人工智能</option>
+                        <option value="Technology">科技</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="article-tags">标签</label>
+                    <input 
+                        type="text" 
+                        id="article-tags" 
+                        class="form-control" 
+                        placeholder="请输入标签，用逗号分隔"
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="content-editor">文章内容</label>
+                <div class="editor-toolbar">
+                    <button type="button" class="editor-btn" data-command="bold" title="粗体">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="italic" title="斜体">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="underline" title="下划线">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="insertUnorderedList" title="无序列表">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="insertOrderedList" title="有序列表">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="createLink" title="插入链接">
+                        <i class="fas fa-link"></i>
+                    </button>
+                    <button type="button" class="editor-btn" data-command="insertImage" title="插入图片">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button type="button" class="editor-btn" id="upload-image-btn" title="上传图片">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                </div>
+                
+                <!-- Hidden file input for image upload -->
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                <div 
+                    id="content-editor" 
+                    class="form-control" 
+                    contenteditable="true" 
+                    data-placeholder="请在此处编写您的文章内容..."
+                    style="min-height: 300px;"
+                ></div>
+                <div class="error-message" id="content-error">内容不能为空</div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="save-draft-btn">
+                    <i class="fas fa-save"></i>
+                    <span>保存草稿</span>
+                </button>
+                <button type="submit" class="btn btn-success" id="publish-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>发布文章</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="blog-models.js"></script>
+    <script src="blog-storage.js"></script>
+    <script src="blog-storage-manager.js"></script>
+    
+    <script>
+        // 立即执行的调试代码
+        console.log('=== 页面脚本开始执行 ===');
+        console.log('当前 URL:', window.location.href);
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
+        console.log('URL 参数中的 editId:', editId);
+        console.log('=== 页面脚本执行完毕 ===');
+    </script>
+    
+    <script>
+        /**
+         * 文章发布表单处理器
+         */
+        class ArticlePublisher {
+            constructor() {
+                this.form = document.getElementById('article-form');
+                this.titleInput = document.getElementById('article-title');
+                this.categorySelect = document.getElementById('article-category');
+                this.tagsInput = document.getElementById('article-tags');
+                this.contentEditor = document.getElementById('content-editor');
+                this.publishBtn = document.getElementById('publish-btn');
+                this.saveDraftBtn = document.getElementById('save-draft-btn');
+                this.successMessage = document.getElementById('success-message');
+                
+                // 编辑模式属性
+                this.isEditMode = false;
+                this.editingArticleId = null;
+                this.originalArticle = null;
+                
+                this.init();
+            }
+
+            async init() {
+                this.setupEventListeners();
+                this.setupRichTextEditor();
+                this.setupCharacterCounter();
+                
+                // 先检查是否为编辑模式
+                await this.checkEditMode();
+                
+                // 在编辑模式检查完成后再设置占位符
+                this.setupPlaceholder();
+            }
+
+            async checkEditMode() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const editId = urlParams.get('edit');
+                
+                console.log('检查编辑模式, editId:', editId);
+                
+                if (editId) {
+                    console.log('进入编辑模式, 文章ID:', editId);
+                    this.isEditMode = true;
+                    this.editingArticleId = editId;
+                    await this.loadArticleForEdit(editId);
+                }
+            }
+
+            async loadArticleForEdit(articleId) {
+                try {
+                    console.log('开始加载文章进行编辑, ID:', articleId);
+                    
+                    // 等待存储准备就绪
+                    const storage = window.blogStorageManager || window.blogStorage;
+                    console.log('存储对象:', storage);
+                    
+                    if (!storage) {
+                        throw new Error('存储系统未初始化');
+                    }
+                    
+                    // 直接调用存储的 getArticle 方法，不使用 waitForReady
+                    console.log('直接调用 getArticle 方法');
+                    this.originalArticle = await storage.getArticle(articleId);
+                    console.log('加载的文章:', this.originalArticle);
+                    
+                    if (!this.originalArticle) {
+                        console.error('文章未找到, ID:', articleId);
+                        
+                        // 调试：检查所有存储的文章
+                        const allArticles = storage.getArticles({});
+                        console.log('所有存储的文章:', allArticles);
+                        console.log('存储的文章ID列表:', allArticles.map(a => a.id));
+                        
+                        alert('文章未找到！');
+                        window.location.href = 'blog-admin.html';
+                        return;
+                    }
+                    
+                    // 详细检查文章内容
+                    console.log('=== 文章内容详细检查 ===');
+                    console.log('文章ID:', this.originalArticle.id);
+                    console.log('文章标题:', this.originalArticle.title);
+                    console.log('文章内容类型:', typeof this.originalArticle.content);
+                    console.log('文章内容长度:', this.originalArticle.content ? this.originalArticle.content.length : 0);
+                    console.log('文章内容是否为空:', !this.originalArticle.content || this.originalArticle.content.trim() === '');
+                    console.log('文章内容前100个字符:', this.originalArticle.content ? this.originalArticle.content.substring(0, 100) : 'N/A');
+                    console.log('文章分类:', this.originalArticle.category);
+                    console.log('文章标签:', this.originalArticle.tags);
+                    console.log('文章状态:', this.originalArticle.status);
+                    console.log('=== 文章内容检查完成 ===');
+                    
+                    // 用文章数据填充表单
+                    console.log('开始填充表单');
+                    this.populateForm();
+                    
+                    // 更新页面标题和按钮文本
+                    document.title = '编辑文章 - OPAI';
+                    document.querySelector('h1').textContent = '编辑文章';
+                    this.publishBtn.innerHTML = '<i class="fas fa-save"></i><span>更新文章</span>';
+                    
+                    console.log('编辑模式设置完成');
+                    
+                } catch (error) {
+                    console.error('加载编辑文章时出错:', error);
+                    alert('加载文章出错: ' + error.message);
+                    window.location.href = 'blog-admin.html';
+                }
+            }
+
+            populateForm() {
+                if (!this.originalArticle) return;
+                
+                console.log('开始填充表单...');
+                console.log('文章标题:', this.originalArticle.title);
+                console.log('文章内容:', this.originalArticle.content);
+                console.log('文章分类:', this.originalArticle.category);
+                console.log('文章标签:', this.originalArticle.tags);
+                
+                // 填充表单字段
+                this.titleInput.value = this.originalArticle.title || '';
+                this.categorySelect.value = this.originalArticle.category || 'General';
+                this.tagsInput.value = (this.originalArticle.tags && Array.isArray(this.originalArticle.tags)) 
+                    ? this.originalArticle.tags.join(', ') 
+                    : '';
+                
+                // 确保内容正确加载
+                if (this.originalArticle.content && this.originalArticle.content.trim() !== '') {
+                    console.log('设置文章内容到编辑器');
+                    this.contentEditor.innerHTML = this.originalArticle.content;
+                } else {
+                    console.log('文章内容为空，清空编辑器');
+                    this.contentEditor.innerHTML = '';
+                }
+                
+                // 更新字符计数器
+                const titleCounter = document.getElementById('title-counter');
+                if (titleCounter) {
+                    titleCounter.textContent = `${this.titleInput.value.length}/200`;
+                }
+                
+                console.log('表单填充完成');
+            }
+
+            setupEventListeners() {
+                // 表单提交
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.publishArticle();
+                });
+
+                // 保存草稿
+                this.saveDraftBtn.addEventListener('click', () => {
+                    this.saveDraft();
+                });
+
+                // 实时验证
+                this.titleInput.addEventListener('input', () => {
+                    this.validateTitle();
+                });
+
+                this.contentEditor.addEventListener('input', () => {
+                    this.validateContent();
+                });
+
+                // 每30秒自动保存
+                setInterval(() => {
+                    this.autoSave();
+                }, 30000);
+            }
+
+            setupRichTextEditor() {
+                // 富文本编辑器工具栏
+                const toolbarButtons = document.querySelectorAll('.editor-btn');
+                const imageUpload = document.getElementById('image-upload');
+                const uploadImageBtn = document.getElementById('upload-image-btn');
+                
+                toolbarButtons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const command = btn.dataset.command;
+                        
+                        if (command === 'createLink') {
+                            const url = prompt('请输入链接地址:');
+                            if (url) {
+                                document.execCommand(command, false, url);
+                            }
+                        } else if (command === 'insertImage') {
+                            this.insertImageFromUrl();
+                        } else {
+                            document.execCommand(command, false, null);
+                        }
+                        
+                        this.contentEditor.focus();
+                        this.updateToolbarState();
+                    });
+                });
+
+                // 处理上传图片按钮
+                uploadImageBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    imageUpload.click();
+                });
+
+                // 处理文件上传
+                imageUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        this.insertImageFromFile(file);
+                    }
+                });
+
+                // 选择变化时更新工具栏状态
+                this.contentEditor.addEventListener('mouseup', () => {
+                    this.updateToolbarState();
+                });
+
+                this.contentEditor.addEventListener('keyup', () => {
+                    this.updateToolbarState();
+                });
+
+                // 处理图片拖放
+                this.setupImageDragDrop();
+            }
+
+            insertImageFromUrl() {
+                const url = prompt('请输入图片链接地址:');
+                if (url) {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    img.style.margin = '10px 0';
+                    img.alt = '插入的图片';
+                    
+                    // 在光标位置插入
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(img);
+                        
+                        // 将光标移到图片后面
+                        range.setStartAfter(img);
+                        range.setEndAfter(img);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        this.contentEditor.appendChild(img);
+                    }
+                    
+                    this.contentEditor.focus();
+                }
+            }
+
+            insertImageFromFile(file) {
+                // 检查文件类型
+                if (!file.type.startsWith('image/')) {
+                    alert('请选择图片文件。');
+                    return;
+                }
+
+                // 检查文件大小（限制为5MB）
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('图片文件太大。请选择小于5MB的图片。');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    img.style.margin = '10px 0';
+                    img.alt = file.name;
+                    
+                    // 在光标位置插入
+                    const selection = window.getSelection();
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        range.deleteContents();
+                        range.insertNode(img);
+                        
+                        // 将光标移到图片后面
+                        range.setStartAfter(img);
+                        range.setEndAfter(img);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        this.contentEditor.appendChild(img);
+                    }
+                    
+                    this.contentEditor.focus();
+                };
+                
+                reader.readAsDataURL(file);
+                
+                // 清空文件输入
+                document.getElementById('image-upload').value = '';
+            }
+
+            setupImageDragDrop() {
+                // 阻止默认拖拽行为
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+
+                // 高亮拖放区域
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, () => {
+                        this.contentEditor.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+                        this.contentEditor.style.border = '2px dashed var(--primary)';
+                    });
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    this.contentEditor.addEventListener(eventName, () => {
+                        this.contentEditor.style.backgroundColor = '';
+                        this.contentEditor.style.border = '';
+                    });
+                });
+
+                // 处理拖放的文件
+                this.contentEditor.addEventListener('drop', (e) => {
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        Array.from(files).forEach(file => {
+                            if (file.type.startsWith('image/')) {
+                                this.insertImageFromFile(file);
+                            }
+                        });
+                    }
+                });
+            }
+
+            updateToolbarState() {
+                const toolbarButtons = document.querySelectorAll('.editor-btn');
+                
+                toolbarButtons.forEach(btn => {
+                    const command = btn.dataset.command;
+                    if (document.queryCommandState(command)) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+
+            setupCharacterCounter() {
+                const titleCounter = document.getElementById('title-counter');
+                
+                this.titleInput.addEventListener('input', () => {
+                    const length = this.titleInput.value.length;
+                    const maxLength = 200;
+                    
+                    titleCounter.textContent = `${length}/${maxLength}`;
+                    
+                    if (length > maxLength * 0.9) {
+                        titleCounter.classList.add('warning');
+                    } else {
+                        titleCounter.classList.remove('warning');
+                    }
+                    
+                    if (length >= maxLength) {
+                        titleCounter.classList.add('error');
+                    } else {
+                        titleCounter.classList.remove('error');
+                    }
+                });
+            }
+
+            setupPlaceholder() {
+                const placeholder = this.contentEditor.dataset.placeholder;
+                
+                this.contentEditor.addEventListener('focus', () => {
+                    // 在编辑模式下不显示占位符
+                    if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
+                        this.contentEditor.innerHTML = '';
+                    }
+                });
+
+                this.contentEditor.addEventListener('blur', () => {
+                    // 在编辑模式下不显示占位符
+                    if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
+                        this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                    }
+                });
+
+                // 设置初始占位符 - 只在非编辑模式下显示
+                if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
+                    this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                }
+            }
+
+            validateTitle() {
+                const title = this.titleInput.value.trim();
+                const titleError = document.getElementById('title-error');
+                
+                if (!title) {
+                    this.showError(this.titleInput, titleError, '标题不能为空');
+                    return false;
+                } else if (title.length > 200) {
+                    this.showError(this.titleInput, titleError, '标题不能超过200个字符');
+                    return false;
+                } else {
+                    this.hideError(this.titleInput, titleError);
+                    return true;
+                }
+            }
+
+            validateContent() {
+                const content = this.contentEditor.textContent.trim();
+                const contentError = document.getElementById('content-error');
+                
+                if (!content || content === this.contentEditor.dataset.placeholder) {
+                    this.showError(this.contentEditor, contentError, '内容不能为空');
+                    return false;
+                } else {
+                    this.hideError(this.contentEditor, contentError);
+                    return true;
+                }
+            }
+
+            showError(input, errorElement, message) {
+                input.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+
+            hideError(input, errorElement) {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+
+            validateForm() {
+                const titleValid = this.validateTitle();
+                const contentValid = this.validateContent();
+                
+                return titleValid && contentValid;
+            }
+
+            getFormData() {
+                const tags = this.tagsInput.value
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+
+                return {
+                    title: this.titleInput.value.trim(),
+                    content: this.contentEditor.innerHTML,
+                    category: this.categorySelect.value,
+                    tags: tags,
+                    author: '管理员' // 将来可以动态设置
+                };
+            }
+
+            async publishArticle() {
+                if (!this.validateForm()) {
+                    return;
+                }
+
+                this.setLoading(this.publishBtn, true);
+
+                try {
+                    const formData = this.getFormData();
+                    
+                    let article;
+                    if (this.isEditMode && this.originalArticle) {
+                        // 更新现有文章
+                        article = new Article({
+                            ...this.originalArticle,
+                            ...formData,
+                            id: this.originalArticle.id, // 保持原始ID
+                            publishDate: this.originalArticle.publishDate, // 保持原始发布日期
+                            status: 'published'
+                        });
+                    } else {
+                        // 创建新文章
+                        article = new Article({
+                            ...formData,
+                            status: 'published'
+                        });
+                    }
+
+                    // 使用 SupabaseStorage 直接保存草稿
+                    const storage = window.supabaseStorage;
+                    const result = await storage.saveArticle(article);
+                    
+                    if (result.success) {
+                        const message = this.isEditMode ? '文章更新成功！' : '文章发布成功！';
+                        this.showSuccess(message);
+                        
+                        // 显示存储类型信息
+                        console.log('✓ 文章已保存到本地存储');
+                        
+                        // 2秒后重定向
+                        setTimeout(() => {
+                            if (this.isEditMode) {
+                                window.location.href = 'blog-admin.html';
+                            } else {
+                                window.location.href = 'index.html';
+                            }
+                        }, 2000);
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    console.error('发布文章时出错:', error);
+                    alert('发布文章出错: ' + error.message);
+                } finally {
+                    this.setLoading(this.publishBtn, false);
+                }
+            }
+
+            async saveDraft() {
+                if (!this.titleInput.value.trim()) {
+                    alert('保存草稿需要填写标题');
+                    return;
+                }
+
+                this.setLoading(this.saveDraftBtn, true);
+
+                try {
+                    const formData = this.getFormData();
+                    
+                    let article;
+                    if (this.isEditMode && this.originalArticle) {
+                        // 将现有文章更新为草稿
+                        article = new Article({
+                            ...this.originalArticle,
+                            ...formData,
+                            id: this.originalArticle.id,
+                            publishDate: this.originalArticle.publishDate,
+                            status: 'draft'
+                        });
+                    } else {
+                        // 创建新草稿
+                        article = new Article({
+                            ...formData,
+                            status: 'draft'
+                        });
+                    }
+
+                    // 使用 SupabaseStorage 直接保存文章
+                    const storage = window.supabaseStorage;
+                    const result = await storage.saveArticle(article);
+                    
+                    if (result.success) {
+                        this.showSuccess('草稿保存成功！');
+                        
+                        // 显示存储类型信息
+                        console.log('✓ 草稿已保存到本地存储');
+                        
+                        // 如果这是新文章，更新编辑模式
+                        if (!this.isEditMode) {
+                            this.isEditMode = true;
+                            this.editingArticleId = article.id;
+                            this.originalArticle = article;
+                            
+                            // 更新URL以反映编辑模式
+                            const newUrl = `${window.location.pathname}?edit=${article.id}`;
+                            window.history.replaceState({}, '', newUrl);
+                        }
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    console.error('保存草稿时出错:', error);
+                    alert('保存草稿出错: ' + error.message);
+                } finally {
+                    this.setLoading(this.saveDraftBtn, false);
+                }
+            }
+
+            async autoSave() {
+                // 只有在编辑模式且有内容时才自动保存
+                if (this.isEditMode && this.titleInput.value.trim()) {
+                    try {
+                        await this.saveDraft();
+                        console.log('自动保存草稿');
+                    } catch (error) {
+                        console.error('自动保存失败:', error);
+                    }
+                }
+            }
+
+            showSuccess(message) {
+                this.successMessage.querySelector('span').textContent = message;
+                this.successMessage.classList.add('show');
+                
+                setTimeout(() => {
+                    this.successMessage.classList.remove('show');
+                }, 3000);
+            }
+
+            setLoading(button, loading) {
+                if (loading) {
+                    button.classList.add('loading');
+                    button.disabled = true;
+                } else {
+                    button.classList.remove('loading');
+                    button.disabled = false;
+                }
+            }
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 立即检查 URL 参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get('edit');
+            console.log('页面加载时检查 URL 参数, editId:', editId);
+            console.log('完整 URL:', window.location.href);
+            
+            // 初始化 Supabase 存储
+            window.supabaseStorage = new SupabaseStorage();
+            await window.supabaseStorage.initialize();
+            
+            setTimeout(() => {
+                new ArticlePublisher();
+                console.log('文章发布器已初始化');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
