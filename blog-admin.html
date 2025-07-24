@@ -658,10 +658,10 @@
                 console.log('Initializing Blog Admin...');
                 console.log('SupabaseStorage available:', typeof SupabaseStorage !== 'undefined');
 
-                // 修复：保存 this 上下文引用
+                // 保存 this 上下文引用
                 const self = this;
 
-                // 新增：等待SupabaseStorage可用
+                // 等待SupabaseStorage可用
                 const checkStorageAvailability = () => {
                     if (typeof SupabaseStorage === 'undefined') {
                         console.log('Waiting for SupabaseStorage...');
@@ -669,7 +669,7 @@
                         return;
                     }
 
-                    // 检查存储是否已初始化 - 修复了之前的方法调用问题
+                    // 检查存储是否已初始化
                     if (!SupabaseStorage.isInitialized) {
                         console.log('Waiting for SupabaseStorage initialization...');
                         setTimeout(checkStorageAvailability, 200);
@@ -683,57 +683,78 @@
                 // 启动检查
                 checkStorageAvailability();
 
-                // 保留原有的1秒延迟，确保所有依赖加载完成 - 修复 this 上下文问题
+                // 保留原有的1秒延迟，确保所有依赖加载完成
                 setTimeout(() => {
-                    self.updateStatistics();
+                    // 检查 updateStatistics 方法是否存在
+                    if (typeof self.updateStatistics === 'function') {
+                        self.updateStatistics();
+                    } else {
+                        console.log('updateStatistics method not found, calling fallback update');
+                        self.updateStatsFallback();
+                    }
                     console.log('Blog Admin initialized');
                 }, 1000);
+            }
+
+            // 添加一个临时的统计更新回退方法
+            updateStatsFallback() {
+                console.log('Updating statistics from fallback method');
+                // 这里只是为了演示，实际应该从数据库获取数据
+                document.getElementById('total-articles').textContent = '0';
+                document.getElementById('published-articles').textContent = '0';
+                document.getElementById('draft-articles').textContent = '0';
+                document.getElementById('recent-articles').textContent = '0';
             }
 
             async loadArticles() {
                 try {
                     // Wait for storage to be ready
-                    const storage = await this.waitForStorage();
+                    const storage = window.SupabaseStorage;
+                    if (!storage) {
+                        console.error('SupabaseStorage is not available');
+                        return;
+                    }
                     
                     // Load all articles (including drafts)
                     this.articles = await storage.getArticles({});
                     
                     console.log(`Loaded ${this.articles.length} articles`);
+                    this.renderArticles();
+                    this.updateStatistics();
                 } catch (error) {
                     console.error('Error loading articles:', error);
                     this.articles = [];
+                    this.showError('Failed to load articles');
                 }
             }
 
-            waitForStorage() {
-                return new Promise((resolve) => {
-                    const checkStorage = () => {
-                        if (window.supabaseStorage && window.supabaseStorage.isInitialized) {
-                            resolve(window.supabaseStorage);
-                        } else {
-                            setTimeout(checkStorage, 100);
-                        }
-                    };
-                    checkStorage();
-                });
-            }
+            // 实现 updateStatistics 方法
+            updateStatistics() {
+                console.log('Updating statistics');
+                if (!this.articles || this.articles.length === 0) {
+                    document.getElementById('total-articles').textContent = '0';
+                    document.getElementById('published-articles').textContent = '0';
+                    document.getElementById('draft-articles').textContent = '0';
+                    document.getElementById('recent-articles').textContent = '0';
+                    return;
+                }
 
-            updateStats() {
-                const totalArticles = this.articles.length;
-                const publishedArticles = this.articles.filter(a => a.status === 'published').length;
-                const draftArticles = this.articles.filter(a => a.status === 'draft').length;
-                
-                // Calculate recent articles (last 7 days)
+                const total = this.articles.length;
+                const published = this.articles.filter(article => article.status === 'published').length;
+                const drafts = this.articles.filter(article => article.status === 'draft').length;
+
+                // 计算最近7天的文章数量
                 const oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                const recentArticles = this.articles.filter(a => 
-                    new Date(a.publishDate) > oneWeekAgo
-                ).length;
+                const recent = this.articles.filter(article => {
+                    const articleDate = new Date(article.created_at);
+                    return articleDate >= oneWeekAgo;
+                }).length;
 
-                document.getElementById('total-articles').textContent = totalArticles;
-                document.getElementById('published-articles').textContent = publishedArticles;
-                document.getElementById('draft-articles').textContent = draftArticles;
-                document.getElementById('recent-articles').textContent = recentArticles;
+                document.getElementById('total-articles').textContent = total;
+                document.getElementById('published-articles').textContent = published;
+                document.getElementById('draft-articles').textContent = drafts;
+                document.getElementById('recent-articles').textContent = recent;
             }
 
             renderArticlesTable() {
