@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章详情 - OPAI</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="src/favicon.ico">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -17,11 +18,15 @@
     <script src="./error-handler.js"></script>
     <script src="./blog-models.js"></script>
     <script src="./supabase-storage.js"></script>
-    
+
+    <!-- Sidebar and i18n -->
+    <script src="sidebar-loader.js"></script>
+    <script src="i18n-loader.js"></script>
+
     <style>
         * {
-            margin: 0; 
-            padding: 0; 
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
             font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -43,6 +48,8 @@
             --glass-border: rgba(255, 255, 255, 0.18);
             --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             --transition: all 0.3s ease;
+            --sidebar-bg: rgba(43, 45, 66, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
         }
 
         body {
@@ -53,16 +60,215 @@
             min-height: 100vh;
         }
 
+        /* App Layout */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            grid-template-rows: 70px 1fr;
+            grid-template-areas: "sidebar header" "sidebar content";
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--sidebar-bg);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .category-section {
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        .category-title {
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0 5px;
+        }
+
+        .category-list li {
+            padding: 12px 15px 12px 45px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-list li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .category-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-list li:hover::before {
+            background: var(--success);
+        }
+
+        .category-list li.active {
+            background: rgba(114, 9, 183, 0.3);
+        }
+
+        .category-list li.active::before {
+            background: var(--accent);
+        }
+
+        .category-list li i {
+            position: absolute;
+            left: 15px;
+            font-size: 1rem;
+        }
+
         /* Header */
         .header {
-            background: var(--card-bg);
-            padding: 15px 30px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
+            grid-area: header;
+            background: var(--header-bg);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 15px 5px 5px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            overflow: hidden;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Content */
+        .content {
+            grid-area: content;
+            padding: 30px;
+            background: rgba(245, 247, 251, 0.85);
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            min-height: calc(100vh - 70px);
         }
 
         .header-content {
@@ -137,7 +343,7 @@
         /* Main Content */
         .container {
             max-width: 900px;
-            margin: 30px auto;
+            margin: 0 auto;
             padding: 0 20px;
         }
 
@@ -218,22 +424,44 @@
             margin-bottom: 20px;
         }
 
-        .article-content h1, .article-content h2, .article-content h3, 
-        .article-content h4, .article-content h5, .article-content h6 {
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4,
+        .article-content h5,
+        .article-content h6 {
             margin-top: 30px;
             margin-bottom: 15px;
             font-weight: 600;
             color: var(--dark);
         }
 
-        .article-content h1 { font-size: 1.8rem; }
-        .article-content h2 { font-size: 1.6rem; }
-        .article-content h3 { font-size: 1.4rem; }
-        .article-content h4 { font-size: 1.2rem; }
-        .article-content h5 { font-size: 1.1rem; }
-        .article-content h6 { font-size: 1rem; }
+        .article-content h1 {
+            font-size: 1.8rem;
+        }
 
-        .article-content ul, .article-content ol {
+        .article-content h2 {
+            font-size: 1.6rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+        }
+
+        .article-content h4 {
+            font-size: 1.2rem;
+        }
+
+        .article-content h5 {
+            font-size: 1.1rem;
+        }
+
+        .article-content h6 {
+            font-size: 1rem;
+        }
+
+        .article-content ul,
+        .article-content ol {
             margin-bottom: 20px;
             padding-left: 25px;
         }
@@ -413,6 +641,17 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 992px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+                grid-template-areas: "header" "content";
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 0 15px;
@@ -441,113 +680,137 @@
                 padding: 10px 15px;
             }
 
-            .header-content {
-                flex-direction: column;
+            .nav-links {
                 gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 0.95rem;
+            }
+
+            .user-actions {
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <i class="fas fa-robot"></i>
-                <span>OPAI</span>
-            </a>
-            
-            <div class="header-actions">
-                <a href="blog-admin.html" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>返回博客管理</span>
+    <div class="app-layout">
+        <!-- 侧边栏 -->
+        <div id="sidebar"></div>
+
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+                <li><a href="#" data-i18n="nav.tools">AI工具</a></li>
+                <li><a href="#" data-i18n="nav.tutorial">教程</a></li>
+                <li><a href="articles.html" data-i18n="nav.blog">博客</a></li>
+                <li><a href="#" data-i18n="nav.community">社区</a></li>
+                <li><a href="#" data-i18n="nav.about">关于</a></li>
+            </ul>
+            <div class="user-actions">
+                <a href="publish.html" class="btn" id="createPostBtn">
+                    <i class="fas fa-plus"></i> 发布文章
                 </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Article Card -->
-        <article class="article-card">
-            <header class="article-header">
-                <h1 class="article-title" id="article-title">加载中...</h1>
-                <div class="article-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-user"></i>
-                        <span id="article-author">加载中...</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="article-date">加载中...</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-folder"></i>
-                        <span id="article-category">加载中...</span>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-eye"></i>
-                        <span id="article-views">加载中...</span>
-                    </div>
-                </div>
-                <div class="article-tags" id="article-tags">
-                    <!-- 标签将动态加载 -->
-                </div>
-            </header>
-
-            <div class="article-content" id="article-content">
-                <div id="loading-indicator" style="text-align: center; padding: 40px 0;">
-                    <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
-                    <p style="margin-top: 20px;">加载文章内容中...</p>
+                <div class="user-profile">
+                    <div class="user-avatar">AI</div>
+                    <span>OPAI探索者</span>
                 </div>
             </div>
-        </article>
+        </header>
 
-        <!-- Related Articles -->
-        <section class="related-articles">
-            <h2 class="section-title">相关推荐</h2>
-            <div class="article-grid">
-                <a href="#" class="related-card">
-                    <div class="related-image">
-                        <img src="src/ai-research.jpg" alt="AI研究">
-                    </div>
-                    <div class="related-content">
-                        <h3 class="related-title">深度学习在药物发现中的突破性进展</h3>
-                        <p class="related-excerpt">探索如何利用深度学习技术加速药物研发过程，以及最新的研究成果和应用案例。</p>
-                        <div class="related-meta">
-                            <span>2023-10-28</span>
-                            <span>892 阅读</span>
+        <!-- 主内容区 -->
+        <main class="content">
+            <div class="container">
+                <!-- Article Card -->
+                <article class="article-card">
+                    <header class="article-header">
+                        <h1 class="article-title" id="article-title">加载中...</h1>
+                        <div class="article-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span id="article-author">加载中...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="article-date">加载中...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-folder"></i>
+                                <span id="article-category">加载中...</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-eye"></i>
+                                <span id="article-views">加载中...</span>
+                            </div>
+                        </div>
+                        <div class="article-tags" id="article-tags">
+                            <!-- 标签将动态加载 -->
+                        </div>
+                    </header>
+
+                    <div class="article-content" id="article-content">
+                        <div id="loading-indicator" style="text-align: center; padding: 40px 0;">
+                            <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
+                            <p style="margin-top: 20px;">加载文章内容中...</p>
                         </div>
                     </div>
-                </a>
-                <a href="#" class="related-card">
-                    <div class="related-image">
-                        <img src="src/telemedicine.jpg" alt="远程医疗">
+                </article>
+
+                <!-- Related Articles -->
+                <section class="related-articles">
+                    <h2 class="section-title">相关推荐</h2>
+                    <div class="article-grid">
+                        <a href="#" class="related-card">
+                            <div class="related-image">
+                                <img src="src/ai-research.jpg" alt="AI研究">
+                            </div>
+                            <div class="related-content">
+                                <h3 class="related-title">深度学习在药物发现中的突破性进展</h3>
+                                <p class="related-excerpt">探索如何利用深度学习技术加速药物研发过程，以及最新的研究成果和应用案例。</p>
+                                <div class="related-meta">
+                                    <span>2023-10-28</span>
+                                    <span>892 阅读</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="related-card">
+                            <div class="related-image">
+                                <img src="src/telemedicine.jpg" alt="远程医疗">
+                            </div>
+                            <div class="related-content">
+                                <h3 class="related-title">AI如何推动远程医疗的发展</h3>
+                                <p class="related-excerpt">分析AI技术在远程诊断、健康监测和医疗咨询等方面的应用，以及对医疗资源分配的影响。</p>
+                                <div class="related-meta">
+                                    <span>2023-11-05</span>
+                                    <span>1,054 阅读</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="related-card">
+                            <div class="related-image">
+                                <img src="src/medical-ethics.jpg" alt="医疗伦理">
+                            </div>
+                            <div class="related-content">
+                                <h3 class="related-title">AI医疗的伦理挑战与应对策略</h3>
+                                <p class="related-excerpt">探讨AI在医疗应用中涉及的隐私、公平性和责任等伦理问题，以及可能的解决方案。</p>
+                                <div class="related-meta">
+                                    <span>2023-11-10</span>
+                                    <span>763 阅读</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="related-content">
-                        <h3 class="related-title">AI如何推动远程医疗的发展</h3>
-                        <p class="related-excerpt">分析AI技术在远程诊断、健康监测和医疗咨询等方面的应用，以及对医疗资源分配的影响。</p>
-                        <div class="related-meta">
-                            <span>2023-11-05</span>
-                            <span>1,054 阅读</span>
-                        </div>
-                    </div>
-                </a>
-                <a href="#" class="related-card">
-                    <div class="related-image">
-                        <img src="src/medical-ethics.jpg" alt="医疗伦理">
-                    </div>
-                    <div class="related-content">
-                        <h3 class="related-title">AI医疗的伦理挑战与应对策略</h3>
-                        <p class="related-excerpt">探讨AI在医疗应用中涉及的隐私、公平性和责任等伦理问题，以及可能的解决方案。</p>
-                        <div class="related-meta">
-                            <span>2023-11-10</span>
-                            <span>763 阅读</span>
-                        </div>
-                    </div>
-                </a>
+                </section>
             </div>
-        </section>
+        </main>
     </div>
 
     <script>
@@ -557,12 +820,12 @@
                 // 优先从查询参数获取ID
                 const urlParams = new URLSearchParams(window.location.search);
                 const queryId = urlParams.get('id');
-                
+
                 if (queryId) {
                     console.log('从查询参数获取文章ID:', queryId);
                     return queryId;
                 }
-                
+
                 // 从hash获取ID（向后兼容）
                 const hash = window.location.hash;
                 if (hash && hash.length > 1) {
@@ -570,13 +833,13 @@
                     console.log('从hash获取文章ID:', hashId);
                     return hashId;
                 }
-                
+
                 return null;
             }
         }
 
         // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', async function () {
             console.log('文章详情页面加载完成');
 
             // 从URL获取文章ID（支持多种格式）
@@ -611,7 +874,7 @@
             // 为社交分享按钮添加点击事件
             const socialButtons = document.querySelectorAll('.social-btn');
             socialButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const platform = this.querySelector('i').classList[1].replace('fa-', '');
                     alert(`分享到${platform}功能开发中...`);
                 });
@@ -619,7 +882,7 @@
 
             // 平滑滚动
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
                     if (targetId === '#') return;
@@ -661,10 +924,10 @@
         // 显示错误信息
         function showError(message, errorType = 'GENERAL') {
             const contentContainer = document.getElementById('article-content');
-            
+
             let iconClass = 'fas fa-exclamation-circle';
             let additionalActions = '';
-            
+
             // 根据错误类型定制图标和操作
             switch (errorType) {
                 case 'ARTICLE_NOT_FOUND':
@@ -688,7 +951,7 @@
                 default:
                     break;
             }
-            
+
             contentContainer.innerHTML = `
                 <div style="text-align: center; padding: 40px 0;">
                     <i class="${iconClass} fa-3x" style="color: var(--error);"></i>
@@ -707,15 +970,15 @@
                 </div>
             `;
         }
-        
+
         // 检查网络连接
         function checkConnection() {
             const button = event.target;
             const originalText = button.innerHTML;
-            
+
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 检查中...';
             button.disabled = true;
-            
+
             // 简单的连接检查
             fetch(window.location.origin + '/favicon.ico', { method: 'HEAD', cache: 'no-cache' })
                 .then(() => {
@@ -747,4 +1010,5 @@
         }
     </script>
 </body>
+
 </html>
