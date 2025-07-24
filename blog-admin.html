@@ -660,19 +660,35 @@
 
                 // 保存 this 上下文引用
                 const self = this;
+                let initializationAttempts = 0;
+                const maxAttempts = 20; // 最多尝试20次（约4秒）
 
-                // 等待SupabaseStorage可用
+                // 等待SupabaseStorage可用并初始化
                 const checkStorageAvailability = () => {
+                    initializationAttempts++;
+
                     if (typeof SupabaseStorage === 'undefined') {
                         console.log('Waiting for SupabaseStorage...');
-                        setTimeout(checkStorageAvailability, 200);
+                        if (initializationAttempts < maxAttempts) {
+                            setTimeout(checkStorageAvailability, 200);
+                        } else {
+                            console.error('SupabaseStorage did not load after maximum attempts');
+                            self.showError('Failed to load SupabaseStorage');
+                        }
                         return;
                     }
 
-                    // 检查存储是否已初始化
-                    if (!SupabaseStorage.isInitialized) {
+                    // 检查存储是否已初始化（尝试多种可能的属性名）
+                    const isInitialized = SupabaseStorage.isInitialized || SupabaseStorage.initialized || false;
+                    if (!isInitialized) {
                         console.log('Waiting for SupabaseStorage initialization...');
-                        setTimeout(checkStorageAvailability, 200);
+                        if (initializationAttempts < maxAttempts) {
+                            setTimeout(checkStorageAvailability, 200);
+                        } else {
+                            console.warn('SupabaseStorage not fully initialized after maximum attempts, proceeding anyway...');
+                            // 超时后强制尝试加载文章
+                            self.loadArticles();
+                        }
                         return;
                     }
 
@@ -687,7 +703,12 @@
                 setTimeout(() => {
                     // 检查 updateStatistics 方法是否存在
                     if (typeof self.updateStatistics === 'function') {
-                        self.updateStatistics();
+                        // 只有在文章加载后才更新统计信息
+                        if (self.articles && self.articles.length > 0) {
+                            self.updateStatistics();
+                        } else {
+                            console.log('No articles loaded yet, skipping statistics update');
+                        }
                     } else {
                         console.log('updateStatistics method not found, calling fallback update');
                         self.updateStatsFallback();
