@@ -767,7 +767,7 @@
                     this.articles = await storage.getArticles({});
 
                     console.log(`Loaded ${this.articles.length} articles`);
-                    this.renderArticles();
+                    this.renderArticlesTable();
                     this.updateStatistics();
                 } catch (error) {
                     console.error('Error loading articles:', error);
