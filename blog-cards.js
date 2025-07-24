@@ -158,8 +158,8 @@ class BlogCards {
     }
 
     navigateToArticle(articleId) {
-        // Navigate to article detail page using hash
-        window.location.href = `article.html#${articleId}`;
+        // Navigate to article detail page using URL parameter instead of hash
+        window.location.href = `article.html?id=${articleId}`;
     }
 
     formatDate(dateString) {
