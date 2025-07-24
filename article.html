@@ -561,83 +561,259 @@
 
         /* Related Articles */
         .related-articles {
-            margin-top: 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px;
+            margin-top: 40px;
         }
 
         .section-title {
-            font-size: 1.5rem;
-            color: white;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
         }
 
-        .article-grid {
+        .section-title i {
+            margin-right: 12px;
+            color: var(--accent);
+        }
+
+        .articles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .related-card {
+        .article-card {
             background: var(--card-bg);
-            border-radius: 15px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            text-decoration: none;
-            color: var(--dark);
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
         }
 
-        .related-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(31, 38, 135, 0.2);
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(31, 38, 135, 0.25);
         }
 
-        .related-image {
+        .article-image {
             height: 160px;
-            background: var(--light-gray);
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
 
-        .related-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+        .article-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
         }
 
-        .related-card:hover .related-image img {
-            transform: scale(1.05);
+        .article-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2;
+            backdrop-filter: blur(10px);
         }
 
-        .related-content {
+        .article-content {
             padding: 20px;
         }
 
-        .related-title {
+        .article-title {
             font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 10px;
+            color: var(--dark);
+            margin-bottom: 12px;
             line-height: 1.4;
-        }
-
-        .related-excerpt {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 15px;
+            font-weight: 600;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .related-meta {
-            font-size: 0.85rem;
+        .article-excerpt {
+            font-size: 0.95rem;
             color: var(--gray);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3;
+        }
+
+        .article-overlay i {
+            color: white;
+            font-size: 2rem;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+
+        .article-card:hover .article-overlay {
+            opacity: 1;
+        }
+
+        .article-card:hover .article-overlay i {
+            transform: translateX(0);
+        }
+
+        .article-meta {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--light-gray);
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .read-time, .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .read-time i, .article-date i {
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 1200px) {
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .related-articles {
+                padding: 0 20px;
+                margin-top: 30px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+
+            .articles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 18px;
+            }
+
+            .article-image {
+                height: 140px;
+            }
+
+            .article-content {
+                padding: 16px;
+            }
+
+            .article-title {
+                font-size: 1rem;
+            }
+
+            .article-excerpt {
+                font-size: 0.9rem;
+            }
+
+            .article-meta {
+                margin-top: 12px;
+                padding-top: 12px;
+                font-size: 0.8rem;
+            }
+
+            .article-overlay i {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .related-articles {
+                padding: 0 15px;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .article-image {
+                height: 120px;
+            }
+
+            .article-category {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+
+            .article-category i {
+                font-size: 0.7rem;
+            }
+
+            .article-content {
+                padding: 14px;
+            }
+
+            .article-title {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+
+            .article-excerpt {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .article-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                font-size: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .article-overlay i {
+                font-size: 1.2rem;
+            }
         }
 
         /* Responsive Design */
@@ -716,9 +892,6 @@
                 <li><a href="#" data-i18n="nav.about">关于</a></li>
             </ul>
             <div class="user-actions">
-                <a href="publish.html" class="btn" id="createPostBtn">
-                    <i class="fas fa-plus"></i> 发布文章
-                </a>
                 <div class="user-profile">
                     <div class="user-avatar">AI</div>
                     <span>OPAI探索者</span>
@@ -766,48 +939,8 @@
 
                 <!-- Related Articles -->
                 <section class="related-articles">
-                    <h2 class="section-title">相关推荐</h2>
-                    <div class="article-grid">
-                        <a href="#" class="related-card">
-                            <div class="related-image">
-                                <img src="src/ai-research.jpg" alt="AI研究">
-                            </div>
-                            <div class="related-content">
-                                <h3 class="related-title">深度学习在药物发现中的突破性进展</h3>
-                                <p class="related-excerpt">探索如何利用深度学习技术加速药物研发过程，以及最新的研究成果和应用案例。</p>
-                                <div class="related-meta">
-                                    <span>2023-10-28</span>
-                                    <span>892 阅读</span>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="related-card">
-                            <div class="related-image">
-                                <img src="src/telemedicine.jpg" alt="远程医疗">
-                            </div>
-                            <div class="related-content">
-                                <h3 class="related-title">AI如何推动远程医疗的发展</h3>
-                                <p class="related-excerpt">分析AI技术在远程诊断、健康监测和医疗咨询等方面的应用，以及对医疗资源分配的影响。</p>
-                                <div class="related-meta">
-                                    <span>2023-11-05</span>
-                                    <span>1,054 阅读</span>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="related-card">
-                            <div class="related-image">
-                                <img src="src/medical-ethics.jpg" alt="医疗伦理">
-                            </div>
-                            <div class="related-content">
-                                <h3 class="related-title">AI医疗的伦理挑战与应对策略</h3>
-                                <p class="related-excerpt">探讨AI在医疗应用中涉及的隐私、公平性和责任等伦理问题，以及可能的解决方案。</p>
-                                <div class="related-meta">
-                                    <span>2023-11-10</span>
-                                    <span>763 阅读</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <h2 class="section-title"><i class="fas fa-thumbs-up"></i> 相关推荐</h2>
+                    <div class="articles-grid"></div>
                 </section>
             </div>
         </main>
@@ -919,6 +1052,9 @@
 
             // 更新页面标题
             document.title = `${article.title} - OPAI`;
+            
+            // 加载相关推荐
+            loadRelatedArticles();
         }
 
         // 显示错误信息
