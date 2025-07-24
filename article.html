@@ -13,12 +13,10 @@
 
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- 引入项目脚本 -->
-    <script src="supabase-config.js"></script>
-    <script src="error-handler.js"></script>
-    <script src="blog-models.js"></script>
-    <script src="supabase-storage.js"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./error-handler.js"></script>
+    <script src="./blog-models.js"></script>
+    <script src="./supabase-storage.js"></script>
     
     <style>
         * {
@@ -584,7 +582,7 @@
 
             } catch (error) {
                 console.error('加载文章失败:', error);
-                showError('加载文章失败，请稍后重试');
+                showError(`加载文章失败: ${error.message || '未知错误'}`);
             }
 
             // 为社交分享按钮添加点击事件
