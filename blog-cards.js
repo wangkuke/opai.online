@@ -28,7 +28,21 @@ class BlogCards {
 
     async loadArticles() {
         const storage = window.blogStorage;
-        if (!storage) {
+        if (storage) {
+            try {
+                // Load published articles only
+                this.articles = await storage.getArticles({
+                    status: 'published',
+                    limit: 12 // Limit to 12 articles for performance
+                });
+                console.log('Articles loaded successfully');
+                this.renderCards(); // 确保加载成功后渲染卡片
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                this.articles = [];
+                this.showError('Failed to load articles. Please try again later.');
+            }
+        } else {
             console.warn('No storage service available');
             // 尝试直接创建SupabaseStorage实例
             if (window.SupabaseStorage) {
@@ -42,34 +56,11 @@ class BlogCards {
                     // 显示错误信息给用户
                     this.showError('Failed to connect to database. Please try again later.');
                 }
+            } else {
+                console.error('SupabaseStorage class not available');
+                // 显示错误信息给用户
+                this.showError('Blog service not available. Please try again later.');
             }
-        } else {
-            console.error('SupabaseStorage class not available');
-            // 显示错误信息给用户
-            this.showError('Blog service not available. Please try again later.');
-        }
-        return;
-    }
-
-    showError(message) {
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'error-message';
-        errorContainer.textContent = message;
-        this.container.appendChild(errorContainer);
-    }
-
-
-        }
-
-        try {
-            // Load published articles only
-            this.articles = await storage.getArticles({ 
-                status: 'published',
-                limit: 12 // Limit to 12 articles for performance
-            });
-        } catch (error) {
-            console.error('Error loading articles:', error);
-            this.articles = [];
         }
     }
 
