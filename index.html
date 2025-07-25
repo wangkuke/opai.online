@@ -2393,23 +2393,22 @@
     window.addEventListener('blogStorageReady', function() {
         console.log('✓ Blog storage ready event received');
         
-        // 如果博客卡片还没有初始化，尝试初始化
+        // 如果博客卡片还没有初始化，立即初始化（去掉500ms延迟）
         if (!window.blogCards) {
-            setTimeout(() => {
-                const articlesGrid = document.querySelector('.articles-grid');
-                if (articlesGrid) {
-                    try {
-                        window.blogCards = new BlogCards('.articles-grid', {
-                            maxArticles: 4,
-                            showViewMore: true,
-                            viewMoreUrl: 'articles.html'
-                        });
-                        console.log('✓ Blog cards initialized after storage ready');
-                    } catch (error) {
-                        console.error('✗ Failed to initialize blog cards after storage ready:', error);
-                    }
+            const articlesGrid = document.querySelector('.articles-grid');
+            if (articlesGrid) {
+                try {
+                    window.blogCards = new BlogCards('.articles-grid', {
+                        maxArticles: 4,
+                        showViewMore: true,
+                        viewMoreUrl: 'articles.html'
+                    });
+                    console.log('✓ Blog cards initialized after storage ready');
+                } catch (error) {
+                    console.error('✗ Failed to initialize blog cards:', error);
+                    // 添加用户可见的错误提示
+                    articlesGrid.innerHTML = `<div class="error-message" style="grid-column: 1/-1; text-align: center; padding: 20px;">Failed to load articles. Please try refreshing the page.</div>`;
                 }
-            }, 500);
         }
     });
 </script>
