@@ -33,11 +33,32 @@ class BlogCards {
             // 尝试直接创建SupabaseStorage实例
             if (window.SupabaseStorage) {
                 window.blogStorage = new SupabaseStorage();
-                await window.blogStorage.initialize();
-                console.log('Created SupabaseStorage instance');
-                this.loadArticles(); // 重新加载
+                try {
+                    await window.blogStorage.initialize();
+                    console.log('Created SupabaseStorage instance');
+                    this.loadArticles(); // 重新加载
+                } catch (error) {
+                    console.error('Failed to initialize SupabaseStorage:', error);
+                    // 显示错误信息给用户
+                    this.showError('Failed to connect to database. Please try again later.');
+                }
             }
-            return;
+        } else {
+            console.error('SupabaseStorage class not available');
+            // 显示错误信息给用户
+            this.showError('Blog service not available. Please try again later.');
+        }
+        return;
+    }
+
+    showError(message) {
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'error-message';
+        errorContainer.textContent = message;
+        this.container.appendChild(errorContainer);
+    }
+
+
         }
 
         try {
