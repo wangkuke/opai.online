@@ -649,12 +649,12 @@
                         throw new Error('Supabase 存储未初始化');
                     }
 
-                    // 构建查询选项
-                    const options = {
-                        status: 'published', // 只显示已发布的文章
-                        limit: this.pageSize,
-                        offset: (this.currentPage - 1) * this.pageSize
-                    };
+                    // 构建查询选项 - 添加状态筛选，只获取已发布文章
+                const options = {
+                    limit: this.pageSize,
+                    offset: (this.currentPage - 1) * this.pageSize,
+                    status: 'published' // 添加状态筛选，只获取已发布文章
+                };
 
                     // 添加分类筛选
                     if (this.currentCategory && this.currentCategory !== 'all') {
@@ -673,7 +673,21 @@
                     
                 } catch (error) {
                     console.error('加载文章列表失败:', error);
-                    this.showError();
+                    // 添加和 article.html 相同的错误提示样式
+                    this.articlesGrid.innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <i class="fas fa-exclamation-circle fa-3x" style="color: var(--error);"></i>
+                            <p style="margin-top: 20px; color: var(--error); font-size: 1.1rem;">加载文章失败: ${error.message || '数据库连接问题'}</p>
+                            <div style="margin-top: 30px;">
+                                <button onclick="location.reload()" class="btn btn-primary">
+                                    <i class="fas fa-redo"></i> 重试加载
+                                </button>
+                                <a href="blog-admin.html" class="btn btn-secondary" style="margin-left: 15px;">
+                                    <i class="fas fa-pencil-alt"></i> 去发布文章
+                                </a>
+                            </div>
+                        </div>
+                    `;
                 } finally {
                     this.isLoading = false;
                 }

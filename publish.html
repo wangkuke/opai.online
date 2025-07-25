@@ -488,7 +488,7 @@
             </a>
             
             <div class="header-actions">
-                <a href="index.html" class="btn btn-secondary">
+                <a href="blog-admin.html" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i>
                     <span>返回首页</span>
                 </a>
@@ -1065,13 +1065,13 @@
                 this.contentEditor.addEventListener('blur', () => {
                     // 在编辑模式下不显示占位符
                     if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
-                        this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                        this.contentEditor.innerHTML = '';
                     }
                 });
 
                 // 设置初始占位符 - 只在非编辑模式下显示
                 if (!this.isEditMode && this.contentEditor.textContent.trim() === '') {
-                    this.contentEditor.innerHTML = `<p style="color: #6c757d; font-style: italic;">${placeholder}</p>`;
+                    this.contentEditor.innerHTML = '';
                 }
             }
 
