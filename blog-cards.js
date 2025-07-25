@@ -30,6 +30,13 @@ class BlogCards {
         const storage = window.blogStorage;
         if (!storage) {
             console.warn('No storage service available');
+            // 尝试直接创建SupabaseStorage实例
+            if (window.SupabaseStorage) {
+                window.blogStorage = new SupabaseStorage();
+                await window.blogStorage.initialize();
+                console.log('Created SupabaseStorage instance');
+                this.loadArticles(); // 重新加载
+            }
             return;
         }
 

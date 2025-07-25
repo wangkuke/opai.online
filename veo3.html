@@ -115,8 +115,6 @@
             border-right: 1px solid var(--glass-border);
         }
 
-
-
         .header {
             grid-area: header;
             background: var(--header-bg);
@@ -460,7 +458,10 @@
 
 <body>
     <div class="app-layout">
-        <div id="sidebar"></div>
+        <!-- 直接引入sidebar内容 -->
+        <div class="sidebar">
+            <!-- 可根据sidebar.html内容进行填充，或后续补充 -->
+        </div>
         <!-- Top Navigation Bar -->
         <header class="header">
             <ul class="nav-links">
@@ -489,9 +490,6 @@
                     });
                 </script>
 
-                <button class="btn" id="createPostBtn">
-                    <i class="fas fa-plus"></i> <span data-i18n="nav.publish">Publish Article</span>
-                </button>
                 <div class="user-profile">
                     <div class="user-avatar">V3</div>
                     <span data-i18n="veo3.user">Veo3 Explorer</span>
@@ -656,17 +654,7 @@
             });
         });
     </script>
-    <script>
-        // Sidebar async load（与cici.html一致）
-        fetch('sidebar.html')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('sidebar').outerHTML = html;
-                if (window.i18n) {
-                    window.i18n.updateSidebarTranslations();
-                }
-            });
-    </script>
+    <!-- 移除sidebar相关异步加载脚本 -->
 </body>
 
 </html>

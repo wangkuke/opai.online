@@ -564,6 +564,15 @@
     <script src="blog-cards.js"></script>
 
     <script>
+        // 初始化i18n
+        window.i18n = new I18nLoader();
+        window.i18n.init().then(() => {
+            console.log('i18n initialized');
+        });
+
+        // 初始化语言切换器
+        window.languageSwitcher = new LanguageSwitcher();
+
         /**
          * Articles Page Handler - 纯 Supabase 云端数据
          */
@@ -1028,14 +1037,23 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 确保下拉选择器显示正确的语言
             const langSelect = document.getElementById('lang-select');
-            if (langSelect && window.languageSwitcher) {
-                langSelect.value = window.languageSwitcher.getCurrentLanguage();
+            if (langSelect && window.i18n) {
+                langSelect.value = window.i18n.getCurrentLanguage();
             }
 
-            // Wait for i18n and blog system to load
+            // 初始化ArticlesPage
             setTimeout(() => {
-                new ArticlesPage();
-                console.log('Articles page ready');
+                // 确保SupabaseStorage可用
+                if (window.SupabaseStorage) {
+                    window.blogStorage = new SupabaseStorage();
+                    window.blogStorage.initialize().then(() => {
+                        console.log('Blog storage initialized');
+                        new ArticlesPage();
+                        console.log('Articles page ready');
+                    }).catch(error => {
+                        console.error('Failed to initialize blog storage:', error);
+                    });
+                }
             }, 1000);
         });
     </script>
