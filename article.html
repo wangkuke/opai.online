@@ -2,6 +2,10 @@
 <html lang="zh-CN">
 
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6160387154009917"
+     crossorigin="anonymous"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章详情 - OPAI</title>
@@ -13,15 +17,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./supabase-config.js"></script>
-    <script src="./error-handler.js"></script>
-    <script src="./blog-models.js"></script>
-    <script src="./supabase-storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="./supabase-config.js" defer></script>
+    <script src="./error-handler.js" defer></script>
+    <script src="./blog-models.js" defer></script>
+    <script src="./supabase-storage.js" defer></script>
 
     <!-- Sidebar and i18n -->
-    <script src="sidebar-loader.js"></script>
-    <script src="i18n-loader.js"></script>
+    <script src="sidebar-loader.js" defer></script>
+    <script src="i18n-loader.js" defer></script>
 
     <style>
         * {
@@ -502,21 +506,68 @@
             line-height: 1.5;
         }
 
+        /* 骨架屏样式 */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-title {
+            height: 2.2rem;
+            margin-bottom: 15px;
+            width: 80%;
+        }
+
+        .skeleton-meta {
+            height: 1rem;
+            margin-bottom: 10px;
+            width: 60%;
+        }
+
+        .skeleton-content {
+            height: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .skeleton-content.short {
+            width: 70%;
+        }
+
+        .skeleton-content.medium {
+            width: 85%;
+        }
+
+        .skeleton-content.long {
+            width: 95%;
+        }
+
+        /* 优化图片加载 */
         .article-content img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin: 20px 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease;
         }
 
-        .article-content a {
-            color: var(--primary);
-            text-decoration: none;
+        .article-content img[loading="lazy"] {
+            opacity: 0;
         }
 
-        .article-content a:hover {
-            text-decoration: underline;
+        .article-content img[loading="lazy"].loaded {
+            opacity: 1;
         }
 
         /* Article Actions */
@@ -1085,7 +1136,22 @@
                     </header>
 
                     <div class="article-content" id="article-content">
-                        <div id="loading-indicator" style="text-align: center; padding: 40px 0;">
+                        <!-- 骨架屏 -->
+                        <div id="skeleton-screen">
+                            <div class="skeleton skeleton-title"></div>
+                            <div class="skeleton skeleton-meta"></div>
+                            <div class="skeleton skeleton-meta" style="width: 40%;"></div>
+                            <div class="skeleton skeleton-content short"></div>
+                            <div class="skeleton skeleton-content medium"></div>
+                            <div class="skeleton skeleton-content long"></div>
+                            <div class="skeleton skeleton-content short"></div>
+                            <div class="skeleton skeleton-content medium"></div>
+                            <div class="skeleton skeleton-content long"></div>
+                            <div class="skeleton skeleton-content short"></div>
+                        </div>
+                        
+                        <!-- 加载指示器 -->
+                        <div id="loading-indicator" style="text-align: center; padding: 40px 0; display: none;">
                             <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
                             <p style="margin-top: 20px;">加载文章内容中...</p>
                         </div>
@@ -1102,6 +1168,75 @@
     </div>
 
     <script>
+        // 性能监控
+        class PerformanceMonitor {
+            static startTime = Date.now();
+            
+            static log(message) {
+                const elapsed = Date.now() - this.startTime;
+                console.log(`[${elapsed}ms] ${message}`);
+            }
+            
+            static mark(name) {
+                const elapsed = Date.now() - this.startTime;
+                console.log(`[${elapsed}ms] MARK: ${name}`);
+            }
+        }
+
+        // 缓存管理类
+        class ArticleCache {
+            static CACHE_PREFIX = 'article_cache_';
+            static CACHE_DURATION = 30 * 60 * 1000; // 30分钟缓存
+
+            static getCacheKey(articleId) {
+                return this.CACHE_PREFIX + articleId;
+            }
+
+            static get(articleId) {
+                try {
+                    const cacheKey = this.getCacheKey(articleId);
+                    const cached = localStorage.getItem(cacheKey);
+                    if (!cached) return null;
+
+                    const data = JSON.parse(cached);
+                    const now = Date.now();
+                    
+                    // 检查缓存是否过期
+                    if (now - data.timestamp > this.CACHE_DURATION) {
+                        localStorage.removeItem(cacheKey);
+                        return null;
+                    }
+
+                    return data.article;
+                } catch (error) {
+                    console.warn('读取缓存失败:', error);
+                    return null;
+                }
+            }
+
+            static set(articleId, article) {
+                try {
+                    const cacheKey = this.getCacheKey(articleId);
+                    const data = {
+                        article: article,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem(cacheKey, JSON.stringify(data));
+                } catch (error) {
+                    console.warn('写入缓存失败:', error);
+                }
+            }
+
+            static clear(articleId) {
+                try {
+                    const cacheKey = this.getCacheKey(articleId);
+                    localStorage.removeItem(cacheKey);
+                } catch (error) {
+                    console.warn('清除缓存失败:', error);
+                }
+            }
+        }
+
         // URL解析工具类
         class URLParser {
             static getArticleId() {
@@ -1128,12 +1263,7 @@
 
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', async function () {
-            console.log('文章详情页面加载完成');
-
-            // 检查依赖是否加载
-            console.log('SupabaseStorage available:', typeof window.SupabaseStorage !== 'undefined');
-            console.log('RetryHandler available:', typeof window.RetryHandler !== 'undefined');
-            console.log('ErrorHandler available:', typeof window.ErrorHandler !== 'undefined');
+            PerformanceMonitor.log('文章详情页面加载完成');
 
             // 从URL获取文章ID（支持多种格式）
             const articleId = URLParser.getArticleId();
@@ -1143,35 +1273,19 @@
                 return;
             }
 
-            try {
-                // 初始化Supabase存储
-                const storage = window.SupabaseStorage;
-                if (!storage) {
-                    console.error('SupabaseStorage is not available');
-                    showError('SupabaseStorage is not available');
-                    return;
-                }
+            PerformanceMonitor.mark('开始加载文章');
 
-                // 确保存储已初始化
-                if (!storage.isInitialized) {
-                    console.log('Initializing SupabaseStorage...');
-                    await storage.initialize();
-                }
-
-                // 获取文章
-                const article = await storage.getArticle(articleId);
-
-                if (!article) {
-                    showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
-                    return;
-                }
-
-                // 填充文章内容
-                populateArticle(article);
-
-            } catch (error) {
-                console.error('加载文章失败:', error);
-                showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
+            // 先尝试从缓存加载
+            const cachedArticle = ArticleCache.get(articleId);
+            if (cachedArticle) {
+                PerformanceMonitor.log('从缓存加载文章');
+                populateArticle(cachedArticle);
+                PerformanceMonitor.mark('缓存加载完成');
+                // 后台异步刷新
+                refreshArticleInBackground(articleId);
+            } else {
+                // 缓存中没有，从服务器加载
+                await loadArticleFromServer(articleId);
             }
 
             // 为社交分享按钮添加点击事件
@@ -1197,13 +1311,89 @@
                     }
                 });
             });
-
-            // 相关推荐区域逻辑，完全参考kiro.html
-            // 删除与相关推荐相关的JS代码（homepageCards、shuffle、renderRelated、DOMContentLoaded绑定）
         });
+
+        // 从服务器加载文章
+        async function loadArticleFromServer(articleId) {
+            try {
+                PerformanceMonitor.mark('开始服务器请求');
+                
+                // 设置加载超时
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('加载超时')), 10000); // 10秒超时
+                });
+
+                // 初始化Supabase存储
+                const storage = window.SupabaseStorage;
+                if (!storage) {
+                    console.error('SupabaseStorage is not available');
+                    showError('SupabaseStorage is not available');
+                    return;
+                }
+
+                // 确保存储已初始化
+                if (!storage.isInitialized) {
+                    PerformanceMonitor.log('初始化SupabaseStorage');
+                    await storage.initialize();
+                    PerformanceMonitor.mark('Supabase初始化完成');
+                }
+
+                // 获取文章（带超时）
+                const articlePromise = storage.getArticle(articleId);
+                const article = await Promise.race([articlePromise, timeoutPromise]);
+
+                PerformanceMonitor.mark('服务器响应完成');
+
+                if (!article) {
+                    showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
+                    return;
+                }
+
+                // 缓存文章
+                ArticleCache.set(articleId, article);
+                PerformanceMonitor.mark('文章缓存完成');
+
+                // 填充文章内容
+                populateArticle(article);
+                PerformanceMonitor.mark('页面渲染完成');
+
+            } catch (error) {
+                console.error('加载文章失败:', error);
+                if (error.message === '加载超时') {
+                    showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
+                } else {
+                    showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
+                }
+            }
+        }
+
+        // 后台刷新文章
+        async function refreshArticleInBackground(articleId) {
+            try {
+                const storage = window.SupabaseStorage;
+                if (!storage || !storage.isInitialized) {
+                    return;
+                }
+
+                const article = await storage.getArticle(articleId);
+                if (article) {
+                    ArticleCache.set(articleId, article);
+                    // 静默更新，不重新渲染页面
+                    console.log('后台刷新文章成功');
+                }
+            } catch (error) {
+                console.warn('后台刷新文章失败:', error);
+            }
+        }
 
         // 填充文章内容
         function populateArticle(article) {
+            // 隐藏骨架屏
+            const skeletonScreen = document.getElementById('skeleton-screen');
+            if (skeletonScreen) {
+                skeletonScreen.style.display = 'none';
+            }
+
             document.getElementById('article-title').textContent = article.title;
             document.getElementById('article-author').textContent = article.author;
             document.getElementById('article-date').textContent = formatDate(article.publishDate);
@@ -1220,14 +1410,22 @@
                 tagsContainer.appendChild(tagElement);
             });
 
-            // 填充内容
-            document.getElementById('article-content').innerHTML = article.content;
+            // 优化内容渲染：批量处理图片懒加载
+            const content = article.content;
+            const optimizedContent = content.replace(
+                /<img([^>]+)>/g, 
+                '<img$1 loading="lazy" onerror="this.style.display=\'none\'" onload="this.classList.add(\'loaded\')">'
+            );
+            
+            document.getElementById('article-content').innerHTML = optimizedContent;
 
             // 更新页面标题
             document.title = `${article.title} - OPAI`;
 
-            // 加载相关推荐
-            // loadRelatedArticles(); // This function is no longer needed as renderRelated is called directly
+            // 异步加载相关推荐
+            setTimeout(() => {
+                loadRelatedArticles();
+            }, 100);
         }
 
         // 加载相关推荐文章
@@ -1334,6 +1532,15 @@
                         <button onclick="checkConnection()" class="btn btn-warning" style="margin-left: 15px;">
                             <i class="fas fa-network-wired"></i>
                             检查连接
+                        </button>
+                    `;
+                    break;
+                case 'TIMEOUT_ERROR':
+                    iconClass = 'fas fa-clock';
+                    additionalActions = `
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-left: 15px;">
+                            <i class="fas fa-redo"></i>
+                            重新加载
                         </button>
                     `;
                     break;
