@@ -8,28 +8,72 @@ class SupabaseStorage {
         this.publicClient = null;
         this.adminClient = null;
         this.isInitialized = false;
+        this.initializationPromise = null;
+    }
+
+    /**
+     * 检查 Supabase 是否可用
+     */
+    static isSupabaseAvailable() {
+        return typeof window !== 'undefined' && typeof window.supabase !== 'undefined' && 
+               typeof window.createPublicSupabaseClient !== 'undefined';
     }
 
     /**
      * 初始化 Supabase 客户端
      */
     async initialize() {
-        try {
-            // 创建公共客户端（用于读取操作）
-            this.publicClient = createPublicSupabaseClient();
-            
-            // 创建管理员客户端（用于写入操作）
-            this.adminClient = createAdminSupabaseClient();
-            
-            this.isInitialized = true;
-            console.log('✅ SupabaseStorage 初始化成功');
-            
-            return true;
-        } catch (error) {
-            console.error('❌ SupabaseStorage 初始化失败:', error);
-            throw error;
+        // 如果已经有初始化中的Promise，直接返回
+        if (this.initializationPromise) {
+            return this.initializationPromise;
         }
+
+        // 创建新的初始化Promise
+        this.initializationPromise = new Promise(async (resolve, reject) => {
+            try {
+                // 检查 Supabase 是否可用，如果不可用则等待
+                if (!SupabaseStorage.isSupabaseAvailable()) {
+                    // 等待最多5秒，每100ms检查一次
+                    const maxWaitTime = 5000;
+                    const checkInterval = 100;
+                    let elapsedTime = 0;
+
+                    while (!SupabaseStorage.isSupabaseAvailable() && elapsedTime < maxWaitTime) {
+                        await new Promise(resolve => setTimeout(resolve, checkInterval));
+                        elapsedTime += checkInterval;
+                    }
+
+                    if (!SupabaseStorage.isSupabaseAvailable()) {
+                        throw new Error('等待 Supabase 加载超时');
+                    }
+                }
+
+                // 创建公共客户端（用于读取操作）
+                this.publicClient = window.createPublicSupabaseClient();
+
+                // 创建管理员客户端（用于写入操作）
+                try {
+                    this.adminClient = window.createAdminSupabaseClient();
+                } catch (error) {
+                    console.warn('⚠️ 无法创建管理员客户端:', error.message);
+                    // 对于只读操作，我们可以继续使用公共客户端
+                }
+
+                this.isInitialized = true;
+                console.log('✅ SupabaseStorage 初始化成功');
+                resolve(true);
+            } catch (error) {
+                console.error('❌ SupabaseStorage 初始化失败:', error);
+                reject(error);
+            }
+        });
+
+        return this.initializationPromise;
     }
+}
+
+// 确保window上有SupabaseStorage实例
+window.SupabaseStorage = new SupabaseStorage();
 
     /**
      * 确保客户端已初始化

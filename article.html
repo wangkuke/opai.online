@@ -16,12 +16,39 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="./supabase-config.js" defer></script>
+    <!-- Supabase JS Client - 移除defer确保优先加载 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 配置脚本也需要优先加载，移除defer -->
+    <script src="./supabase-config.js"></script>
+    <!-- 其他脚本可以使用defer -->
     <script src="./error-handler.js" defer></script>
     <script src="./blog-models.js" defer></script>
     <script src="./supabase-storage.js" defer></script>
+
+    <!-- 初始化脚本 -->
+    <script>
+        // 等待文档加载完成
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 等待 Supabase 相关模块加载完成
+            setTimeout(async function() {
+                try {
+                    // 初始化 SupabaseStorage
+                    if (window.SupabaseStorage) {
+                        const storage = new SupabaseStorage();
+                        await storage.initialize();
+                        window.blogStorage = storage;
+                        console.log('✅ SupabaseStorage 初始化成功');
+                        // 加载文章
+                        loadArticleFromServer();
+                    } else {
+                        console.error('❌ SupabaseStorage 未定义');
+                    }
+                } catch (error) {
+                    console.error('❌ 初始化失败:', error);
+                }
+            }, 500); // 延迟 500ms 确保所有脚本都已加载
+        });
+    </script>
 
     <!-- Sidebar and i18n -->
     <script src="sidebar-loader.js" defer></script>
@@ -1314,58 +1341,68 @@
         });
 
         // 从服务器加载文章
-        async function loadArticleFromServer(articleId) {
-            try {
-                PerformanceMonitor.mark('开始服务器请求');
-                
-                // 设置加载超时
-                const timeoutPromise = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error('加载超时')), 10000); // 10秒超时
-                });
+async function loadArticleFromServer(articleId) {
+    try {
+        PerformanceMonitor.mark('开始服务器请求');
+        
+        // 设置加载超时
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('加载超时')), 10000); // 10秒超时
+        });
 
-                // 初始化Supabase存储
-                const storage = window.SupabaseStorage;
-                if (!storage) {
-                    console.error('SupabaseStorage is not available');
-                    showError('SupabaseStorage is not available');
-                    return;
-                }
-
-                // 确保存储已初始化
-                if (!storage.isInitialized) {
-                    PerformanceMonitor.log('初始化SupabaseStorage');
-                    await storage.initialize();
-                    PerformanceMonitor.mark('Supabase初始化完成');
-                }
-
-                // 获取文章（带超时）
-                const articlePromise = storage.getArticle(articleId);
-                const article = await Promise.race([articlePromise, timeoutPromise]);
-
-                PerformanceMonitor.mark('服务器响应完成');
-
-                if (!article) {
-                    showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
-                    return;
-                }
-
-                // 缓存文章
-                ArticleCache.set(articleId, article);
-                PerformanceMonitor.mark('文章缓存完成');
-
-                // 填充文章内容
-                populateArticle(article);
-                PerformanceMonitor.mark('页面渲染完成');
-
-            } catch (error) {
-                console.error('加载文章失败:', error);
-                if (error.message === '加载超时') {
-                    showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
-                } else {
-                    showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
-                }
+        // 初始化Supabase存储
+        let storage = window.SupabaseStorage;
+        if (!storage) {
+            // 如果还没有SupabaseStorage实例，等待一小段时间再检查
+            await new Promise(resolve => setTimeout(resolve, 100));
+            storage = window.SupabaseStorage;
+            
+            if (!storage) {
+                console.error('SupabaseStorage is not available');
+                showError('SupabaseStorage is not available');
+                return;
             }
         }
+
+        // 确保存储已初始化
+        PerformanceMonitor.log('初始化SupabaseStorage');
+        try {
+            await storage.initialize();
+            PerformanceMonitor.mark('Supabase初始化完成');
+        } catch (initError) {
+            console.error('Supabase初始化失败:', initError);
+            showError(`Supabase初始化失败: ${initError.message || '未知错误'}`);
+            return;
+        }
+
+        // 获取文章（带超时）
+        const articlePromise = storage.getArticle(articleId);
+        const article = await Promise.race([articlePromise, timeoutPromise]);
+
+        PerformanceMonitor.mark('服务器响应完成');
+
+        if (!article) {
+            showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
+            return;
+        }
+
+        // 缓存文章
+        ArticleCache.set(articleId, article);
+        PerformanceMonitor.mark('文章缓存完成');
+
+        // 填充文章内容
+        populateArticle(article);
+        PerformanceMonitor.mark('页面渲染完成');
+
+    } catch (error) {
+        console.error('加载文章失败:', error);
+        if (error.message === '加载超时') {
+            showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
+        } else {
+            showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
+        }
+    }
+}
 
         // 后台刷新文章
         async function refreshArticleInBackground(articleId) {

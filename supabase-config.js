@@ -79,6 +79,11 @@ function createAdminSupabaseClient() {
         throw new Error('Service role 密钥未配置，无法创建管理员客户端');
     }
     
+    // 检查 supabase 对象是否存在
+    if (typeof supabase === 'undefined') {
+        throw new Error('Supabase 库未加载，请确保已正确引入 Supabase JS 客户端');
+    }
+    
     return supabase.createClient(config.url, config.serviceRoleKey, {
         ...config.options,
         auth: {
@@ -91,6 +96,12 @@ function createAdminSupabaseClient() {
 // 创建普通客户端（使用 anon 密钥）
 function createPublicSupabaseClient() {
     const config = getSupabaseConfig();
+    
+    // 检查 supabase 对象是否存在
+    if (typeof supabase === 'undefined') {
+        throw new Error('Supabase 库未加载，请确保已正确引入 Supabase JS 客户端');
+    }
+    
     return supabase.createClient(config.url, config.anonKey, config.options);
 }
 
