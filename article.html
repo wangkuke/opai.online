@@ -31,8 +31,8 @@
 
     <!-- 初始化脚本 -->
     <script>
-        // 等待文档加载完成
-        document.addEventListener('DOMContentLoaded', async function () {
+        // 等待所有资源加载完成（包括defer脚本）
+        window.addEventListener('load', async function () {
             console.log('📄 文档加载完成，开始初始化...');
 
             try {
@@ -40,7 +40,7 @@
                 await waitForDependencyManager();
 
                 // 额外等待一小段时间确保所有defer脚本都已加载
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 // 开始监控依赖状态
                 window.dependencyManager.startMonitoring();
