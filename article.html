@@ -4,8 +4,8 @@
 <head>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6160387154009917"
-     crossorigin="anonymous"></script>
-    
+        crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文章详情 - OPAI</title>
@@ -21,33 +21,286 @@
     <!-- 配置脚本也需要优先加载，移除defer -->
     <script src="./supabase-config.js"></script>
     <!-- 其他脚本可以使用defer -->
+    <script src="./dependency-manager.js" defer></script>
     <script src="./error-handler.js" defer></script>
     <script src="./blog-models.js" defer></script>
     <script src="./supabase-storage.js" defer></script>
+    <script src="./article-load-controller.js" defer></script>
+    <script src="./ui-state-manager.js" defer></script>
+    <script src="./fallback-handler.js" defer></script>
 
     <!-- 初始化脚本 -->
     <script>
         // 等待文档加载完成
-        document.addEventListener('DOMContentLoaded', async function() {
-            // 等待 Supabase 相关模块加载完成
-            setTimeout(async function() {
-                try {
-                    // 初始化 SupabaseStorage
-                    if (window.SupabaseStorage) {
-                        const storage = new SupabaseStorage();
-                        await storage.initialize();
-                        window.blogStorage = storage;
-                        console.log('✅ SupabaseStorage 初始化成功');
-                        // 加载文章
-                        loadArticleFromServer();
+        document.addEventListener('DOMContentLoaded', async function () {
+            console.log('📄 文档加载完成，开始初始化...');
+
+            try {
+                // 等待依赖管理器加载
+                await waitForDependencyManager();
+
+                // 开始监控依赖状态
+                window.dependencyManager.startMonitoring();
+
+                // 等待所有必需依赖加载完成
+                console.log('⏳ 等待依赖加载...');
+                await window.dependencyManager.waitForDependencies();
+                console.log('✅ 所有依赖加载完成');
+
+                // 停止监控
+                window.dependencyManager.stopMonitoring();
+
+                // 初始化 SupabaseStorage
+                if (window.SupabaseStorage) {
+                    await window.SupabaseStorage.initialize();
+                    window.blogStorage = window.SupabaseStorage;
+                    console.log('✅ SupabaseStorage 初始化成功');
+
+                    // 使用文章加载控制器加载文章
+                    const articleId = URLParser.getArticleId();
+                    if (articleId) {
+                        // 添加加载控制器监听器
+                        window.articleLoadController.addListener(handleLoadEvent);
+
+                        // 开始加载文章
+                        const article = await window.articleLoadController.loadArticle(articleId);
+                        populateArticle(article);
                     } else {
-                        console.error('❌ SupabaseStorage 未定义');
+                        showError('未找到文章ID，请检查URL格式');
                     }
-                } catch (error) {
-                    console.error('❌ 初始化失败:', error);
+                } else {
+                    throw new Error('SupabaseStorage 未定义');
                 }
-            }, 500); // 延迟 500ms 确保所有脚本都已加载
+            } catch (error) {
+                console.error('❌ 初始化失败:', error);
+
+                // 获取依赖状态
+                const status = window.dependencyManager ?
+                    window.dependencyManager.getDependencyStatus() :
+                    { error: '依赖管理器未加载' };
+
+                console.log('📊 依赖状态:', status);
+
+                // 显示详细的错误信息
+                showDependencyError(error, status);
+            }
         });
+
+        // 处理加载事件
+        function handleLoadEvent(event, data) {
+            console.log(`📡 加载事件: ${event}`, data);
+
+            if (!window.uiStateManager) {
+                console.warn('UI状态管理器未加载');
+                return;
+            }
+
+            switch (event) {
+                case 'load_started':
+                    window.uiStateManager.showLoadingState('skeleton');
+                    break;
+                case 'stale_cache_loaded':
+                    window.uiStateManager.showContent(data.article);
+                    showStaleNotice();
+                    break;
+                case 'background_refresh_completed':
+                    window.uiStateManager.showContent(data.article);
+                    hideStaleNotice();
+                    break;
+                case 'load_completed':
+                    window.uiStateManager.showContent(data.article);
+                    break;
+                case 'load_failed':
+                    window.uiStateManager.showErrorState(data.error, {
+                        type: getErrorType(data.error),
+                        showRetry: true,
+                        showDetails: true
+                    });
+                    break;
+                case 'retry_started':
+                    window.uiStateManager.showLoadingState('spinner', {
+                        message: `重试加载中... (第 ${data.attempt} 次尝试)`
+                    });
+                    break;
+            }
+        }
+
+        // 获取错误类型
+        function getErrorType(error) {
+            if (error.message.includes('网络请求超时')) {
+                return 'TIMEOUT_ERROR';
+            } else if (error.message.includes('文章不存在')) {
+                return 'ARTICLE_NOT_FOUND';
+            } else if (error.message.includes('SupabaseStorage')) {
+                return 'STORAGE_ERROR';
+            } else {
+                return 'NETWORK_ERROR';
+            }
+        }
+
+        // 显示过期缓存通知
+        function showStaleNotice() {
+            const notice = document.createElement('div');
+            notice.id = 'stale-notice';
+            notice.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: var(--warning);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                z-index: 1000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            `;
+            notice.innerHTML = '<i class="fas fa-sync fa-spin"></i> 正在后台更新内容...';
+            document.body.appendChild(notice);
+        }
+
+        // 隐藏过期缓存通知
+        function hideStaleNotice() {
+            const notice = document.getElementById('stale-notice');
+            if (notice) {
+                notice.remove();
+            }
+        }
+
+        // 显示重试状态
+        function showRetryState(attempt) {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            if (loadingIndicator) {
+                loadingIndicator.innerHTML = `
+                    <i class="fas fa-sync fa-spin fa-3x" style="color: var(--primary);"></i>
+                    <p style="margin-top: 20px;">重试加载中... (第 ${attempt} 次尝试)</p>
+                `;
+                loadingIndicator.style.display = 'block';
+            }
+        }
+
+        // 处理加载错误
+        function handleLoadError(error, articleId) {
+            console.error('文章加载失败:', error);
+
+            if (error.message.includes('网络请求超时')) {
+                showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
+            } else if (error.message.includes('文章不存在')) {
+                showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
+            } else if (error.message.includes('SupabaseStorage')) {
+                showError('存储服务不可用，请刷新页面重试', 'STORAGE_ERROR');
+            } else {
+                showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
+            }
+        }
+
+        // 等待依赖管理器加载
+        async function waitForDependencyManager(timeout = 5000) {
+            const startTime = Date.now();
+
+            while (Date.now() - startTime < timeout) {
+                if (typeof window.dependencyManager !== 'undefined') {
+                    return true;
+                }
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            throw new Error('依赖管理器加载超时');
+        }
+
+        // 显示依赖错误
+        function showDependencyError(error, status) {
+            const contentContainer = document.getElementById('article-content');
+            const missingDeps = Object.entries(status)
+                .filter(([key, value]) => value && !value.isLoaded)
+                .map(([key]) => key);
+
+            let errorMessage = `初始化失败: ${error.message}`;
+            if (missingDeps.length > 0) {
+                errorMessage += `<br>缺少依赖: ${missingDeps.join(', ')}`;
+            }
+
+            contentContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px 0;">
+                    <i class="fas fa-exclamation-triangle fa-3x" style="color: var(--error);"></i>
+                    <p style="margin-top: 20px; color: var(--error); font-size: 1.1rem;">${errorMessage}</p>
+                    <div style="margin-top: 30px;">
+                        <button onclick="location.reload()" class="btn btn-primary">
+                            <i class="fas fa-redo"></i>
+                            重新加载
+                        </button>
+                        <button onclick="checkDependencies()" class="btn btn-secondary" style="margin-left: 15px;">
+                            <i class="fas fa-search"></i>
+                            检查依赖
+                        </button>
+                        <button onclick="retryDependencies()" class="btn btn-warning" style="margin-left: 15px;">
+                            <i class="fas fa-sync"></i>
+                            重试依赖
+                        </button>
+                    </div>
+                    <div style="margin-top: 20px; font-size: 0.9rem; color: var(--gray);">
+                        <details>
+                            <summary>依赖状态详情</summary>
+                            <pre style="text-align: left; margin-top: 10px;">${JSON.stringify(status, null, 2)}</pre>
+                        </details>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 检查依赖状态
+        function checkDependencies() {
+            if (!window.dependencyManager) {
+                alert('依赖管理器未加载');
+                return;
+            }
+
+            const status = window.dependencyManager.getDependencyStatus();
+            const stats = window.dependencyManager.getStats();
+
+            alert(`依赖检查结果:\n${JSON.stringify(status, null, 2)}\n\n统计信息:\n${JSON.stringify(stats, null, 2)}`);
+        }
+
+        // 重试依赖加载
+        async function retryDependencies() {
+            if (!window.dependencyManager) {
+                alert('依赖管理器未加载');
+                return;
+            }
+
+            const button = event.target;
+            const originalText = button.innerHTML;
+
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 重试中...';
+            button.disabled = true;
+
+            try {
+                const success = await window.dependencyManager.retryDependency();
+                if (success) {
+                    button.innerHTML = '<i class="fas fa-check"></i> 重试成功';
+                    button.className = 'btn btn-success';
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    button.innerHTML = '<i class="fas fa-times"></i> 重试失败';
+                    button.className = 'btn btn-danger';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.className = 'btn btn-warning';
+                        button.disabled = false;
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('重试依赖失败:', error);
+                button.innerHTML = '<i class="fas fa-times"></i> 重试失败';
+                button.className = 'btn btn-danger';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.className = 'btn btn-warning';
+                    button.disabled = false;
+                }, 2000);
+            }
+        }
     </script>
 
     <!-- Sidebar and i18n -->
@@ -545,6 +798,7 @@
             0% {
                 background-position: 200% 0;
             }
+
             100% {
                 background-position: -200% 0;
             }
@@ -1176,7 +1430,7 @@
                             <div class="skeleton skeleton-content long"></div>
                             <div class="skeleton skeleton-content short"></div>
                         </div>
-                        
+
                         <!-- 加载指示器 -->
                         <div id="loading-indicator" style="text-align: center; padding: 40px 0; display: none;">
                             <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary);"></i>
@@ -1198,12 +1452,12 @@
         // 性能监控
         class PerformanceMonitor {
             static startTime = Date.now();
-            
+
             static log(message) {
                 const elapsed = Date.now() - this.startTime;
                 console.log(`[${elapsed}ms] ${message}`);
             }
-            
+
             static mark(name) {
                 const elapsed = Date.now() - this.startTime;
                 console.log(`[${elapsed}ms] MARK: ${name}`);
@@ -1227,7 +1481,7 @@
 
                     const data = JSON.parse(cached);
                     const now = Date.now();
-                    
+
                     // 检查缓存是否过期
                     if (now - data.timestamp > this.CACHE_DURATION) {
                         localStorage.removeItem(cacheKey);
@@ -1341,68 +1595,68 @@
         });
 
         // 从服务器加载文章
-async function loadArticleFromServer(articleId) {
-    try {
-        PerformanceMonitor.mark('开始服务器请求');
-        
-        // 设置加载超时
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('加载超时')), 10000); // 10秒超时
-        });
+        async function loadArticleFromServer(articleId) {
+            try {
+                PerformanceMonitor.mark('开始服务器请求');
 
-        // 初始化Supabase存储
-        let storage = window.SupabaseStorage;
-        if (!storage) {
-            // 如果还没有SupabaseStorage实例，等待一小段时间再检查
-            await new Promise(resolve => setTimeout(resolve, 100));
-            storage = window.SupabaseStorage;
-            
-            if (!storage) {
-                console.error('SupabaseStorage is not available');
-                showError('SupabaseStorage is not available');
-                return;
+                // 设置加载超时
+                const timeoutPromise = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('加载超时')), 10000); // 10秒超时
+                });
+
+                // 初始化Supabase存储
+                let storage = window.SupabaseStorage;
+                if (!storage) {
+                    // 如果还没有SupabaseStorage实例，等待一小段时间再检查
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    storage = window.SupabaseStorage;
+
+                    if (!storage) {
+                        console.error('SupabaseStorage is not available');
+                        showError('SupabaseStorage is not available');
+                        return;
+                    }
+                }
+
+                // 确保存储已初始化
+                PerformanceMonitor.log('初始化SupabaseStorage');
+                try {
+                    await storage.initialize();
+                    PerformanceMonitor.mark('Supabase初始化完成');
+                } catch (initError) {
+                    console.error('Supabase初始化失败:', initError);
+                    showError(`Supabase初始化失败: ${initError.message || '未知错误'}`);
+                    return;
+                }
+
+                // 获取文章（带超时）
+                const articlePromise = storage.getArticle(articleId);
+                const article = await Promise.race([articlePromise, timeoutPromise]);
+
+                PerformanceMonitor.mark('服务器响应完成');
+
+                if (!article) {
+                    showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
+                    return;
+                }
+
+                // 缓存文章
+                ArticleCache.set(articleId, article);
+                PerformanceMonitor.mark('文章缓存完成');
+
+                // 填充文章内容
+                populateArticle(article);
+                PerformanceMonitor.mark('页面渲染完成');
+
+            } catch (error) {
+                console.error('加载文章失败:', error);
+                if (error.message === '加载超时') {
+                    showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
+                } else {
+                    showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
+                }
             }
         }
-
-        // 确保存储已初始化
-        PerformanceMonitor.log('初始化SupabaseStorage');
-        try {
-            await storage.initialize();
-            PerformanceMonitor.mark('Supabase初始化完成');
-        } catch (initError) {
-            console.error('Supabase初始化失败:', initError);
-            showError(`Supabase初始化失败: ${initError.message || '未知错误'}`);
-            return;
-        }
-
-        // 获取文章（带超时）
-        const articlePromise = storage.getArticle(articleId);
-        const article = await Promise.race([articlePromise, timeoutPromise]);
-
-        PerformanceMonitor.mark('服务器响应完成');
-
-        if (!article) {
-            showError('未找到指定的文章', 'ARTICLE_NOT_FOUND');
-            return;
-        }
-
-        // 缓存文章
-        ArticleCache.set(articleId, article);
-        PerformanceMonitor.mark('文章缓存完成');
-
-        // 填充文章内容
-        populateArticle(article);
-        PerformanceMonitor.mark('页面渲染完成');
-
-    } catch (error) {
-        console.error('加载文章失败:', error);
-        if (error.message === '加载超时') {
-            showError('文章加载超时，请检查网络连接后重试', 'TIMEOUT_ERROR');
-        } else {
-            showError(`加载文章失败: ${error.message || '未知错误'}`, 'NETWORK_ERROR');
-        }
-    }
-}
 
         // 后台刷新文章
         async function refreshArticleInBackground(articleId) {
@@ -1450,10 +1704,10 @@ async function loadArticleFromServer(articleId) {
             // 优化内容渲染：批量处理图片懒加载
             const content = article.content;
             const optimizedContent = content.replace(
-                /<img([^>]+)>/g, 
+                /<img([^>]+)>/g,
                 '<img$1 loading="lazy" onerror="this.style.display=\'none\'" onload="this.classList.add(\'loaded\')">'
             );
-            
+
             document.getElementById('article-content').innerHTML = optimizedContent;
 
             // 更新页面标题
