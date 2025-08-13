@@ -62,12 +62,18 @@
                     // 使用文章加载控制器加载文章
                     const articleId = URLParser.getArticleId();
                     if (articleId) {
-                        // 添加加载控制器监听器
-                        window.articleLoadController.addListener(handleLoadEvent);
+                        if (window.articleLoadController) {
+                            // 添加加载控制器监听器
+                            window.articleLoadController.addListener(handleLoadEvent);
 
-                        // 开始加载文章
-                        const article = await window.articleLoadController.loadArticle(articleId);
-                        populateArticle(article);
+                            // 开始加载文章
+                            const article = await window.articleLoadController.loadArticle(articleId);
+                            populateArticle(article);
+                        } else {
+                            // 回退到直接加载
+                            console.log('文章加载控制器不可用，使用直接加载');
+                            await loadArticleFromServer(articleId);
+                        }
                     } else {
                         showError('未找到文章ID，请检查URL格式');
                     }
