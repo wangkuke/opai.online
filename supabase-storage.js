@@ -150,15 +150,6 @@ class SupabaseStorage {
 window.SupabaseStorage = new SupabaseStorage();
 
     /**
-     * 确保客户端已初始化
-     */
-    ensureInitialized() {
-        if (!this.isInitialized) {
-            throw new Error('SupabaseStorage 未初始化，请先调用 initialize()');
-        }
-    }
-
-    /**
      * 保存文章到 Supabase
      * @param {Article} article - 文章对象
      * @returns {Promise<{success: boolean, article?: Article, error?: string}>}
