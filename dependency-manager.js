@@ -300,9 +300,19 @@ dependencyManager.registerDependency('supabase-config', () => {
 }, { required: true, timeout: 5000 });
 
 dependencyManager.registerDependency('supabase-storage', () => {
-    return typeof window.SupabaseStorage !== 'undefined' && 
-           window.SupabaseStorage !== null &&
-           typeof window.SupabaseStorage.initialize === 'function';
+    const exists = typeof window.SupabaseStorage !== 'undefined';
+    const notNull = window.SupabaseStorage !== null;
+    const hasInitialize = exists && typeof window.SupabaseStorage.initialize === 'function';
+    
+    if (!exists) {
+        console.log('🔍 SupabaseStorage 不存在');
+    } else if (!notNull) {
+        console.log('🔍 SupabaseStorage 为 null');
+    } else if (!hasInitialize) {
+        console.log('🔍 SupabaseStorage 没有 initialize 方法');
+    }
+    
+    return exists && notNull && hasInitialize;
 }, { required: true, timeout: 5000 });
 
 dependencyManager.registerDependency('error-handler', () => {
