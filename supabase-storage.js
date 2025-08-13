@@ -94,7 +94,7 @@ class SupabaseStorage {
             if (!validation.isValid) {
                 return {
                     success: false,
-                    error: validation.error
+                    error: '文章验证失败: ' + validation.errors.join(', ')
                 };
             }
 
