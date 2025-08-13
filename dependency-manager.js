@@ -300,7 +300,9 @@ dependencyManager.registerDependency('supabase-config', () => {
 }, { required: true, timeout: 5000 });
 
 dependencyManager.registerDependency('supabase-storage', () => {
-    return typeof window.SupabaseStorage !== 'undefined';
+    return typeof window.SupabaseStorage !== 'undefined' && 
+           window.SupabaseStorage !== null &&
+           typeof window.SupabaseStorage.initialize === 'function';
 }, { required: true, timeout: 5000 });
 
 dependencyManager.registerDependency('error-handler', () => {

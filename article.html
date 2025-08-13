@@ -39,6 +39,9 @@
                 // 等待依赖管理器加载
                 await waitForDependencyManager();
 
+                // 额外等待一小段时间确保所有defer脚本都已加载
+                await new Promise(resolve => setTimeout(resolve, 100));
+
                 // 开始监控依赖状态
                 window.dependencyManager.startMonitoring();
 
