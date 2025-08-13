@@ -70,6 +70,80 @@ class SupabaseStorage {
 
         return this.initializationPromise;
     }
+
+    /**
+     * 确保客户端已初始化
+     */
+    ensureInitialized() {
+        if (!this.isInitialized) {
+            throw new Error('SupabaseStorage 未初始化，请先调用 initialize()');
+        }
+    }
+
+    /**
+     * 保存文章到 Supabase
+     * @param {Article} article - 文章对象
+     * @returns {Promise<{success: boolean, article?: Article, error?: string}>}
+     */
+    async saveArticle(article) {
+        try {
+            this.ensureInitialized();
+
+            // 验证文章
+            const validation = article.validate();
+            if (!validation.isValid) {
+                return {
+                    success: false,
+                    error: validation.error
+                };
+            }
+
+            // 转换为 Supabase 格式
+            const articleData = article.toSupabaseFormat();
+
+            // 使用重试机制执行保存操作
+            const result = await RetryHandler.withRetry(async () => {
+                const { data, error } = await RetryHandler.withTimeout(
+                    this.adminClient
+                        .from('articles')
+                        .upsert([articleData])
+                        .select()
+                        .single(),
+                    15000 // 15秒超时
+                );
+
+                if (error) {
+                    throw error;
+                }
+
+                return data;
+            }, {
+                maxRetries: 3,
+                baseDelay: 1000
+            });
+
+            // 转换回 Article 对象
+            const savedArticle = Article.fromSupabaseFormat(result);
+            
+            console.log('✅ 文章保存成功:', savedArticle.id);
+            return {
+                success: true,
+                article: savedArticle
+            };
+
+        } catch (error) {
+            console.error('保存文章异常:', error);
+            
+            const processedError = error.code ? 
+                ErrorHandler.handleSupabaseError(error) : 
+                ErrorHandler.handleNetworkError(error);
+
+            return {
+                success: false,
+                error: ErrorHandler.getUserFriendlyMessage(processedError)
+            };
+        }
+    }
 }
 
 // 确保window上有SupabaseStorage实例
