@@ -70,7 +70,7 @@ class SupabaseStorage {
 
         return this.initializationPromise;
     }
-
+// ... existing code ...
     /**
      * 确保客户端已初始化
      */
@@ -79,6 +79,7 @@ class SupabaseStorage {
             throw new Error('SupabaseStorage 未初始化，请先调用 initialize()');
         }
     }
+// ... existing code ...
 
     /**
      * 保存文章到 Supabase
